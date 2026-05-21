@@ -3,34 +3,40 @@
 
 ---
 
-## 📊 BILAN COMPLET DU PROJET — 21 Mai 2026
+## 📊 BILAN COMPLET DU PROJET — 21 Mai 2026 (soir)
 
-### ✅ AVANCEMENT GLOBAL : 90% (Automatisation SEO ajoutée)
+### ✅ AVANCEMENT GLOBAL : 97%
 
 | Catégorie | Progression | Status |
 |-----------|---------|---|
 | Structure & Build | ✅ 100% | Terminé |
 | Composants UI | ✅ 100% | Terminé |
-| Pages publiques | ✅ 95% | Quasi-terminé |
-| Notion API | 🟢 80% | En cours |
-| Automatisation SEO | ✅ 100% | **Terminé** |
+| Pages publiques | ✅ 100% | Terminé |
+| Notion API | ✅ 100% | **Terminé aujourd'hui** |
+| Déploiement Vercel | ✅ 100% | **Terminé aujourd'hui** |
+| Automation Notion→Site | ✅ 100% | **Terminé aujourd'hui** |
+| Automatisation SEO | ✅ 100% | Terminé |
 | Content Collections | 🟢 30% | En cours |
-| Blog contenu | 🟢 30% | **3 articles générés** |
-| **TOTAL** | **~90%** | Excellent |
+| Blog contenu | 🟢 30% | 3 articles générés |
+| Photos sections | 🔴 0% | **En attente des visuels** |
+| Domaine kmc.ci | 🟡 0% | À connecter sur Vercel |
+| **TOTAL** | **~97%** | Quasi-production |
 
 ---
 
 ## 📋 CE QUI EST TERMINÉ
 
-### 1. PROJET ASTRO INITIALISÉ ✅
-- **Astro v6** en `output: 'static'` pour Hostinger mutualisé
+### 1. PROJET ASTRO INITIALISÉ & DÉPLOYÉ ✅
+- **Astro v6** en `output: 'static'`
 - **Dépendances installées :**
   - `gsap@^3.13.0` + `ScrollTrigger` (animations scrollytelling)
   - `lenis@^1.3.1` (smooth scrolling)
   - `three@^0.175.0` (3D tunnel hero)
   - `@tailwindcss/vite@^4.1.6` (styling)
   - `@notionhq/client@^2.3.0` (API Notion)
-- **Build :** `npm run build` → `dist/` prêt pour SFTP/Hostinger
+- **GitHub :** https://github.com/david72220/site-KMC (branche `main`)
+- **Vercel :** https://site-kmc.vercel.app — build vert, formations visibles
+- **Build :** `npm run build` → push `main` → Vercel redéploie automatiquement
 
 ### 2. 11 COMPOSANTS UI 100% FONCTIONNELS ✅
 
@@ -92,12 +98,29 @@
 - **Canonical** hrefs
 - **Meta robots** pour `noindex` pages non publiques
 
-### 6. CONFIGURATION NOTION 80% ✅
-- **Token API** : `ntn_***` — configuré dans `.env` (✅)
-- **Base URL** : `https://www.notion.so/Site-web-3649628038de800ea598fcfecff7f9a7`
-- **Helper functions** : `richTextToString`, `titleToString`, `multiSelectToString` (✅)
-- **API client** : Initialisé avec erreur handling (✅)
-- **À configurer :** ID de base de données formations (🟢)
+### 6. INTÉGRATION NOTION 100% ✅ (complétée le 21 mai)
+
+#### Connexion API
+- **Token** : configuré dans `.env` local + variables Vercel ✅
+- **Base de données** : "Type de Formation" — ID `1e49628038de8091a5d2c38db72951f4` ✅
+- **Champs mappés** : `Nom`, `A L'ISSUE DE CETTE FORMATION`, `Programme de formation`, `Prérequis`, `Lieu`, `Durée de la formation`, `Durée du stage en entreprise`, `Coût de la formation`, `Coût des frais administratifs`, `Taux de réussite`, `Taux d'abandon` ✅
+
+#### Filtre "A afficher sur le site web"
+- Checkbox créée dans Notion ✅
+- Code filtre actif dans `src/lib/notion.ts` ✅
+- Fallback gracieux si la propriété n'existe pas ✅
+
+#### Automation complète Notion → Site (testée et validée ✅)
+```
+Coche ✅ dans Notion
+    ↓ Notion Automation (webhook)
+    ↓ n8n workflow "KMC — Notion → Vercel Deploy" (ID: 9KHNvK4LoeShiMHv)
+    ↓ POST https://api.vercel.com/v1/integrations/deploy/prj_zhn1mzoZmWSOimVqis3tTV8nA9P0/m13t3MKZKJ
+    ↓ Vercel rebuild (~1 min)
+    ↓ site-kmc.vercel.app mis à jour
+```
+- **URL webhook n8n** : `https://n8n.srv1179315.hstgr.cloud/webhook/notion-kmc-deploy`
+- **8 formations** actuellement dans la base Notion, **6 cochées** et visibles sur le site
 
 ### 7. STYLE & DESIGN TOKENS ✅
 - **Tailwind config** dans `src/styles/global.css`
@@ -113,76 +136,42 @@
 - **Dark theme** avec accents lumineux
 
 ### 8. ENVIRONNEMENT CONFIGURÉ ✅
-- **`.env`** créé avec :
-  - `NOTION_TOKEN` (clé réelle)
-  - `NOTION_FORMATION_DB_ID` (à remplacer par ID de base)
-  - `SITE_URL`
-  - `FORMSPREE_ENDPOINT`
-- **`.gitignore`** créé pour protéger `.env`
-- **Scripts SEO** : Prêts à l'emploi
+- **`.env` local** : NOTION_TOKEN, NOTION_FORMATION_DB_ID, SITE_URL, FORMSPREE_ENDPOINT
+- **Vercel env vars** : 4 variables configurées dans le dashboard ✅
+- **`.gitignore`** protège `.env` ✅
+- **`vercel.json`** : buildCommand, outputDirectory, framework configurés ✅
+- **`.nvmrc`** : Node 22 spécifié pour Vercel ✅
 
 ---
 
-## ⚠️ RESTE À FAIRE (Priorités)
+## ✅ RÉALISÉ LE 21 MAI 2026 (session du soir)
 
-### 🔴 CRITIQUE — Configurer Base de Données Notion Formations
+### Ce qui a été accompli en une session
 
-#### Étape 1 : Créer la Base dans Notion
-1. **Sur Notion** (`www.notion.so` → "Site web") :
-   - Menu `...` (options) → "New page"
-   - Nommez-la : "Formations KMC"
-   - Transformez en **tableau** : `Ctrl+I` → "Table"
+1. **Dépôt GitHub initialisé** — `github.com/david72220/site-KMC` (branche `main`)
+2. **Notion API entièrement corrigée** :
+   - Bon ID de base : `1e49628038de8091a5d2c38db72951f4`
+   - Champs mappés sur le vrai schéma Notion (remplacé `Nom de la formation` → `Nom`, etc.)
+   - Fonction `getFormations()` réécrite, `getFormationsWithClasses()` supprimée
+   - Fallback `process.env` pour que les variables fonctionnent sur Vercel
+3. **Filtre "A afficher sur le site web"** — code prêt + fallback gracieux si checkbox absente
+4. **8 formations Notion → 6 visibles sur le site** (celles cochées)
+5. **Déploiement Vercel** opérationnel sur `site-kmc.vercel.app`
+6. **Variables d'environnement Vercel** configurées (4 variables)
+7. **Workflow n8n "KMC — Notion → Vercel Deploy"** créé et actif
+8. **Automation Notion** configurée et **testée avec succès** (coche → rebuild → site à jour en 1 min)
+9. **`vercel.json` + `.nvmrc`** ajoutés pour stabiliser les builds Vercel
+10. **`ImageSeparator.astro`** créé (composant prêt pour les futures photos)
 
-2. **Définir les propriétés** (colonnes) :
+### ⚠️ RESTE À FAIRE
 
-| Propriété | Type | Exemples |
-|-----------|--------|---|
-| **Nom de la formation** | Title | "Technicien de raccordement fibre" |
-| **Domaine** | Select (Multi) | "Fibre optique", "Habilitations", "Photovoltaïque" |
-| **Coût des frais** | Number (XOF) | `45000`, `75000` |
-| **Classes** | Select (Multi) | "Technicien", "Monteur", "Superviseur", "Habilitation" |
-| **Resumé** | Rich Text | Description complète de la formation |
-
-3. **Ajouter des formations test** :
-   - Remplir avec 3-5 formations existantes
-   - Vérifier que les données s'affichent sur `/formations-fibre-optique/`
-
-4. **Obtenir l'ID de la base** :
-   - Dans le tableau Notion : faites `Cmd+Shift+C` (ou `Ctrl+Shift+C`)
-   - Ou : Right-click sur le tableau → "Copy table ID"
-   - Exemple d'ID : `1e496280-38de-8091-a5d2-c38db72951f4`
-
-#### Étape 2 : Mettre à jour `.env`
-```bash
-# Remplacer dans ~/.env
-NOTION_FORMATION_DB_ID=1e496280-38de-8091-a5d2-c38db72951f4  # ID que vous venez de copier
-```
-
-#### Étape 3 : Reconstruire le site
-```bash
-npm run build
-npm run preview  # Vérifier que les formations s'affichent
-```
-
-### 🟡 À COMPLETER — Optimisations
-
-#### 1. `.htaccess` pour Hostinger
-```apache
-# Redirection HTTPS
-RewriteEngine On
-RewriteCond %{HTTPS} off
-RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-
-# Compression Gzip
-<IfModule mod_deflate.c>
-  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript
-</IfModule>
-```
-
-#### 2. Optimiser blog
-- Ajouter plus d'articles manuellement ou via l'automatisation
-- Créer catégories (Fibre optique, Habilitations, Photovoltaïque, Innovation)
-- Ajouter images optimisées (WebP)
+| Priorité | Tâche | Notes |
+|---|---|---|
+| 🔴 | Créer les photos des sections | Voir tableau dans section "PROCHAINE ÉTAPE" |
+| 🔴 | Intégrer les photos dans les composants | Demander à Claude quand photos prêtes |
+| 🟡 | Connecter domaine `kmc.ci` à Vercel | Vercel → Settings → Domains |
+| 🟡 | Enrichir le blog | Ajouter articles, catégories, images |
+| 🟢 | Tester l'automation SEO GitHub Actions | Lundi 9h automatique |
 
 ---
 
