@@ -1,0 +1,83 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import HeroTunnel from '../components/HeroTunnel.astro';
+import FiberLine from '../components/FiberLine.astro';
+import SectionOperators from '../components/SectionOperators.astro';
+import SectionNRO from '../components/SectionNRO.astro';
+import SectionSRO from '../components/SectionSRO.astro';
+import SectionPBO from '../components/SectionPBO.astro';
+import SectionClientFinal from '../components/SectionClientFinal.astro';
+import SectionCatalogue from '../components/SectionCatalogue.astro';
+import Footer from '../components/Footer.astro';
+
+const pageTitle = 'KMC.ci — Centre de Formation en Fibre Optique & Photovoltaïque';
+const pageDescription = 'KMC, le premier centre de formation en fibre optique et énergie photovoltaïque en Côte d\'Ivoire. Formez-vous aux métiers de demain : technicien de raccordement, monteur de lignes, superviseur FTTH.';
+const pageImage = 'https://kmc.ci/og-image.jpg';
+---
+
+<Layout
+  title={pageTitle}
+  description={pageDescription}
+  image={pageImage}
+  type="website"
+  jsonLd={{
+    '@context': 'https://schema.org',
+    '@type': 'EducationalOrganization',
+    name: 'KMC — Knowledge Management Center',
+    description: pageDescription,
+    url: 'https://kmc.ci',
+    logo: 'https://kmc.ci/logo.png',
+    sameAs: [
+      'https://www.linkedin.com/company/kmc-ci',
+      'https://www.facebook.com/kmc.ci'
+    ],
+    address: {
+      '@type': 'PostalAddress',
+      addressCountry: 'CI',
+      addressLocality: 'Abidjan'
+    },
+    contactPoint: {
+      '@type': 'ContactPoint',
+      contactType: 'Formation',
+      availableLanguage: ['French']
+    }
+  }}
+>
+  <Navigation />
+  
+  <main id="main-content">
+    <HeroTunnel />
+    <FiberLine />
+    <SectionOperators />
+    <SectionNRO />
+    <SectionSRO />
+    <SectionPBO />
+    <SectionClientFinal />
+    <SectionCatalogue />
+  </main>
+  
+  <Footer />
+</Layout>
+
+<script>
+  import { initLenis } from '../lib/scroll';
+  
+  // Initialize Lenis smooth scroll on homepage
+  const lenis = initLenis();
+  if (lenis) {
+    // Handle anchor links with smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+      anchor.addEventListener('click', (e) => {
+        const href = anchor.getAttribute('href');
+        if (href && href.startsWith('#')) {
+          e.preventDefault();
+          const target = document.querySelector(href);
+          if (target) {
+            lenis.scrollTo(target as HTMLElement, { offset: -80 });
+          }
+        }
+      });
+    });
+  }
+</script>

@@ -1,0 +1,32 @@
+{
+  "name": "kmc-website",
+  "type": "module",
+  "version": "1.0.0",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "analyze-seo": "node scripts/analyze-seo-simple.js",
+    "generate-content": "node scripts/generate-seo-content.js",
+    "deploy": "git add . && git commit -m 'feat: déploiement automatique' && git push",
+    "validate-deploy": "node scripts/validate-deployment.js"
+  },
+  "dependencies": {
+    "astro": "^6.3.3",
+    "@astrojs/sitemap": "^3.4.0",
+    "@notionhq/client": "^2.3.0",
+    "gsap": "^3.13.0",
+    "lenis": "^1.3.1",
+    "three": "^0.175.0",
+    "astro-seo": "^0.8.4"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.6",
+    "tailwindcss": "^4.1.6",
+    "@types/three": "^0.175.0"
+  }
+}

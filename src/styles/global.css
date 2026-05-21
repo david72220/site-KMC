@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+@theme {
+    /* Colors from KMC brand guide */
+    --color-kmc-night: #0a1628;
+    --color-kmc-cyan: #2DD4BF;
+    --color-kmc-ochre: #C8913E;
+    --color-kmc-gold: #F59E0B;
+    --color-kmc-teal: #2DD4BF;
+    --color-kmc-white: #f8fafc;
+    --color-kmc-light: #e2e8f0;
+
+    /* Operator colors */
+    --color-op-orange: #F97316;
+    --color-op-yellow: #EAB308;
+    --color-op-blue: #3B82F6;
+
+    /* Light trail colors for fiber tunnel */
+    --color-light-cyan: #67e8f9;
+    --color-light-white: #ffffff;
+
+    /* Typography */
+    --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+
+    /* Custom spacing for scrollytelling */
+    --spacing-section: 100vh;
+}
+
+/* Base styles */
+html {
+    scroll-behavior: auto;
+}
+
+body {
+    font-family: var(--font-sans);
+    background-color: var(--color-kmc-night);
+    color: var(--color-kmc-white);
+    overflow-x: hidden;
+}
+
+/* Selection color */
+::selection {
+    background-color: var(--color-kmc-cyan);
+    color: var(--color-kmc-night);
+}
+
+/* Smooth scrolling handled by Lenis */
+html.lenis,
+html.lenis body {
+    height: auto;
+}
+
+.lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Fiber line SVG animation */
+.fiber-line {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+}
+
+/* Pin spacer fix for ScrollTrigger */
+.pin-spacer {
+    pointer-events: none;
+}
+
+.pin-spacer>* {
+    pointer-events: auto;
+}

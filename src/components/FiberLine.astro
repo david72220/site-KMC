@@ -1,0 +1,58 @@
+---
+// FiberLine.astro - Ligne de fibre optique animée verticalement
+---
+<svg
+    id="fiber-line"
+    class="pointer-events-none fixed left-[calc(50%-1px)] top-0 z-30 h-full w-1 hidden md:block"
+    viewBox="0 0 2 100"
+    preserveAspectRatio="none"
+    aria-hidden="true"
+>
+    <defs>
+        <linearGradient id="fiber-gradient" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#2DD4BF" />
+            <stop offset="50%" stop-color="#67e8f9" />
+            <stop offset="100%" stop-color="#ffffff" />
+        </linearGradient>
+        <filter id="fiber-glow">
+            <feGaussianBlur stdDeviation="1.5" result="coloredBlur" />
+            <feMerge>
+                <feMergeNode in="coloredBlur" />
+                <feMergeNode in="SourceGraphic" />
+            </feMerge>
+        </filter>
+    </defs>
+    <path
+        id="fiber-path"
+        d="M1,0 L1,100"
+        stroke="url(#fiber-gradient)"
+        stroke-width="0.8"
+        fill="none"
+        stroke-linecap="round"
+        filter="url(#fiber-glow)"
+    />
+</svg>
+
+<script>
+    import { gsap } from 'gsap';
+    import { ScrollTrigger } from 'gsap/ScrollTrigger';
+    gsap.registerPlugin(ScrollTrigger);
+
+    const path = document.getElementById('fiber-path') as SVGPathElement | null;
+    if (path) {
+        const length = path.getTotalLength();
+        path.style.strokeDasharray = `${length}`;
+        path.style.strokeDashoffset = `${length}`;
+
+        gsap.to(path, {
+            strokeDashoffset: 0,
+            ease: 'none',
+            scrollTrigger: {
+                trigger: 'body',
+                start: 'top top',
+                end: 'bottom bottom',
+                scrub: 1,
+            },
+        });
+    }
+</script>

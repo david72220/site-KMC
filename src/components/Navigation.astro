@@ -1,0 +1,168 @@
+---
+const navLinks = [
+  { href: '/#hero', label: 'Accueil' },
+  { href: '/#operators', label: 'Opérateurs' },
+  { href: '/#nro', label: 'NRO' },
+  { href: '/#sro', label: 'SRO' },
+  { href: '/#pbo', label: 'PBO' },
+  { href: '/#client', label: 'Client' },
+  { href: '/#catalogue', label: 'Formations' },
+];
+
+const pageLinks = [
+  { href: '/formations-fibre-optique/', label: 'Catalogue complet' },
+  { href: '/habilitations/', label: 'Habilitations' },
+  { href: '/blog/', label: 'Blog' },
+  { href: '/contact/', label: 'Contact' },
+];
+---
+
+<header id="main-nav" class="fixed top-0 left-0 w-full z-50 transition-all duration-500 border-b border-transparent">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16 lg:h-20">
+      {/* Logo */}
+      <a href="/" class="flex items-center gap-2 group">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-[#2dd4bf] to-[#0f766e] flex items-center justify-center shadow-lg shadow-[#2dd4bf]/20 group-hover:shadow-[#2dd4bf]/40 transition-shadow">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+          </svg>
+        </div>
+        <span class="text-white font-display font-bold text-lg lg:text-xl tracking-tight">KMC</span>
+      </a>
+
+      {/* Desktop Navigation */}
+      <nav class="hidden lg:flex items-center gap-1">
+        {navLinks.map((link) => (
+          <a
+            href={link.href}
+            class="px-3 py-2 rounded-lg text-sm font-medium text-white/70 hover:text-white hover:bg-white/10 transition-all duration-300"
+          >
+            {link.label}
+          </a>
+        ))}
+        <div class="w-px h-5 bg-white/20 mx-2" />
+        {pageLinks.map((link) => (
+          <a
+            href={link.href}
+            class="px-3 py-2 rounded-lg text-sm font-medium text-[#2dd4bf]/80 hover:text-[#2dd4bf] hover:bg-[#2dd4bf]/10 transition-all duration-300"
+          >
+            {link.label}
+          </a>
+        ))}
+      </nav>
+
+      {/* CTA Desktop */}
+      <a
+        href="/contact/"
+        class="hidden lg:inline-flex items-center px-4 py-2 rounded-lg bg-gradient-to-r from-[#2dd4bf] to-[#0d9488] text-[#0f172a] font-semibold text-sm hover:shadow-lg hover:shadow-[#2dd4bf]/30 hover:scale-105 transition-all duration-300"
+      >
+        Nous contacter
+      </a>
+
+      {/* Mobile Hamburger */}
+      <button
+        id="menu-toggle"
+        class="lg:hidden relative w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors"
+        aria-label="Ouvrir le menu"
+        aria-expanded="false"
+      >
+        <svg id="icon-menu" class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+        <svg id="icon-close" class="w-6 h-6 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  {/* Mobile Menu */}
+  <div
+    id="mobile-menu"
+    class="lg:hidden absolute top-full left-0 w-full bg-[#0B1120]/95 backdrop-blur-xl border-b border-white/10 opacity-0 invisible transition-all duration-300 translate-y-[-10px]"
+  >
+    <div class="px-4 py-6 space-y-1">
+      <p class="px-3 text-xs font-semibold text-white/40 uppercase tracking-wider mb-2">Sections</p>
+      {navLinks.map((link) => (
+        <a
+          href={link.href}
+          class="mobile-link block px-3 py-2.5 rounded-lg text-base font-medium text-white/80 hover:text-white hover:bg-white/10 transition-all"
+        >
+          {link.label}
+        </a>
+      ))}
+      <div class="my-3 border-t border-white/10" />
+      <p class="px-3 text-xs font-semibold text-white/40 uppercase tracking-wider mb-2">Pages</p>
+      {pageLinks.map((link) => (
+        <a
+          href={link.href}
+          class="mobile-link block px-3 py-2.5 rounded-lg text-base font-medium text-[#2dd4bf]/80 hover:text-[#2dd4bf] hover:bg-[#2dd4bf]/10 transition-all"
+        >
+          {link.label}
+        </a>
+      ))}
+      <div class="mt-4 pt-4 border-t border-white/10">
+        <a
+          href="/contact/"
+          class="mobile-link block w-full text-center px-4 py-3 rounded-lg bg-gradient-to-r from-[#2dd4bf] to-[#0d9488] text-[#0f172a] font-semibold hover:shadow-lg hover:shadow-[#2dd4bf]/30 transition-all"
+        >
+          Nous contacter
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<script>
+  const header = document.getElementById('main-nav');
+  const menuToggle = document.getElementById('menu-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const iconMenu = document.getElementById('icon-menu');
+  const iconClose = document.getElementById('icon-close');
+  let menuOpen = false;
+
+  // Scroll effect: transparent to solid
+  const onScroll = () => {
+    if (window.scrollY > 50) {
+      header?.classList.add('bg-[#0B1120]/90', 'backdrop-blur-xl', 'border-white/10', 'shadow-lg', 'shadow-black/20');
+      header?.classList.remove('border-transparent');
+    } else {
+      header?.classList.remove('bg-[#0B1120]/90', 'backdrop-blur-xl', 'border-white/10', 'shadow-lg', 'shadow-black/20');
+      header?.classList.add('border-transparent');
+    }
+  };
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // Mobile menu toggle
+  menuToggle?.addEventListener('click', () => {
+    menuOpen = !menuOpen;
+    menuToggle.setAttribute('aria-expanded', String(menuOpen));
+    if (menuOpen) {
+      mobileMenu?.classList.remove('opacity-0', 'invisible', 'translate-y-[-10px]');
+      mobileMenu?.classList.add('opacity-100', 'visible', 'translate-y-0');
+      iconMenu?.classList.add('hidden');
+      iconClose?.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    } else {
+      mobileMenu?.classList.add('opacity-0', 'invisible', 'translate-y-[-10px]');
+      mobileMenu?.classList.remove('opacity-100', 'visible', 'translate-y-0');
+      iconMenu?.classList.remove('hidden');
+      iconClose?.classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+  });
+
+  // Close mobile menu on link click
+  document.querySelectorAll('.mobile-link').forEach((link) => {
+    link.addEventListener('click', () => {
+      if (menuOpen) menuToggle?.click();
+    });
+  });
+
+  // Close on escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && menuOpen) menuToggle?.click();
+  });
+</script>

@@ -1,0 +1,95 @@
+---
+import { SEO } from 'astro-seo';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  type?: string;
+  noindex?: boolean;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const {
+  title,
+  description = 'KMC - Institut de formation aux métiers de la fibre optique et du photovoltaïque à Abidjan, Côte d\'Ivoire. Découvrez nos formations professionnelles certifiantes.',
+  image = 'https://kmc.ci/images/og-default.jpg',
+  type = 'website',
+  noindex = false,
+  jsonLd,
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+
+const defaultJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'EducationalOrganization',
+  name: 'KMC - Knowledge Management Center',
+  alternateName: 'KMC.ci',
+  url: 'https://kmc.ci',
+  logo: 'https://kmc.ci/images/logo-kmc.png',
+  description: 'Institut de formation aux métiers de la fibre optique et du photovoltaïque en Côte d\'Ivoire',
+  address: {
+    '@type': 'PostalAddress',
+    addressCountry: 'CI',
+    addressLocality: 'Abidjan',
+  },
+  contactPoint: {
+    '@type': 'ContactPoint',
+    contactType: 'Formation',
+    telephone: '+225-07-08-09-10-11',
+  },
+};
+
+const finalJsonLd = jsonLd || defaultJsonLd;
+const jsonLdScript = JSON.stringify(finalJsonLd);
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <SEO
+      title={title}
+      titleTemplate="%s | KMC.ci"
+      description={description}
+      canonical={canonical}
+      noindex={noindex}
+      openGraph={{
+        basic: {
+          title: title,
+          type: type,
+          image: image,
+          url: canonical,
+        },
+        optional: {
+          description: description,
+          locale: 'fr_FR',
+          siteName: 'KMC.ci',
+        },
+      }}
+      twitter={{
+        card: 'summary_large_image',
+        title: title,
+        description: description,
+        image: image,
+      }}
+    />
+
+    <script type="application/ld+json" set:html={jsonLdScript} />
+
+    <slot name="head" />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

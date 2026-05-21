@@ -1,0 +1,347 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+import Footer from '../../components/Footer.astro';
+
+interface BlogPost {
+  id: string;
+  data: {
+    title: string;
+    description: string;
+    pubDate: string;
+    updatedDate?: string;
+    category: string;
+    tags: string[];
+    heroImage?: string;
+    author?: string;
+  };
+  Content: any;
+}
+
+export async function getStaticPaths() {
+  const postModules = import.meta.glob('../../content/blog/*.md', { eager: true });
+  const allPosts = Object.entries(postModules).map(([path, mod]: [string, any]) => {
+    const id = path.split('/').pop()?.replace('.md', '') || '';
+    return {
+      id,
+      data: mod.frontmatter,
+      Content: mod.Content,
+    } as BlogPost;
+  });
+  return allPosts.map((post) => ({
+    params: { id: post.id },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: BlogPost;
+}
+
+const { post } = Astro.props;
+const ContentComponent = post.Content;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description: post.data.description,
+  url: `https://kmc.ci/blog/${post.id}/`,
+  datePublished: new Date(post.data.pubDate).toISOString(),
+  dateModified: post.data.updatedDate
+    ? new Date(post.data.updatedDate).toISOString()
+    : new Date(post.data.pubDate).toISOString(),
+  image: post.data.heroImage
+    ? `https://kmc.ci${post.data.heroImage}`
+    : 'https://kmc.ci/images/og-default.jpg',
+  author: {
+    '@type': 'Organization',
+    name: post.data.author || 'KMC',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'KMC',
+    logo: 'https://kmc.ci/images/logo-kmc.png',
+  },
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': `https://kmc.ci/blog/${post.id}/`,
+  },
+};
+---
+
+<Layout
+  title={post.data.title}
+  description={post.data.description}
+  image={post.data.heroImage ? `https://kmc.ci${post.data.heroImage}` : undefined}
+  type="article"
+  jsonLd={jsonLd}
+>
+  <Navigation />
+
+  <main id="main-content" class="min-h-screen bg-kmc-night pt-24 pb-20">
+    <!-- Article Header -->
+    <article class="max-w-4xl mx-auto px-6">
+      <div class="reveal-item opacity-0 translate-y-6 mb-8">
+        <a
+          href="/blog/"
+          class="inline-flex items-center gap-2 text-sm text-kmc-cyan hover:text-kmc-cyan/80 transition-colors duration-300 mb-6"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="m15 18-6-6 6-6"></path>
+          </svg>
+          Retour au blog
+        </a>
+
+        <div class="flex items-center gap-3 mb-6">
+          {post.data.category && (
+            <span class="text-sm font-medium px-4 py-1.5 rounded-full bg-kmc-cyan/10 text-kmc-cyan border border-kmc-cyan/20">
+              {post.data.category}
+            </span>
+          )}
+          <div class="flex items-center gap-2 text-sm text-kmc-light/60">
+            <time datetime={new Date(post.data.pubDate).toISOString()}>
+              {new Date(post.data.pubDate).toLocaleDateString('fr-FR', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })}
+            </time>
+            {post.data.updatedDate && new Date(post.data.updatedDate).valueOf() !== new Date(post.data.pubDate).valueOf() && (
+              <span>
+                (mis à jour le{' '}
+                {new Date(post.data.updatedDate).toLocaleDateString('fr-FR', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })}
+                )
+              </span>
+            )}
+          </div>
+        </div>
+
+        <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-kmc-white font-display mb-6 leading-tight">
+          {post.data.title}
+        </h1>
+
+        {post.data.tags && post.data.tags.length > 0 && (
+          <div class="flex flex-wrap gap-2 mb-8">
+            {post.data.tags.map((tag: string) => (
+              <span class="text-sm text-kmc-light/50">#{tag}</span>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <!-- Hero Image -->
+      {post.data.heroImage && (
+        <div class="reveal-item opacity-0 translate-y-6 mb-12 rounded-xl overflow-hidden border border-white/[0.08]">
+          <img
+            src={post.data.heroImage}
+            alt={post.data.title}
+            class="w-full h-auto object-cover"
+            loading="eager"
+          />
+        </div>
+      )}
+
+      <!-- Article Content -->
+      <div class="reveal-item opacity-0 translate-y-6 prose-content">
+        <ContentComponent />
+      </div>
+
+      <!-- Article Footer -->
+      <div class="reveal-item opacity-0 translate-y-6 mt-16 pt-8 border-t border-white/[0.08]">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-kmc-cyan/10 border border-kmc-cyan/20 flex items-center justify-center">
+              <span class="text-kmc-cyan font-display font-bold text-sm">K</span>
+            </div>
+            <div>
+              <p class="text-kmc-white font-medium text-sm">{post.data.author || 'KMC'}</p>
+              <p class="text-kmc-light/50 text-xs">Centre de formation</p>
+            </div>
+          </div>
+          <a
+            href="/blog/"
+            class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-kmc-cyan/10 text-kmc-cyan border border-kmc-cyan/20 hover:bg-kmc-cyan/20 transition-all duration-300 text-sm font-medium"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="m15 18-6-6 6-6"></path>
+            </svg>
+            Tous les articles
+          </a>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <Footer />
+</Layout>
+
+<script>
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const el = entry.target as HTMLElement;
+          el.style.transition = 'opacity 0.7s ease, transform 0.7s ease';
+          el.style.opacity = '1';
+          el.style.transform = 'translateY(0)';
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.1 }
+  );
+
+  document.querySelectorAll('.reveal-item').forEach((el) => observer.observe(el));
+</script>
+
+<style>
+  .prose-content {
+    color: #e2e8f0;
+    line-height: 1.8;
+    font-size: 1.125rem;
+  }
+
+  .prose-content :global(h2) {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #f8fafc;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    line-height: 1.3;
+  }
+
+  .prose-content :global(h3) {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.375rem;
+    font-weight: 600;
+    color: #f8fafc;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .prose-content :global(p) {
+    margin-bottom: 1.25rem;
+    color: #cbd5e1;
+  }
+
+  .prose-content :global(a) {
+    color: #2dd4bf;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.2s ease;
+  }
+
+  .prose-content :global(a:hover) {
+    color: #5eead4;
+  }
+
+  .prose-content :global(ul),
+  .prose-content :global(ol) {
+    margin-bottom: 1.25rem;
+    padding-left: 1.5rem;
+  }
+
+  .prose-content :global(li) {
+    margin-bottom: 0.5rem;
+    color: #cbd5e1;
+  }
+
+  .prose-content :global(strong) {
+    color: #f8fafc;
+    font-weight: 600;
+  }
+
+  .prose-content :global(blockquote) {
+    border-left: 3px solid #2dd4bf;
+    padding-left: 1.25rem;
+    margin: 1.5rem 0;
+    font-style: italic;
+    color: #94a3b8;
+  }
+
+  .prose-content :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.9375rem;
+  }
+
+  .prose-content :global(th),
+  .prose-content :global(td) {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .prose-content :global(th) {
+    font-weight: 600;
+    color: #f8fafc;
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .prose-content :global(tr:hover) {
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .prose-content :global(img) {
+    border-radius: 0.75rem;
+    margin: 1.5rem 0;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .prose-content :global(hr) {
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    margin: 2rem 0;
+  }
+
+  .prose-content :global(code) {
+    background: rgba(45, 212, 191, 0.1);
+    color: #2dd4bf;
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+  }
+
+  .prose-content :global(pre) {
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+  }
+
+  .prose-content :global(pre code) {
+    background: none;
+    padding: 0;
+    color: #cbd5e1;
+  }
+</style>

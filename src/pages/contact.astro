@@ -1,0 +1,271 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+
+const title = 'Contact – KMC';
+const description = 'Contactez KMC, le centre de formation aux métiers de la fibre optique et du photovoltaïque à Abidjan. Inscriptions, devis, renseignements.';
+const pageImage = 'https://kmc.ci/images/og-contact.jpg';
+
+const contactJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ContactPage',
+  name: 'Contact KMC',
+  url: 'https://kmc.ci/contact/',
+  mainEntity: {
+    '@type': 'Organization',
+    name: 'KMC - Knowledge Management Center',
+    url: 'https://kmc.ci',
+    telephone: '+225 07 08 09 10 11',
+    email: 'contact@kmc.ci',
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: 'Angré, Cocody',
+      addressLocality: 'Abidjan',
+      addressCountry: 'CI',
+    },
+    contactPoint: {
+      '@type': 'ContactPoint',
+      telephone: '+225 07 08 09 10 11',
+      email: 'contact@kmc.ci',
+      contactType: 'Inscriptions et renseignements',
+      availableLanguage: ['French'],
+      areaServed: 'CI',
+    },
+  },
+};
+---
+
+<Layout title={title} description={description} image={pageImage} type="website" jsonLd={contactJsonLd}>
+  <Navigation />
+
+  <main class="relative overflow-x-hidden bg-kmc-night text-kmc-white">
+    <!-- Hero Contact -->
+    <section class="relative flex min-h-[50vh] items-center justify-center px-6 pt-32 pb-16 md:min-h-[60vh] md:px-12">
+      <div class="relative z-10 max-w-3xl text-center">
+        <h1 class="reveal mb-6 font-display text-4xl leading-tight font-bold tracking-tight md:text-6xl">
+          Contactez <span class="text-kmc-cyan">KMC</span>
+        </h1>
+        <p class="reveal mx-auto max-w-xl text-lg leading-relaxed text-kmc-light/80 delay-100">
+          Une question sur nos formations ? Un projet de habilitation ? Nous sommes à votre disposition pour vous accompagner.
+        </p>
+      </div>
+    </section>
+
+    <!-- Contact Grid -->
+    <section class="relative px-6 py-16 md:px-12">
+      <div class="mx-auto grid max-w-7xl grid-cols-1 gap-8 lg:grid-cols-2">
+        <!-- Formulaire -->
+        <div class="reveal rounded-2xl border border-white/[0.08] bg-gradient-to-br from-white/[0.04] to-transparent p-8 backdrop-blur-sm md:p-10">
+          <h2 class="mb-6 font-display text-2xl font-bold md:text-3xl">Envoyer un message</h2>
+
+          <form action="https://formspree.io/f/xnqkqzqz" method="POST" class="space-y-5">
+            <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+              <div>
+                <label for="name" class="mb-2 block text-sm font-medium text-kmc-light">Nom complet</label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  required
+                  class="w-full rounded-lg border border-white/[0.08] bg-white/[0.03] px-4 py-3 text-sm text-kmc-white outline-none transition placeholder:text-kmc-light/50 focus:border-kmc-cyan focus:ring-1 focus:ring-kmc-cyan"
+                  placeholder="Jean Dupont"
+                />
+              </div>
+              <div>
+                <label for="email" class="mb-2 block text-sm font-medium text-kmc-light">Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  required
+                  class="w-full rounded-lg border border-white/[0.08] bg-white/[0.03] px-4 py-3 text-sm text-kmc-white outline-none transition placeholder:text-kmc-light/50 focus:border-kmc-cyan focus:ring-1 focus:ring-kmc-cyan"
+                  placeholder="jean@example.com"
+                />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+              <div>
+                <label for="phone" class="mb-2 block text-sm font-medium text-kmc-light">Téléphone</label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  class="w-full rounded-lg border border-white/[0.08] bg-white/[0.03] px-4 py-3 text-sm text-kmc-white outline-none transition placeholder:text-kmc-light/50 focus:border-kmc-cyan focus:ring-1 focus:ring-kmc-cyan"
+                  placeholder="+225 07 XX XX XX XX"
+                />
+              </div>
+              <div>
+                <label for="interest" class="mb-2 block text-sm font-medium text-kmc-light">Formation souhaitée</label>
+                <select
+                  id="interest"
+                  name="interest"
+                  class="w-full rounded-lg border border-white/[0.08] bg-white/[0.03] px-4 py-3 text-sm text-kmc-white outline-none transition focus:border-kmc-cyan focus:ring-1 focus:ring-kmc-cyan"
+                >
+                  <option value="" class="bg-kmc-night text-kmc-light">-- Choisir --</option>
+                  <option value="technicien-fibre" class="bg-kmc-night">Technicien de raccordement fibre optique</option>
+                  <option value="monteur-lignes" class="bg-kmc-night">Monteur de lignes fibre optique</option>
+                  <option value="superviseur" class="bg-kmc-night">Superviseur travaux FTTH</option>
+                  <option value="habilitation" class="bg-kmc-night">Habilitation électrique</option>
+                  <option value="certification" class="bg-kmc-night">Certification internationale</option>
+                  <option value="photovoltaique" class="bg-kmc-night">Installation photovoltaïque</option>
+                  <option value="autre" class="bg-kmc-night">Autre / Je ne sais pas encore</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label for="message" class="mb-2 block text-sm font-medium text-kmc-light">Message</label>
+              <textarea
+                id="message"
+                name="message"
+                rows="5"
+                required
+                class="w-full resize-none rounded-lg border border-white/[0.08] bg-white/[0.03] px-4 py-3 text-sm text-kmc-white outline-none transition placeholder:text-kmc-light/50 focus:border-kmc-cyan focus:ring-1 focus:ring-kmc-cyan"
+                placeholder="Décrivez votre projet ou votre question..."
+              ></textarea>
+            </div>
+
+            <button
+              type="submit"
+              class="group inline-flex items-center gap-2 rounded-full bg-kmc-cyan px-8 py-3.5 text-sm font-semibold text-kmc-night transition hover:bg-kmc-teal"
+            >
+              Envoyer le message
+              <svg class="h-4 w-4 transition-transform group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+            </button>
+          </form>
+        </div>
+
+        <!-- Infos + Map -->
+        <div class="flex flex-col gap-8">
+          <div class="reveal delay-100 rounded-2xl border border-white/[0.08] bg-gradient-to-br from-white/[0.04] to-transparent p-8 backdrop-blur-sm md:p-10">
+            <h2 class="mb-6 font-display text-2xl font-bold md:text-3xl">Nos coordonnées</h2>
+
+            <ul class="space-y-5">
+              <li class="flex items-start gap-4">
+                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-kmc-cyan/10 text-kmc-cyan">
+                  <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                  </svg>
+                </div>
+                <div>
+                  <p class="font-medium text-kmc-white">Adresse</p>
+                  <p class="text-sm text-kmc-light">Angré, Cocody — Abidjan, Côte d'Ivoire</p>
+                </div>
+              </li>
+
+              <li class="flex items-start gap-4">
+                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-kmc-cyan/10 text-kmc-cyan">
+                  <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                  </svg>
+                </div>
+                <div>
+                  <p class="font-medium text-kmc-white">Téléphone</p>
+                  <p class="text-sm text-kmc-light">+225 07 08 09 10 11</p>
+                </div>
+              </li>
+
+              <li class="flex items-start gap-4">
+                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-kmc-cyan/10 text-kmc-cyan">
+                  <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                  </svg>
+                </div>
+                <div>
+                  <p class="font-medium text-kmc-white">Email</p>
+                  <p class="text-sm text-kmc-light">contact@kmc.ci</p>
+                </div>
+              </li>
+
+              <li class="flex items-start gap-4">
+                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-kmc-cyan/10 text-kmc-cyan">
+                  <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                </div>
+                <div>
+                  <p class="font-medium text-kmc-white">Horaires</p>
+                  <p class="text-sm text-kmc-light">Lun – Ven : 08h00 – 18h00</p>
+                  <p class="text-sm text-kmc-light">Sam : 09h00 – 13h00</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Map placeholder -->
+          <div class="reveal delay-200 overflow-hidden rounded-2xl border border-white/[0.08]">
+            <iframe
+              title="Localisation KMC Abidjan"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3972.1234567890123!2d-3.9!3d5.35!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNcKwMjEnMDAuMCJOIDPCsDU0JzAwLjAiVw!5e0!3m2!1sfr!2sci!4v1600000000000!5m2!1sfr!2sci"
+              width="100%"
+              height="320"
+              style="border:0; filter: grayscale(80%) invert(92%) contrast(90%);"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WhatsApp CTA -->
+    <section class="relative px-6 py-16 md:px-12">
+      <div class="reveal mx-auto max-w-3xl rounded-2xl border border-kmc-cyan/20 bg-gradient-to-br from-kmc-cyan/5 to-transparent p-8 text-center backdrop-blur-sm md:p-12">
+        <p class="mb-4 text-sm font-medium uppercase tracking-wider text-kmc-cyan">Réponse rapide</p>
+        <h2 class="mb-4 font-display text-2xl font-bold md:text-3xl">Discutez avec nous sur WhatsApp</h2>
+        <p class="mx-auto mb-8 max-w-md text-kmc-light/80">
+          Pour une réponse immédiate, écrivez-nous directement sur WhatsApp. Nous vous répondons en général sous l'heure en journée.
+        </p>
+        <a
+          href="https://wa.me/2250708091011?text=Bonjour%20KMC%2C%20je%20souhaite%20avoir%20des%20renseignements%20sur%20vos%20formations."
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group inline-flex items-center gap-3 rounded-full bg-green-500 px-8 py-4 text-sm font-semibold text-white shadow-lg shadow-green-500/20 transition hover:bg-green-400"
+        >
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+          </svg>
+          Écrire sur WhatsApp
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+
+  <script>
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const el = entry.target as HTMLElement;
+            el.style.opacity = '1';
+            el.style.transform = 'translateY(0)';
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+    );
+
+    revealEls.forEach((el) => {
+      const htmlEl = el as HTMLElement;
+      htmlEl.style.opacity = '0';
+      htmlEl.style.transform = 'translateY(24px)';
+      htmlEl.style.transition = 'opacity 0.7s ease, transform 0.7s ease';
+      const delay = htmlEl.classList.contains('delay-100') ? 100 : htmlEl.classList.contains('delay-200') ? 200 : 0;
+      if (delay) htmlEl.style.transitionDelay = `${delay}ms`;
+      observer.observe(el);
+    });
+  </script>
+</Layout>

@@ -1,0 +1,154 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+
+interface BlogPost {
+  id: string;
+  data: {
+    title: string;
+    description: string;
+    pubDate: string;
+    updatedDate?: string;
+    category: string;
+    tags: string[];
+    heroImage?: string;
+    author?: string;
+  };
+}
+
+const postModules = import.meta.glob('../content/blog/*.md', { eager: true });
+
+const posts = Object.entries(postModules).map(([path, mod]: [string, any]) => {
+  const id = path.split('/').pop()?.replace('.md', '') || '';
+  return {
+    id,
+    data: mod.frontmatter as BlogPost['data'],
+  };
+}).sort((a, b) => new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf());
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Blog',
+      name: 'Blog KMC.ci',
+      url: 'https://kmc.ci/blog/',
+      description: 'Articles et guides sur la fibre optique, le photovoltaïque et les technologies de réseau en Côte d\'Ivoire.',
+    },
+      ...posts.map((post: BlogPost) => ({
+        '@type': 'BlogPosting',
+        headline: post.data.title,
+        description: post.data.description,
+        url: `https://kmc.ci/blog/${post.id}/`,
+        datePublished: new Date(post.data.pubDate).toISOString(),
+        dateModified: post.data.updatedDate ? new Date(post.data.updatedDate).toISOString() : new Date(post.data.pubDate).toISOString(),
+        image: post.data.heroImage ? `https://kmc.ci${post.data.heroImage}` : 'https://kmc.ci/images/og-default.jpg',
+        author: {
+          '@type': 'Organization',
+          name: post.data.author || 'KMC',
+        },
+        publisher: {
+          '@type': 'Organization',
+          name: 'KMC',
+          logo: 'https://kmc.ci/images/logo-kmc.png',
+        },
+      })),
+  ],
+};
+---
+
+<Layout
+  title="Blog"
+  description="Articles et guides sur la fibre optique, le photovoltaïque et les technologies de réseau en Côte d'Ivoire. Expertise KMC."
+  type="website"
+  jsonLd={jsonLd}
+>
+  <Navigation />
+  
+  <main id="main-content" class="min-h-screen bg-kmc-night pt-24 pb-20">
+    <!-- Header -->
+    <section class="max-w-7xl mx-auto px-6 mb-16">
+      <div class="max-w-3xl reveal-item opacity-0 translate-y-6">
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-kmc-white font-display mb-6">
+          Blog KMC
+        </h1>
+        <p class="text-lg md:text-xl text-kmc-light leading-relaxed">
+          Découvrez nos articles et guides sur la fibre optique, le photovoltaïque et les technologies de réseau en Côte d'Ivoire.
+        </p>
+      </div>
+    </section>
+
+    <!-- Posts Grid -->
+    <section class="max-w-7xl mx-auto px-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {posts.map((post: BlogPost, i: number) => (
+          <article
+            class="reveal-card group relative rounded-xl overflow-hidden border border-white/[0.08] bg-gradient-to-br from-white/[0.04] to-transparent backdrop-blur-sm hover:border-kmc-cyan/30 transition-all duration-500"
+            style={`transition-delay: ${i * 0.1}s`}
+          >
+            <a href={`/blog/${post.id}/`} class="block">
+              {post.data.heroImage && (
+                <div class="aspect-video overflow-hidden">
+                  <img
+                    src={post.data.heroImage}
+                    alt={post.data.title}
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    loading="lazy"
+                  />
+                </div>
+              )}
+              <div class="p-6">
+                <div class="flex items-center gap-3 mb-4">
+                  {post.data.category && (
+                    <span class="text-xs font-medium px-3 py-1 rounded-full bg-kmc-cyan/10 text-kmc-cyan border border-kmc-cyan/20">
+                      {post.data.category}
+                    </span>
+                  )}
+                  <time class="text-xs text-kmc-light/60" datetime={new Date(post.data.pubDate).toISOString()}>
+                    {new Date(post.data.pubDate).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })}
+                  </time>
+                </div>
+                <h2 class="text-xl font-semibold text-kmc-white font-display mb-3 group-hover:text-kmc-cyan transition-colors duration-300 line-clamp-2">
+                  {post.data.title}
+                </h2>
+                <p class="text-kmc-light/80 text-sm leading-relaxed line-clamp-3 mb-4">
+                  {post.data.description}
+                </p>
+                {post.data.tags && post.data.tags.length > 0 && (
+                  <div class="flex flex-wrap gap-2">
+                    {post.data.tags.slice(0, 3).map((tag: string) => (
+                      <span class="text-xs text-kmc-light/40">#{tag}</span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </a>
+          </article>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<script>
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const el = entry.target as HTMLElement;
+          el.style.transition = 'opacity 0.7s ease, transform 0.7s ease';
+          el.style.opacity = '1';
+          el.style.transform = 'translateY(0)';
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.1 }
+  );
+
+  document.querySelectorAll('.reveal-item').forEach((el) => observer.observe(el));
+  document.querySelectorAll('.reveal-card').forEach((el) => observer.observe(el));
+</script>

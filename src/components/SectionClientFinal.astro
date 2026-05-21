@@ -1,0 +1,260 @@
+---
+// Section 5 — Client Final : salon connecté, témoignage, thème or/chaleureux
+---
+
+<section class="client-section relative w-full bg-kmc-night overflow-hidden">
+  <div class="client-container relative min-h-screen flex items-center justify-center px-6 py-20">
+    <!-- Background glow chaleureux -->
+    <div class="absolute inset-0 pointer-events-none">
+      <div class="absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[500px] bg-kmc-gold/10 rounded-full blur-[140px]"></div>
+      <div class="absolute bottom-0 right-0 w-[400px] h-[400px] bg-kmc-ochre/10 rounded-full blur-[120px]"></div>
+    </div>
+
+    <div class="relative z-10 max-w-6xl w-full grid lg:grid-cols-2 gap-16 items-center">
+      <!-- Visual : Salon connecté -->
+      <div class="living-room-visual relative h-[480px] flex items-center justify-center">
+        <svg viewBox="0 0 500 400" class="w-full h-full max-w-[440px]" aria-hidden="true">
+          <!-- Mur -->
+          <rect x="30" y="20" width="440" height="360" rx="6" fill="#111827" stroke="#374151" stroke-width="1"/>
+          
+          <!-- Fenêtre avec fibre qui entre -->
+          <rect x="50" y="40" width="120" height="100" rx="4" fill="#1e293b" stroke="#f59e0b" stroke-width="2"/>
+          <line x1="110" y1="40" x2="110" y2="140" stroke="#374151" stroke-width="1"/>
+          <line x1="50" y1="90" x2="170" y2="90" stroke="#374151" stroke-width="1"/>
+          
+          <!-- Fibre entrant par la fenêtre -->
+          <path class="fiber-window" d="M 110 140 Q 110 180 110 220" fill="none" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
+          
+          <!-- Routeur -->
+          <rect x="80" y="220" width="70" height="35" rx="4" fill="#1e293b" stroke="#f59e0b" stroke-width="2"/>
+          <rect x="88" y="228" width="54" height="19" rx="2" fill="#0f172a"/>
+          <circle cx="95" cy="237" r="3" fill="#22c55e" class="led-router"/>
+          <circle cx="105" cy="237" r="3" fill="#f59e0b" class="led-router"/>
+          <circle cx="115" cy="237" r="3" fill="#3b82f6" class="led-router"/>
+          
+          <!-- Câbles vers appareils -->
+          <path class="cable-tv" d="M 150 237 Q 200 237 240 180" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+          <path class="cable-pc" d="M 150 242 Q 220 242 320 280" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+          <path class="cable-phone" d="M 150 247 Q 180 270 200 320" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+          
+          <!-- Télévision -->
+          <rect x="240" y="120" width="120" height="70" rx="4" fill="#1e293b" stroke="#374151" stroke-width="2"/>
+          <rect x="248" y="128" width="104" height="54" rx="2" fill="#0f172a"/>
+          <!-- Image sur l'écran -->
+          <circle cx="300" cy="155" r="14" fill="#f59e0b" opacity="0.6"/>
+          <path d="M 290 165 L 300 150 L 310 165 Z" fill="#f59e0b" opacity="0.8"/>
+          <rect x="285" y="172" width="30" height="4" rx="2" fill="#f59e0b" opacity="0.4"/>
+          
+          <!-- PC / Laptop -->
+          <rect x="320" y="250" width="100" height="65" rx="4" fill="#1e293b" stroke="#374151" stroke-width="2"/>
+          <rect x="328" y="258" width="84" height="49" rx="2" fill="#0f172a"/>
+          <!-- Écran PC -->
+          <rect x="335" y="265" width="70" height="35" rx="2" fill="#f59e0b" opacity="0.15"/>
+          <circle cx="360" cy="282" r="8" fill="#f59e0b" opacity="0.5"/>
+          
+          <!-- Smartphone -->
+          <rect x="200" y="310" width="32" height="55" rx="6" fill="#1e293b" stroke="#374151" stroke-width="2"/>
+          <rect x="204" y="316" width="24" height="40" rx="3" fill="#0f172a"/>
+          <circle cx="216" cy="334" r="6" fill="#f59e0b" opacity="0.6"/>
+          
+          <!-- WiFi waves globales -->
+          <g class="wifi-global" opacity="0.5">
+            <path d="M 110 190 Q 180 120 280 120" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M 110 200 Q 200 100 340 100" fill="none" stroke="#f59e0b" stroke-width="1" stroke-linecap="round"/>
+            <path d="M 110 210 Q 220 80 380 80" fill="none" stroke="#f59e0b" stroke-width="0.5" stroke-linecap="round"/>
+          </g>
+          
+          <!-- Glow -->
+          <defs>
+            <filter id="living-glow">
+              <feGaussianBlur stdDeviation="3" result="blur"/>
+              <feMerge>
+                <feMergeNode in="blur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+        </svg>
+
+        <!-- Label -->
+        <div class="absolute top-4 left-1/2 -translate-x-1/2 bg-kmc-gold/20 backdrop-blur-sm px-4 py-2 rounded-full border border-kmc-gold/40">
+          <span class="text-kmc-gold font-display font-bold text-sm tracking-wider">CHEZ LE CLIENT</span>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="content text-center lg:text-left">
+        <span class="inline-block text-kmc-gold font-mono text-sm tracking-widest uppercase mb-4">Étape 6</span>
+        <h2 class="font-display text-4xl md:text-5xl font-bold text-kmc-white mb-6 leading-tight">
+          La fibre<br>
+          <span class="text-kmc-gold">chez vous</span>
+        </h2>
+        <p class="text-lg text-kmc-light leading-relaxed mb-8 max-w-lg mx-auto lg:mx-0">
+          Le voyage de la lumière s'achève dans votre salon. Télévision 4K, télétravail,
+          visioconférence, cloud gaming — tout fonctionne sans latence, sans coupure.
+          La fibre transforme le quotidien.
+        </p>
+
+        <!-- Speed test visuel -->
+        <div class="speed-test bg-kmc-night/60 backdrop-blur-sm border border-kmc-gold/20 rounded-2xl p-5 mb-8 max-w-md mx-auto lg:mx-0">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-sm text-kmc-light font-mono">Débit descendant</span>
+            <span class="text-kmc-gold font-display font-bold text-xl speed-value">0</span>
+          </div>
+          <div class="w-full h-2 bg-kmc-night rounded-full overflow-hidden">
+            <div class="speed-bar h-full bg-gradient-to-r from-kmc-gold to-kmc-ochre rounded-full" style="width: 0%"></div>
+          </div>
+          <div class="flex items-center gap-4 mt-4">
+            <div class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span class="text-xs text-kmc-light">Ping {'<'}5ms</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span class="text-xs text-kmc-light">Jitter 0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Témoignage -->
+        <blockquote class="border-l-4 border-kmc-gold pl-5 mb-8 max-w-lg mx-auto lg:mx-0">
+          <p class="text-kmc-light italic text-base leading-relaxed mb-3">
+            « Grâce à KMC, j'ai pu me reconvertir dans la fibre optique. Aujourd'hui je suis
+            technicien certifié et je travaille pour un grand opérateur à Abidjan. »
+          </p>
+          <footer class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-kmc-gold/20 flex items-center justify-center text-kmc-gold font-bold text-sm">AK</div>
+            <div>
+              <div class="text-kmc-white font-semibold text-sm">Amadou K.</div>
+              <div class="text-kmc-light text-xs">Technicien FTTH, Abidjan</div>
+            </div>
+          </footer>
+        </blockquote>
+
+        <a href="/formations-fibre-optique/" class="inline-flex items-center gap-2 bg-kmc-gold text-kmc-night font-semibold px-6 py-3 rounded-full hover:bg-kmc-ochre transition-colors">
+          Rejoignez nos apprenants
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const isMobile = window.matchMedia('(pointer: coarse)').matches;
+  const section = document.querySelector('.client-section');
+  if (section) {
+  const container = section.querySelector('.client-container');
+  const content = section.querySelectorAll('.content > *');
+  const fiberWindow = section.querySelector('.fiber-window');
+  const cables = section.querySelectorAll('.cable-tv, .cable-pc, .cable-phone');
+  const ledRouter = section.querySelectorAll('.led-router');
+  const wifiGlobal = section.querySelector('.wifi-global');
+  const speedBar = section.querySelector('.speed-bar');
+  const speedValue = section.querySelector('.speed-value');
+
+  if (!isMobile && container) {
+    ScrollTrigger.create({
+      trigger: container,
+      start: 'top top',
+      end: '+=130%',
+      pin: true,
+      scrub: 1,
+    });
+  }
+
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: section,
+      start: 'top 80%',
+      end: 'center center',
+      scrub: 1,
+    }
+  });
+
+  tl.from(content, {
+    y: 60,
+    opacity: 0,
+    duration: 1,
+    stagger: 0.1,
+    ease: 'power2.out'
+  })
+  .from(fiberWindow, {
+    strokeDasharray: 200,
+    strokeDashoffset: 200,
+    duration: 1,
+    ease: 'power2.out'
+  }, '-=0.8')
+  .from(cables, {
+    strokeDasharray: 150,
+    strokeDashoffset: 150,
+    duration: 1.2,
+    stagger: 0.2,
+    ease: 'power2.out'
+  }, '-=0.6')
+  .from(ledRouter, {
+    scale: 0,
+    opacity: 0,
+    duration: 0.4,
+    stagger: 0.1,
+    ease: 'back.out(1.7)'
+  }, '-=0.8')
+  .from(wifiGlobal, {
+    opacity: 0,
+    scale: 0.8,
+    duration: 1,
+    ease: 'power2.out'
+  }, '-=0.5');
+
+  // Speed test animation
+  ScrollTrigger.create({
+    trigger: section,
+    start: 'top 60%',
+    onEnter: () => {
+      gsap.to(speedBar, { width: '92%', duration: 1.5, ease: 'power2.out' });
+      gsap.to({ val: 0 }, {
+        val: 940,
+        duration: 1.5,
+        ease: 'power2.out',
+        onUpdate: function() {
+          if (speedValue) speedValue.textContent = Math.round(this.targets()[0].val) + ' Mbps';
+        }
+      });
+    },
+    once: true
+  });
+
+  // LED pulse loop
+  gsap.to(ledRouter, {
+    opacity: 0.3,
+    duration: 1,
+    stagger: 0.2,
+    repeat: -1,
+    yoyo: true,
+    ease: 'sine.inOut'
+  });
+
+  // WiFi waves loop
+  if (wifiGlobal) {
+    gsap.to(wifiGlobal.querySelectorAll('path'), {
+      opacity: 0.15,
+      duration: 1.5,
+      stagger: 0.3,
+      repeat: -1,
+      yoyo: true,
+      ease: 'sine.inOut'
+    });
+  }
+  }
+</script>

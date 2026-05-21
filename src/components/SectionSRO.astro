@@ -1,0 +1,185 @@
+---
+// Section SRO — Immeuble et Formation 1
+// Formation 1 : Technicien de raccordement fibre (SRO/PBO)
+---
+
+<section class="sro-section relative w-full bg-kmc-night overflow-hidden">
+  <div class="sro-container relative min-h-screen flex items-center justify-center px-6 py-20">
+    <!-- Background Glow -->
+    <div class="absolute inset-0 pointer-events-none">
+      <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-kmc-cyan/10 rounded-full blur-[120px]"></div>
+    </div>
+
+    <div class="relative z-10 max-w-6xl w-full grid lg:grid-cols-2 gap-12 items-center">
+      <!-- Visual: Building + Fiber -->
+      <div class="building-visual relative h-[500px] flex items-center justify-center order-2 lg:order-1">
+        <svg viewBox="0 0 400 500" class="w-full h-full max-w-[320px]" aria-hidden="true">
+          <!-- Building -->
+          <rect x="120" y="60" width="160" height="380" rx="4" fill="#1a2332" stroke="#2dd4bf" stroke-width="2"/>
+          <!-- Floors -->
+          <line x1="120" y1="120" x2="280" y2="120" stroke="#2dd4bf" stroke-width="1" opacity="0.5"/>
+          <line x1="120" y1="180" x2="280" y2="180" stroke="#2dd4bf" stroke-width="1" opacity="0.5"/>
+          <line x1="120" y1="240" x2="280" y2="240" stroke="#2dd4bf" stroke-width="1" opacity="0.5"/>
+          <line x1="120" y1="300" x2="280" y2="300" stroke="#2dd4bf" stroke-width="1" opacity="0.5"/>
+          <line x1="120" y1="360" x2="280" y2="360" stroke="#2dd4bf" stroke-width="1" opacity="0.5"/>
+          
+          <!-- Floor Nodes -->
+          <circle class="floor-node" cx="200" cy="120" r="6" fill="#2dd4bf"/>
+          <circle class="floor-node" cx="200" cy="180" r="6" fill="#2dd4bf"/>
+          <circle class="floor-node" cx="200" cy="240" r="6" fill="#2dd4bf"/>
+          <circle class="floor-node" cx="200" cy="300" r="6" fill="#2dd4bf"/>
+          <circle class="floor-node" cx="200" cy="360" r="6" fill="#2dd4bf"/>
+          
+          <!-- Fiber line entering building -->
+          <path class="fiber-branch" d="M 200 -20 L 200 60" fill="none" stroke="#2dd4bf" stroke-width="3" stroke-linecap="round"/>
+          
+          <!-- Fiber branches to floors -->
+          <path class="fiber-branch" d="M 200 60 L 200 120" fill="none" stroke="#2dd4bf" stroke-width="2" stroke-linecap="round" opacity="0.8"/>
+          <path class="fiber-branch" d="M 200 120 L 200 180" fill="none" stroke="#2dd4bf" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+          <path class="fiber-branch" d="M 200 180 L 200 240" fill="none" stroke="#2dd4bf" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+          <path class="fiber-branch" d="M 200 240 L 200 300" fill="none" stroke="#2dd4bf" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+          <path class="fiber-branch" d="M 200 300 L 200 360" fill="none" stroke="#2dd4bf" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+          
+          <!-- Glow filter -->
+          <defs>
+            <filter id="sro-glow">
+              <feGaussianBlur stdDeviation="3" result="blur"/>
+              <feMerge>
+                <feMergeNode in="blur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+        </svg>
+        
+        <!-- SRO Label -->
+        <div class="absolute top-4 left-1/2 -translate-x-1/2 bg-kmc-cyan/20 backdrop-blur-sm px-4 py-2 rounded-full border border-kmc-cyan/40">
+          <span class="text-kmc-cyan font-display font-bold text-sm tracking-wider">SRO</span>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="content order-1 lg:order-2 text-center lg:text-left">
+        <span class="inline-block text-kmc-cyan font-mono text-sm tracking-widest uppercase mb-4">Étape 4</span>
+        <h2 class="font-display text-4xl md:text-5xl font-bold text-kmc-white mb-6 leading-tight">
+          Le <span class="text-kmc-cyan">SRO</span><br>
+          <span class="text-2xl md:text-3xl font-normal text-kmc-light">Point de mutualisation</span>
+        </h2>
+        <p class="text-lg text-kmc-light leading-relaxed mb-8 max-w-lg mx-auto lg:mx-0">
+          Dans l'immeuble, la fibre se déploie étage par étage. Le SRO (Sub-Rack Optical) 
+          répartit la connexion vers chaque logement, comme un système nerveux qui 
+          atteint chaque appartement.
+        </p>
+
+        <!-- Stats -->
+        <div class="stats grid grid-cols-3 gap-6 mb-10 max-w-md mx-auto lg:mx-0">
+          <div class="stat-item text-center lg:text-left">
+            <div class="font-display text-3xl font-bold text-kmc-cyan">72</div>
+            <div class="text-sm text-kmc-light">fibres</div>
+          </div>
+          <div class="stat-item text-center lg:text-left">
+            <div class="font-display text-3xl font-bold text-kmc-cyan">48</div>
+            <div class="text-sm text-kmc-light">logements</div>
+          </div>
+          <div class="stat-item text-center lg:text-left">
+            <div class="font-display text-3xl font-bold text-kmc-cyan">1</div>
+            <div class="text-sm text-kmc-light">PBO</div>
+          </div>
+        </div>
+
+        <!-- Formation 1 CTA Card -->
+        <div class="formation-card bg-gradient-to-br from-kmc-cyan/20 to-transparent backdrop-blur-sm border border-kmc-cyan/30 rounded-2xl p-6 max-w-md mx-auto lg:mx-0 hover:border-kmc-cyan/60 transition-colors duration-300">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-10 h-10 rounded-full bg-kmc-cyan/20 flex items-center justify-center">
+              <svg class="w-5 h-5 text-kmc-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+              </svg>
+            </div>
+            <span class="text-kmc-cyan font-mono text-xs tracking-wider uppercase">Formation</span>
+          </div>
+          <h3 class="font-display text-xl font-bold text-kmc-white mb-2">Technicien de raccordement fibre</h3>
+          <p class="text-sm text-kmc-light mb-4">Apprenez à installer et configurer les équipements SRO/PBO dans les immeubles.</p>
+          <a href="/formations-fibre-optique/" class="inline-flex items-center gap-2 text-kmc-cyan font-semibold hover:gap-3 transition-all">
+            Découvrir la formation
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  
+  gsap.registerPlugin(ScrollTrigger);
+  
+  const isMobile = window.matchMedia('(pointer: coarse)').matches;
+  const section = document.querySelector('.sro-section');
+  
+  if (section) {
+    const container = section.querySelector('.sro-container');
+    const content = section.querySelectorAll('.content > *');
+    const floorNodes = section.querySelectorAll('.floor-node');
+    const fiberBranches = section.querySelectorAll('.fiber-branch');
+    const stats = section.querySelectorAll('.stat-item');
+    const formationCard = section.querySelector('.formation-card');
+    
+    if (!isMobile && container) {
+      ScrollTrigger.create({
+        trigger: container,
+        start: 'top top',
+        end: '+=130%',
+        pin: true,
+        scrub: 1,
+      });
+    }
+    
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: section,
+        start: 'top 80%',
+        end: 'center center',
+        scrub: 1,
+      }
+    });
+    
+    tl.from(content, {
+      y: 60,
+      opacity: 0,
+      duration: 1,
+      stagger: 0.1,
+      ease: 'power2.out'
+    })
+    .from(fiberBranches, {
+      strokeDasharray: 200,
+      strokeDashoffset: 200,
+      duration: 1.5,
+      stagger: 0.2,
+      ease: 'power2.out'
+    }, '-=0.8')
+    .from(floorNodes, {
+      scale: 0,
+      opacity: 0,
+      duration: 0.5,
+      stagger: 0.15,
+      ease: 'back.out(1.7)'
+    }, '-=1')
+    .from(stats, {
+      y: 30,
+      opacity: 0,
+      duration: 0.8,
+      stagger: 0.1,
+      ease: 'power2.out'
+    }, '-=0.5')
+    .from(formationCard, {
+      y: 40,
+      opacity: 0,
+      duration: 1,
+      ease: 'power2.out'
+    }, '-=0.3');
+  }
+</script>

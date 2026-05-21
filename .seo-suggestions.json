@@ -1,0 +1,65 @@
+{
+  "date": "2026-05-21T09:00:00.000Z",
+  "siteUrl": "https://kmc.ci",
+  "suggestions": [
+    {
+      "id": "content-photovoltaique",
+      "type": "content",
+      "priority": "high",
+      "title": "Ajouter section formations photovoltaïques",
+      "description": "Créer une page dédiée aux formations photovoltaïques pour capter le trafic sur ce terme en croissance",
+      "estimatedTraffic": 890,
+      "estimatedConversion": 3.2,
+      "relatedPage": "/habilitations",
+      "notionPageId": null
+    },
+    {
+      "id": "blog-certification-fibre-optique",
+      "type": "blog-post",
+      "priority": "medium",
+      "title": "Certification fibre optique ivoire - Guide complet 2026",
+      "description": "Créer un article de blog optimisé pour 'certification fibre optique ivoire'",
+      "estimatedTraffic": 320,
+      "estimatedConversion": 2.1
+    },
+    {
+      "id": "blog-numerisation-entreprises",
+      "type": "blog-post",
+      "priority": "medium",
+      "title": "L'importance de la numérisation des entreprises ivoiriennes",
+      "description": "Article sur comment les entreprises ivoiriennes peuvent se numériser avec la fibre et le cloud",
+      "estimatedTraffic": 320,
+      "estimatedConversion": 1.8
+    },
+    {
+      "id": "technical-sitemap",
+      "type": "technical",
+      "priority": "low",
+      "title": "Optimiser sitemap.xml",
+      "description": "Ajouter les nouvelles pages au sitemap et vérifier robots.txt",
+      "estimatedTraffic": 0,
+      "estimatedConversion": 0
+    }
+  ],
+  "macroData": {
+    "ci": {
+      "gdp": 85.2,
+      "growthRate": 7.5,
+      "inflation": 4.2,
+      "internetUsers": 5.1
+    },
+    "gh": {
+      "gdp": 82.0,
+      "growthRate": 5.8,
+      "inflation": 1.4,
+      "internetUsers": 25.0
+    },
+    "bf": {
+      "gdp": 31.0,
+      "growthRate": 5.4,
+      "inflation": 2.8,
+      "internetUsers": 1.2
+    },
+    "latestUpdate": "2026-05-21"
+  }
+}

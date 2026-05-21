@@ -1,0 +1,203 @@
+---
+interface Props {
+    title?: string;
+    subtitle?: string;
+}
+const { title = "KMC", subtitle = "Knowledge Management Center" } = Astro.props;
+---
+
+<section id="hero" class="relative h-screen w-full overflow-hidden bg-kmc-night">
+    <canvas id="fiber-canvas" class="absolute inset-0 z-0"></canvas>
+
+    <div class="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center">
+        <div class="hero-content opacity-0 translate-y-8">
+            <h1 class="font-display text-5xl font-bold tracking-tight text-white md:text-7xl lg:text-8xl">
+                {title}
+            </h1>
+            <p class="mt-4 text-xl text-kmc-cyan md:text-2xl lg:text-3xl font-light">
+                {subtitle}
+            </p>
+            <p class="mt-6 max-w-xl text-kmc-light/80 text-base md:text-lg">
+                Institut de formation aux métiers de la fibre optique et du photovoltaïque — Abidjan, Côte d'Ivoire
+            </p>
+            <div class="mt-10 flex flex-col gap-4 sm:flex-row sm:justify-center">
+                <a href="#formations" class="inline-flex items-center justify-center rounded-full bg-kmc-ochre px-8 py-3 text-sm font-semibold text-white transition-transform hover:scale-105">
+                    Découvrir les formations
+                </a>
+                <a href="#contact" class="inline-flex items-center justify-center rounded-full border border-kmc-cyan/40 px-8 py-3 text-sm font-semibold text-kmc-cyan transition-colors hover:bg-kmc-cyan/10">
+                    Nous contacter
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="absolute bottom-8 left-1/2 z-10 -translate-x-1/2">
+        <div class="flex flex-col items-center gap-2 text-kmc-cyan/60">
+            <span class="text-xs uppercase tracking-widest">Scroll</span>
+            <div class="h-8 w-px bg-kmc-cyan/40"></div>
+        </div>
+    </div>
+</section>
+
+<script>
+    import { gsap } from 'gsap';
+    import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Animate hero content in
+    gsap.to('.hero-content', {
+        opacity: 1,
+        y: 0,
+        duration: 1.2,
+        ease: 'power3.out',
+        delay: 0.3,
+    });
+
+    // Fade out hero on scroll
+    ScrollTrigger.create({
+        trigger: '#hero',
+        start: 'top top',
+        end: 'bottom top',
+        scrub: true,
+        onUpdate: (self) => {
+            const progress = self.progress;
+            const content = document.querySelector('.hero-content') as HTMLElement;
+            if (content) {
+                content.style.opacity = String(1 - progress);
+                content.style.transform = `translateY(${progress * -40}px)`;
+            }
+        },
+    });
+
+    // Three.js fiber tunnel — dynamic import for performance
+    async function initTunnel() {
+        const canvas = document.getElementById('fiber-canvas') as HTMLCanvasElement;
+        if (!canvas) return;
+
+        // Skip WebGL on mobile/low-power
+        const isMobile = window.matchMedia('(pointer: coarse)').matches;
+        if (isMobile) {
+            canvas.style.background = 'radial-gradient(ellipse at center, #0f2b4d 0%, #0a1628 70%)';
+            return;
+        }
+
+        try {
+            const THREE = await import('three');
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+            // Fog for depth
+            scene.fog = new THREE.FogExp2(0x0a1628, 0.03);
+
+            // Tunnel path
+            const points: any[] = [];
+            for (let i = 0; i < 200; i++) {
+                const t = i / 20;
+                const x = Math.sin(t * 1.5) * 3;
+                const y = Math.cos(t * 1.2) * 2;
+                const z = -t * 4;
+                points.push(new THREE.Vector3(x, y, z));
+            }
+            const curve = new THREE.CatmullRomCurve3(points);
+            const geometry = new THREE.TubeGeometry(curve, 100, 0.3, 8, false);
+
+            // Glow material
+            const material = new THREE.MeshBasicMaterial({
+                color: 0x2dd4bf,
+                transparent: true,
+                opacity: 0.4,
+                side: THREE.BackSide,
+                blending: THREE.AdditiveBlending,
+            });
+
+            const tunnel = new THREE.Mesh(geometry, material);
+            scene.add(tunnel);
+
+            // Light particles
+            const particleCount = 300;
+            const particlesGeometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+            for (let i = 0; i < particleCount; i++) {
+                const t = Math.random();
+                const p = curve.getPoint(t);
+                positions[i * 3] = p.x + (Math.random() - 0.5) * 0.5;
+                positions[i * 3 + 1] = p.y + (Math.random() - 0.5) * 0.5;
+                positions[i * 3 + 2] = p.z + (Math.random() - 0.5) * 2;
+            }
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            const particlesMaterial = new THREE.PointsMaterial({
+                color: 0xffffff,
+                size: 0.05,
+                transparent: true,
+                opacity: 0.8,
+                blending: THREE.AdditiveBlending,
+            });
+            const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particles);
+
+            // Camera starts inside
+            camera.position.set(0, 0, 1);
+
+            let scrollProgress = 0;
+
+            ScrollTrigger.create({
+                trigger: '#hero',
+                start: 'top top',
+                end: '+=150%',
+                pin: true,
+                scrub: 1,
+                onUpdate: (self) => {
+                    scrollProgress = self.progress;
+                },
+            });
+
+            // Animation loop
+            let animationId: number;
+            function animate() {
+                animationId = requestAnimationFrame(animate);
+
+                // Move camera through tunnel based on scroll
+                const t = Math.min(scrollProgress * 0.95, 0.95);
+                const camPos = curve.getPointAt(t);
+                const lookAt = curve.getPointAt(Math.min(t + 0.01, 1));
+                camera.position.copy(camPos);
+                camera.lookAt(lookAt);
+
+                // Rotate particles
+                particles.rotation.z += 0.001;
+
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            // Resize
+            function onResize() {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            }
+            window.addEventListener('resize', onResize);
+
+            // Cleanup
+            return () => {
+                cancelAnimationFrame(animationId);
+                window.removeEventListener('resize', onResize);
+                renderer.dispose();
+                geometry.dispose();
+                material.dispose();
+                particlesGeometry.dispose();
+                particlesMaterial.dispose();
+            };
+        } catch (err) {
+            console.warn('Three.js tunnel init failed:', err);
+            canvas.style.background = 'radial-gradient(ellipse at center, #0f2b4d 0%, #0a1628 70%)';
+        }
+    }
+
+    initTunnel();
+</script>
