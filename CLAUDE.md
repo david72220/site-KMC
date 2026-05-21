@@ -294,30 +294,95 @@ Site KMC/
 
 ---
 
+## 🚀 DÉPLOIEMENT — Vercel (actif)
+
+- **URL Vercel :** https://vercel.com/david72220s-projects/site-kmc
+- **Hébergeur :** Vercel (remplace Hostinger pour le déploiement)
+- **Déclenchement :** push sur `main` → rebuild automatique
+
+### 🔴 Variables d'environnement Vercel à configurer
+
+Aller sur **Vercel → projet site-kmc → Settings → Environment Variables** et ajouter :
+
+| Variable | Valeur | Environnement |
+|---|---|---|
+| `NOTION_TOKEN` | `ntn_***` (voir `.env` local) | Production + Preview |
+| `NOTION_FORMATION_DB_ID` | `1e49628038de8091a5d2c38db72951f4` | Production + Preview |
+| `SITE_URL` | `https://kmc.ci` | Production |
+| `FORMSPREE_ENDPOINT` | `https://formspree.io/f/xnqkqzqz` | Production + Preview |
+
+Sans ces variables, le build Vercel ne récupérera pas les données Notion.
+
+---
+
+## 🔔 AUTOMATISATION NOTION → SITE (À CONSTRUIRE)
+
+### Objectif
+Quand une formation est cochée/décochée dans Notion ("A afficher sur le site web"),
+le site se reconstruit automatiquement en moins de 2 minutes.
+
+### Prérequis côté code (déjà fait ✅)
+- Propriété checkbox **`A afficher sur le site web`** à ajouter dans la base Notion "Type de Formation"
+- `src/lib/notion.ts` filtre déjà sur `checkbox: { equals: true }` — le code est prêt
+
+### Architecture à mettre en place
+```
+Notion : coche "A afficher sur le site web"
+       ↓
+Notion Automation (onglet ⚡ du tableau)
+       ↓  POST webhook
+Vercel Deploy Hook (URL secrète à générer)
+       ↓  rebuild ~1 min
+kmc.ci mis à jour automatiquement
+```
+
+### Étapes à réaliser
+
+#### 1. Ajouter la checkbox dans Notion
+Dans la base "Type de Formation" → `+` nouvelle colonne → **Checkbox** → nommer exactement :
+`A afficher sur le site web`
+Puis cocher les formations à afficher sur le site.
+
+#### 2. Créer le Deploy Hook Vercel
+**Vercel → site-kmc → Settings → Git → Deploy Hooks**
+- Nom : `Notion trigger`
+- Branche : `main`
+- Copier l'URL générée (format : `https://api.vercel.com/v1/integrations/deploy/xxx`)
+
+#### 3. Créer l'Automation Notion
+Dans le tableau Notion → **⚡ Automations → New automation**
+- **Trigger :** "Property is edited" → `A afficher sur le site web`
+- **Action :** "Send webhook" → coller l'URL Vercel Deploy Hook
+- Méthode : `POST`, corps vide
+
+#### 4. Tester
+Cocher une formation → attendre ~1 min → vérifier que `/formations-fibre-optique/` est mis à jour.
+
+---
+
 ## 📋 CHECKLIST FINALE
 
 | Tâche | Priorité | % Fait | Notes |
 |-----------|--------|---|------|
-| ✅ Base Notion formations | 🔴 | 0% | À configurer |
-| ✅ ID de base obtenu | 🔴 | 0% | À copier |
-| ✅ Mettre à jour `.env` | 🔴 | 0% | Avec ID base |
-| ✅ Reconstruire site | 🟢 | 0% | `npm run build` |
-| ✅ Blog articles | 🟢 | 30% | 3 auto + manuels |
-| ✅ `.htaccess` | 🟢 | 0% | Généré |
-| ✅ Automatisation SEO | ✅ | 100% | Terminé |
-| **TOTAL** | | **~90%** | Excellent |
+| Base Notion formations | ✅ | 100% | ID configuré, schema mappé |
+| Notion API intégration | ✅ | 100% | Filtre checkbox actif dans le code |
+| Déploiement Vercel | ✅ | 100% | Projet connecté |
+| Variables env Vercel | 🔴 | 0% | À configurer dans le dashboard Vercel |
+| Checkbox "A afficher" dans Notion | 🔴 | 0% | À créer dans le tableau Notion |
+| Automation Notion → Deploy Hook | 🟡 | 0% | À construire (voir section ci-dessus) |
+| Blog articles | 🟢 | 30% | 3 auto-générés |
+| Automatisation SEO | ✅ | 100% | GitHub Actions hebdo |
+| **TOTAL** | | **~92%** | Quasi-prêt pour production |
 
 ---
 
-## 🎯 PROCHAINES ÉTAPE (15 min)
+## 🎯 PROCHAINES ÉTAPES
 
-1. **Créer base formations** dans Notion → 5 min
-2. **Copier ID de base** → 1 min
-3. **Mettre à jour `.env`** → 1 min
-4. **Lancer build** → 2 min
-5. **Vérifier site** → 2 min
-6. **Configurer workflows GitHub** → 4 min
+1. **Variables Vercel** → 5 min (Settings → Environment Variables)
+2. **Checkbox Notion** → 2 min (nouvelle colonne dans le tableau)
+3. **Cocher les formations** à afficher → 2 min
+4. **Deploy Hook + Automation Notion** → 10 min (voir section ci-dessus)
 
 ---
 
-*Généré le 21 mai 2026 — Projet KMC.ci v2 — Automatisation SEO activée — Progression : 90%*
+*Mis à jour le 21 mai 2026 — Déploiement Vercel actif — Automatisation Notion à finaliser*

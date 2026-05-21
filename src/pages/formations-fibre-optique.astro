@@ -1,102 +1,71 @@
 ---
-/* ============================================
-   PAGE – FORMATIONS FIBRE OPTIQUE
-   Fetches live formation data from Notion at build time.
-   ============================================ */
-
 import Layout from '../layouts/Layout.astro';
 import Navigation from '../components/Navigation.astro';
 import Footer from '../components/Footer.astro';
-import { getFormationsWithClasses } from '../lib/notion';
+import { getFormations } from '../lib/notion';
 
-let formations: Awaited<ReturnType<typeof getFormationsWithClasses>> = [];
+let formations: Awaited<ReturnType<typeof getFormations>> = [];
 let notionError = false;
 
 try {
-  formations = await getFormationsWithClasses();
+  formations = await getFormations();
 } catch (e) {
-  console.error('Notion API error fetching formations:', e);
+  console.error('Notion API error:', e);
   notionError = true;
 }
 
-const pageTitle = 'Formations fibre optique';
-const pageDescription = 'Découvrez toutes nos formations certifiantes aux métiers de la fibre optique — Technicien, Monteur, Superviseur, Habilitation électrique, Certification CW/DW et Gestionnaire réseau FTTH. KMC, Abidjan.';
-const pageImage = 'https://kmc.ci/images/og-formations.jpg';
+const pageTitle = 'Formations fibre optique & habilitations — KMC.ci';
+const pageDescription = 'Découvrez toutes nos formations certifiantes : fibre optique, habilitations électriques, photovoltaïque. KMC, Abidjan, Côte d\'Ivoire.';
 
-// JSON-LD: Course schema for each formation
-const coursesJsonLd = formations.map((f) => ({
+const jsonLd = formations.length > 0 ? {
   '@context': 'https://schema.org',
-  '@type': 'Course',
-  name: f.nom,
-  description: f.resume || `Formation ${f.nom} au Knowledge Management Center.`,
-  provider: {
-    '@type': 'EducationalOrganization',
-    name: 'KMC - Knowledge Management Center',
-    url: 'https://kmc.ci',
-    address: {
-      '@type': 'PostalAddress',
-      addressLocality: 'Abidjan',
-      addressCountry: 'CI',
+  '@graph': formations.map(f => ({
+    '@type': 'Course',
+    name: f.nom,
+    description: f.issue || f.programme,
+    provider: {
+      '@type': 'EducationalOrganization',
+      name: 'KMC - Knowledge Management Center',
+      url: 'https://kmc.ci',
     },
-  },
-  educationalLevel: f.classes.length > 0 ? f.classes.join(', ') : 'Professionnel',
-  offers: f.fraisAdministratifs
-    ? {
-        '@type': 'Offer',
-        price: f.fraisAdministratifs.toString(),
-        priceCurrency: 'XOF',
-        availability: 'https://schema.org/InStock',
-      }
-    : undefined,
-}));
-
-const jsonLd =
-  coursesJsonLd.length > 0
-    ? {
-        '@context': 'https://schema.org',
-        '@graph': [
-          {
-            '@type': 'EducationalOrganization',
-            name: 'KMC - Knowledge Management Center',
-            url: 'https://kmc.ci',
-            logo: 'https://kmc.ci/images/logo-kmc.png',
-          },
-          ...coursesJsonLd,
-        ],
-      }
-    : undefined;
+    offers: f.fraisAdministratifs ? {
+      '@type': 'Offer',
+      price: f.fraisAdministratifs.toString(),
+      priceCurrency: 'XOF',
+    } : undefined,
+  })),
+} : undefined;
 ---
 
-<Layout
-  title={pageTitle}
-  description={pageDescription}
-  image={pageImage}
-  type="website"
-  jsonLd={jsonLd}
->
+<Layout title={pageTitle} description={pageDescription} jsonLd={jsonLd}>
   <Navigation />
 
-  {/* ── Page Hero ── */}
+  <!-- Hero -->
   <section class="relative bg-[#070a10] pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden">
     <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(45,212,191,0.06)_0%,_transparent_60%)]"></div>
     <div class="max-w-7xl mx-auto px-6 lg:px-8 relative">
       <div class="max-w-3xl">
-        <p class="text-[#2dd4bf] text-sm font-semibold tracking-widest uppercase mb-4">
-          Nos formations
-        </p>
+        <p class="text-[#2dd4bf] text-sm font-semibold tracking-widest uppercase mb-4">Nos formations</p>
         <h1 class="font-display text-4xl md:text-6xl font-bold text-[#f5f5f0] mb-6 leading-tight">
           Formez-vous aux métiers de la <span class="text-[#eab308]">fibre optique</span>
         </h1>
         <p class="text-[#a1a1aa] text-lg md:text-xl leading-relaxed max-w-2xl">
-          De la pose de câbles à la supervision de réseaux FTTH — nos formations certifiantes couvrent chaque maillon de la chaîne, du terrain jusqu'au client final.
+          Des formations certifiantes dispensées par des experts du terrain, à Abidjan.
         </p>
       </div>
     </div>
   </section>
 
-  {/* ── Formations Grid by Domain ── */}
+  <!-- Formations Grid -->
   <section class="relative bg-[#070a10] pb-24 md:pb-32">
     <div class="max-w-7xl mx-auto px-6 lg:px-8">
+
+      {notionError && (
+        <div class="rounded-2xl border border-red-500/20 bg-red-500/5 p-12 text-center">
+          <p class="text-red-400 text-lg">Erreur de chargement des formations. Veuillez réessayer.</p>
+        </div>
+      )}
+
       {!notionError && formations.length === 0 && (
         <div class="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-12 text-center">
           <p class="text-[#a1a1aa] text-lg">Les formations sont en cours de configuration.</p>
@@ -107,82 +76,70 @@ const jsonLd =
       )}
 
       {formations.length > 0 && (
-        <div id="formations-grid">
-          {formations.map((formation, idx) => {
-            // Assign colors by domaine type
-            const cyan = '#2dd4bf';      // Fibre optique
-            const ochre = '#eab308';     // Habilitations
-            const blue = '#3B82F6';      // Photovoltaïque
-            const orange = '#F97316';    // Autres
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {formations.map((formation) => (
+            <article class="formation-card group relative rounded-2xl border border-white/[0.08] bg-gradient-to-br from-white/[0.04] to-transparent p-8 hover:border-[#2dd4bf]/30 transition-all duration-500 hover:-translate-y-2">
 
-            const accent = formation.domaines?.includes('Habilitations') ? ochre :
-                          formation.domaines?.includes('Photovoltaïque') ? blue :
-                          formation.domaines?.includes('Fibre') ? cyan : orange;
-            const accentText = accent;
-            const accentBg = `${accent}20`;
+              <h2 class="font-display text-xl font-bold text-[#f5f5f0] mb-3">
+                {formation.nom}
+              </h2>
 
-            return (
-              <article class="formation-card group relative rounded-2xl border border-white/[0.08] bg-gradient-to-br from-white/[0.04] to-transparent backdrop-blur-sm p-8 hover:border-opacity-40 transition-all duration-500 hover:-translate-y-2">
-                <div class="absolute top-0 right-0 w-32 h-32 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 opacity-5 group-hover:opacity-10 transition-opacity" style={`background-color: ${accent};`}></div>
+              {formation.issue && (
+                <p class="text-[#a1a1aa] text-sm leading-relaxed mb-4">
+                  {formation.issue}
+                </p>
+              )}
 
-                <div class="relative">
-                  {/* Domain & Class badges */}
-                  <div class="flex flex-wrap gap-2 mb-4">
-                    <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold" style={`background-color: ${accentBg}; color: ${accent};`}>
-                      {formation.domaines?.[0] || 'Certification'}
-                    </span>
-                    {formation.classes.length > 0 && (
-                      <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold" style={`background-color: ${cyan}15; color: ${cyan};`}>
-                        {formation.classes[0]}
-                      </span>
-                    )}
-                  </div>
-
-                  <h2 class="font-display text-xl font-bold text-[#f5f5f0] mb-3">
-                    {formation.nom}
-                  </h2>
-
-                  <p class="text-[#a1a1aa] text-sm leading-relaxed mb-6">
-                    {formation.resume || 'Formation pratique certifiante dispensée par des experts du terrain au Knowledge Management Center.'}
-                  </p>
-
-                  {/* Price with icon */}
-                  <div class="inline-flex items-center gap-2 text-[#eab308] font-semibold text-lg mb-4">
-                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <div class="flex flex-wrap gap-4 text-sm text-[#a1a1aa] mb-4">
+                {formation.dureeFormation && (
+                  <span class="flex items-center gap-1">
+                    <svg class="w-4 h-4 text-[#2dd4bf]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    {formation.fraisAdministratifs
-                      ? `${formation.fraisAdministratifs.toLocaleString('fr-FR')} FCFA`
-                      : 'Sur demande'}
-                  </div>
-
-                  <a
-                    href="/contact/?formation=${encodeURIComponent(formation.nom)}"
-                    class="mt-6 inline-flex items-center text-[${accent}] text-sm font-semibold group-hover:underline"
-                    style={`color: ${accent};`}
-                  >
-                    S'inscrire
-                    <svg class="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    {formation.dureeFormation}
+                  </span>
+                )}
+                {formation.lieu && (
+                  <span class="flex items-center gap-1">
+                    <svg class="w-4 h-4 text-[#2dd4bf]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                     </svg>
-                  </a>
+                    {formation.lieu}
+                  </span>
+                )}
+              </div>
+
+              {formation.tauxReussite && (
+                <div class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-[#2dd4bf]/10 text-[#2dd4bf] mb-4">
+                  Taux de réussite : {formation.tauxReussite}
                 </div>
-              </article>
-            );
-          })}
+              )}
+
+              <div class="border-t border-white/[0.06] pt-4 flex items-center justify-between">
+                <span class="text-[#eab308] font-semibold">
+                  {formation.fraisAdministratifs
+                    ? `${formation.fraisAdministratifs.toLocaleString('fr-FR')} FCFA`
+                    : formation.coutFormation || 'Sur demande'}
+                </span>
+                <a
+                  href={`/contact/?formation=${encodeURIComponent(formation.nom)}`}
+                  class="inline-flex items-center text-[#2dd4bf] text-sm font-semibold hover:underline"
+                >
+                  S'inscrire
+                  <svg class="ml-1 w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </a>
+              </div>
+            </article>
+          ))}
         </div>
       )}
 
-      {/* Bottom CTA */}
       {formations.length > 0 && (
         <div class="mt-16 text-center">
-          <p class="text-[#a1a1aa] mb-6">
-            Besoin d'une formation sur mesure pour votre équipe ?
-          </p>
-          <a
-            href="/contact/"
-            class="inline-flex items-center justify-center rounded-full bg-[#f5f5f0] px-8 py-4 text-[#070a10] font-display font-bold text-lg hover:bg-[#eab308] transition-colors duration-300"
-          >
+          <p class="text-[#a1a1aa] mb-6">Besoin d'une formation sur mesure pour votre équipe ?</p>
+          <a href="/contact/" class="inline-flex items-center justify-center rounded-full bg-[#f5f5f0] px-8 py-4 text-[#070a10] font-display font-bold text-lg hover:bg-[#eab308] transition-colors duration-300">
             Demander un devis
             <svg class="ml-3 w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -196,25 +153,19 @@ const jsonLd =
   <Footer />
 </Layout>
 
-<script>
-  /* ── IntersectionObserver reveal for cards ── */
-  document.addEventListener('DOMContentLoaded', () => {
-    const cards = document.querySelectorAll('.formation-card');
-    if (!cards.length) return;
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const el = entry.target as HTMLElement;
-          el.style.opacity = '1';
-          el.style.transform = 'translateY(0)';
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-
-    cards.forEach((card) => {
-      observer.observe(card);
-    });
-  });
-</script>
+<style>
+  .formation-card {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.6s ease forwards;
+  }
+  .formation-card:nth-child(1) { animation-delay: 0.1s; }
+  .formation-card:nth-child(2) { animation-delay: 0.2s; }
+  .formation-card:nth-child(3) { animation-delay: 0.3s; }
+  .formation-card:nth-child(4) { animation-delay: 0.4s; }
+  .formation-card:nth-child(5) { animation-delay: 0.5s; }
+  .formation-card:nth-child(6) { animation-delay: 0.6s; }
+  @keyframes fadeInUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
