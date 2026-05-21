@@ -1,0 +1,140 @@
+name: SEO Analysis & Suggestions
+
+# Analyse SEO hebdomadaire + génération de suggestions
+on:
+  schedule:
+    # Lundi 9h00 - Analyse hebdomadaire
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+    # Permet de lancer manuellement
+    inputs:
+      manualRun:
+        description: 'Analyse SEO manuelle'
+        required: false
+        type: boolean
+
+jobs:
+  analyze-seo:
+    name: Analyser le SEO
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Vérifier la connexion API Notion
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Installer dépendances
+        run: npm ci
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+
+      - name: Exécuter analyse SEO
+        run: node scripts/analyze-seo-simple.js
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+        continue-on-error: true
+
+      - name: Sauvegarder résultats
+        uses: actions/upload-artifact@v4
+        with:
+          name: seo-results
+          path: .seo-suggestions.json
+          retention-days: 7
+
+      - name: Créer issue si analyse échoue
+        if: failure()
+        run: |
+          echo "L'analyse SEO a échoué. Veuillez vérifier vos credentials Notion."
+          exit 0
+
+  generate-content:
+    name: Générer contenu SEO
+    needs: analyze-seo
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || always()
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Installer dépendances
+        run: npm ci
+
+      - name: Télécharger résultats SEO
+        uses: actions/download-artifact@v4
+        with:
+          name: seo-results
+
+      - name: Générer contenu
+        run: node scripts/generate-seo-content.js
+
+      - name: Committer les changements
+        run: |
+          git config user.email "seo@kmc.ci"
+          git config user.name "KMC SEO Bot"
+          git add src/content/blog/
+          git add src/pages/
+          git status
+          git diff --cached
+
+      - name: Commit et push
+        run: |
+          if git diff --cached --quiet; then
+            echo "Aucun changement à commiter"
+            exit 0
+          fi
+          git commit -m "feat(seo): ajouter contenu généré automatiquement
+
+          - Génération basée sur l'analyse SEO hebdomadaire
+
+          Co-Authored-By: Claude Code"
+          git push
+
+  notify-notion:
+    name: Notifier Notion
+    needs: [analyze-seo, generate-content]
+    runs-on: ubuntu-latest
+    if: always()
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Installer @notionhq/client
+        run: npm install @notionhq/client
+
+      - name: Envoyer notification Notion
+        run: |
+          NOTION_TOKEN="${{ secrets.NOTION_TOKEN }}"
+          node -e "
+            const { Client } = require('@notionhq/client');
+            const notion = new Client({ auth: process.env.NOTION_TOKEN });
+
+            const notification = await notion.pages.create({
+              parent: { database_id: '3669628038de808f8046f97af7b0e4db' },
+              properties: {
+                'Date': { date: { start: new Date() } },
+                'Status du workflow': { select: { name: 'Terminé' } },
+                'Dernière analyse': { date: { start: new Date() } }
+              }
+            });
+            console.log('Notification envoyée :', notification.id);
+          "
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+        continue-on-error: true
