@@ -1,8 +1,9 @@
 import { Client } from '@notionhq/client';
 
-const FORMATION_DB_ID = '1e49628038de8091a5d2c38db72951f4';
+const FORMATION_DB_ID = import.meta.env.NOTION_FORMATION_DB_ID ?? process.env.NOTION_FORMATION_DB_ID ?? '1e49628038de8091a5d2c38db72951f4';
 
-const notion = new Client({ auth: import.meta.env.NOTION_TOKEN });
+const NOTION_TOKEN = import.meta.env.NOTION_TOKEN ?? process.env.NOTION_TOKEN;
+const notion = new Client({ auth: NOTION_TOKEN });
 
 export interface Formation {
     id: string;
