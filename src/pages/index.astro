@@ -9,6 +9,7 @@ import SectionSRO from '../components/SectionSRO.astro';
 import SectionPBO from '../components/SectionPBO.astro';
 import SectionClientFinal from '../components/SectionClientFinal.astro';
 import SectionCatalogue from '../components/SectionCatalogue.astro';
+import ImageSeparator from '../components/ImageSeparator.astro';
 import Footer from '../components/Footer.astro';
 
 const pageTitle = 'KMC.ci — Centre de Formation en Fibre Optique & Photovoltaïque';
@@ -49,11 +50,46 @@ const pageImage = 'https://kmc.ci/og-image.jpg';
   <main id="main-content">
     <HeroTunnel />
     <FiberLine />
+
+    <!-- 📸 IMAGE 1 : Vue aérienne d'Abidjan ou infrastructure télécom -->
+    <ImageSeparator
+      label="Photo 1 — Vue Abidjan / infrastructure télécom"
+      height="50vh"
+    />
+
     <SectionOperators />
+
+    <!-- 📸 IMAGE 2 : Technicien en train de raccorder de la fibre -->
+    <ImageSeparator
+      label="Photo 2 — Technicien raccordement fibre"
+      height="55vh"
+    />
+
     <SectionNRO />
     <SectionSRO />
+
+    <!-- 📸 IMAGE 3 : Salle de formation / stagiaires en cours -->
+    <ImageSeparator
+      label="Photo 3 — Salle de formation KMC"
+      height="50vh"
+    />
+
     <SectionPBO />
+
+    <!-- 📸 IMAGE 4 : Chantier fibre optique en extérieur -->
+    <ImageSeparator
+      label="Photo 4 — Chantier fibre optique terrain"
+      height="55vh"
+    />
+
     <SectionClientFinal />
+
+    <!-- 📸 IMAGE 5 : Diplômés / remise de certificats -->
+    <ImageSeparator
+      label="Photo 5 — Remise de certifications / diplômés"
+      height="50vh"
+    />
+
     <SectionCatalogue />
   </main>
   

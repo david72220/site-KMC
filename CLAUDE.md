@@ -385,4 +385,55 @@ Cocher une formation → attendre ~1 min → vérifier que `/formations-fibre-op
 
 ---
 
-*Mis à jour le 21 mai 2026 — Déploiement Vercel actif — Automatisation Notion à finaliser*
+## 🖼️ PROCHAINE ÉTAPE — Intégration des photos (EN ATTENTE DES VISUELS)
+
+### Narrative scrollytelling : "Le parcours du signal"
+Le site raconte le trajet de la lumière dans la fibre, du NRO jusqu'au client final.
+Chaque section attend une photo réelle pour remplacer les visuels CSS actuels.
+
+### Photos à créer / photographier
+
+| Priorité | Fichier à déposer | Contenu attendu | Section |
+|---|---|---|---|
+| 🔴 | `public/images/nro-baie-brassage.jpg` | Photo d'une vraie baie NRO (rack optique, câbles, équipements) | SectionNRO |
+| 🔴 | `public/images/sro-armoire-rue.jpg` | Photo d'une armoire SRO en rue (boîtier gris en bas de poteau ou encastré trottoir) | SectionSRO |
+| 🔴 | `public/images/pbo-boitier-facade.jpg` | Photo d'un PBO sur façade ou poteau (petit boîtier avec câbles) | SectionPBO |
+| 🔴 | `public/images/client-final-logement.jpg` | Photo d'un logement/bureau connecté à la fibre, modem visible | SectionClientFinal |
+| 🟡 | `public/images/operateurs-telecom.jpg` | Infrastructure télécom générique (antennes, câbles, datacenter) | SectionOperators |
+| 🟡 | `public/images/og-image.jpg` | Photo KMC pour les partages réseaux sociaux — **1200×630px** | Open Graph |
+| 🟡 | `public/images/logo-kmc.png` | Logo KMC fond transparent (PNG) — déjà présent, à vérifier qualité | Navigation + Footer |
+
+### Format recommandé pour les photos
+- **Format :** WebP ou JPG (qualité 85%)
+- **Taille :** minimum 1600px de large (pleine largeur desktop)
+- **Orientation :** paysage (16:9 ou plus large)
+- **Style :** professionnel, lumière naturelle ou studio, fond sombre si possible pour s'intégrer au thème
+
+### Ce que Claude fera quand les photos sont prêtes
+Une fois les images déposées dans `public/images/`, demander à Claude de :
+1. Intégrer chaque photo dans son composant de section (`src/components/Section*.astro`)
+2. Remplacer les visuels CSS/SVG actuels par les vraies photos avec effet parallax
+3. Optimiser les images (srcset, lazy-load, WebP)
+4. Ajuster les overlays et typographies sur chaque image pour la lisibilité
+
+---
+
+## 📋 CHECKLIST COMPLÈTE — État au 21 mai 2026
+
+| Tâche | Status | Notes |
+|---|---|---|
+| Base Notion formations | ✅ | ID configuré, schema mappé |
+| Notion API + filtre checkbox | ✅ | `getFormations()` avec fallback |
+| Checkbox "A afficher sur le site" | ✅ | Créée dans Notion, testée |
+| Automation Notion → n8n → Vercel | ✅ | Workflow actif, testé avec succès |
+| Déploiement Vercel | ✅ | Build vert, formations visibles |
+| Variables env Vercel | ✅ | 4 variables configurées |
+| Photos des sections | 🔴 | **EN ATTENTE** — voir tableau ci-dessus |
+| Intégration photos dans composants | 🔴 | À faire une fois les photos prêtes |
+| Domaine kmc.ci → Vercel | 🟡 | Vercel → Settings → Domains |
+| Blog articles | 🟢 | 3 auto-générés, à enrichir |
+| Automatisation SEO | ✅ | GitHub Actions hebdo |
+
+---
+
+*Mis à jour le 21 mai 2026 — Pipeline Notion→Vercel opérationnel — En attente des photos*
