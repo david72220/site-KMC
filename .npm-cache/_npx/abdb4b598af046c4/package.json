@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "create-astro": "^5.0.6"
+  },
+  "_npx": {
+    "packages": [
+      "create-astro@latest"
+    ]
+  }
+}

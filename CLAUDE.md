@@ -3,24 +3,113 @@
 
 ---
 
-## 📊 BILAN COMPLET DU PROJET — 21 Mai 2026 (soir)
+## 📊 BILAN COMPLET DU PROJET — 22 Mai 2026
 
-### ✅ AVANCEMENT GLOBAL : 97%
+### ✅ AVANCEMENT GLOBAL : 99%
 
 | Catégorie | Progression | Status |
 |-----------|---------|---|
 | Structure & Build | ✅ 100% | Terminé |
-| Composants UI | ✅ 100% | Terminé |
+| Composants UI | ✅ 100% | **Mis à jour aujourd'hui** |
+| Scrollytelling scène hero | ✅ 100% | **Créé aujourd'hui** |
+| Charte graphique | ✅ 100% | **Appliquée aujourd'hui** |
 | Pages publiques | ✅ 100% | Terminé |
-| Notion API | ✅ 100% | **Terminé aujourd'hui** |
-| Déploiement Vercel | ✅ 100% | **Terminé aujourd'hui** |
-| Automation Notion→Site | ✅ 100% | **Terminé aujourd'hui** |
+| Notion API | ✅ 100% | Terminé |
+| Déploiement Vercel | ✅ 100% | Terminé |
+| Automation Notion→Site | ✅ 100% | Terminé |
 | Automatisation SEO | ✅ 100% | Terminé |
+| SectionOperators SEO | ✅ 100% | **Enrichi aujourd'hui** |
 | Content Collections | 🟢 30% | En cours |
 | Blog contenu | 🟢 30% | 3 articles générés |
-| Photos sections | 🔴 0% | **En attente des visuels** |
+| Photos sections NRO/SRO/PBO | 🔴 0% | En attente des visuels |
 | Domaine kmc.ci | 🟡 0% | À connecter sur Vercel |
-| **TOTAL** | **~97%** | Quasi-production |
+| **TOTAL** | **~99%** | Quasi-production |
+
+---
+
+## ✅ RÉALISÉ LE 22 MAI 2026
+
+### 1. COMPOSANT SCROLLYTELLING HERO (`src/components/ScrollytellingScene.astro`) ✅
+
+Nouveau composant créé — première chose visible sur le site, séquence en 4 temps :
+
+| Phase | Action | Détail |
+|---|---|---|
+| 1 | Image 1 statique | `Image 1 - centre de formation.png` plein écran |
+| 2 | Scroll → texte | H1, H2, texte enrichi, logos FDFP+AEJ apparaissent par-dessus |
+| 3 | Scroll → vidéo | Tout disparaît → `reseau-anime.mp4` révélée (autoplay loop) |
+| 4 | Scroll → zoom | Zoom vers la gauche (`scale 1.45, origin: left`) vers les opérateurs |
+
+**Contenu texte intégré :**
+- H1 : "Institut Professionnel de Formation en **Fibre Optique**"
+- H2 : "Devenez technicien reconnu par l'état Ivoirien…"
+- Texte enrichi SEO + mention FDFP
+- Logos FDFP (https://fdfp.ci/) et AEJ (https://agenceemploijeunes.ci/) cliquables
+- Label "Habilité par l'État Ivoirien · Abidjan" en bas, gras
+- Carte verre dépoli (`backdrop-filter: blur(14px)`) pour lisibilité
+- Logo KMC intégré en tête de carte
+
+**Fichiers images/vidéo utilisés :**
+- `public/images/Image 1 - centre de formation.png` — vue du centre de formation
+- `public/images/reseau-anime.mp4` (renommé depuis `Image 2 - reseau animé.mp4`)
+- `public/images/Image 2 - reseau.png` — fallback statique
+- `public/images/FDFP.png` — logo partenaire
+- `public/images/AEJ.png` — logo partenaire
+
+### 2. NAVIGATION MISE À JOUR (`src/components/Navigation.astro`) ✅
+
+- **Logo** : éclair SVG vert remplacé par `logo-kmc.png` dans conteneur blanc arrondi
+- **Couleurs** : toutes les occurrences de `#2dd4bf` (cyan/vert) → `#1e9ad7` (bleu KMC)
+- **Gradient CTA** : `#1e9ad7 → #1565a8` (bouton "Nous contacter")
+
+### 3. CHARTE GRAPHIQUE APPLIQUÉE ✅
+
+| Élément | Avant | Après |
+|---|---|---|
+| Couleur accent principale | `#2DD4BF` (cyan/vert) | `#1e9ad7` (bleu KMC) |
+| Logo navigation | SVG éclair vert | `logo-kmc.png` |
+| Logo scène hero | — | `logo-kmc.png` |
+| Logos partenaires | — | FDFP + AEJ intégrés |
+
+### 4. SECTION OPÉRATEURS RÉÉCRITE (`src/components/SectionOperators.astro`) ✅
+
+Contenu SEO massif ajouté — chaque opérateur possède désormais :
+
+**Orange CI :**
+- Description : leader télécoms CI depuis 1996, FTTH Abidjan/Bouaké/San Pedro/Yamoussoukro
+- 5 compétences : raccordement PBO, soudure fibres, config ONT Livebox, OTDR, pose câbles
+- Matériel : Boîtiers PBO Orange, ONT Livebox 5, OTDR Yokogawa, SC/APC, Fusionneuse Fujikura
+
+**MTN Côte d'Ivoire :**
+- Description : opérateur mobile avec expansion FTTH zones résidentielles haut de gamme
+- 5 compétences : déploiement FTTH résidentiel, config terminaux, tests certification, maintenance, SAV
+- Matériel : ONT MTN, testeur fibre, cliveur, LC/UPC, réflectomètre OTDR
+
+**Moov Africa :**
+- Description : filiale Maroc Telecom, FTTB immeuble et campus entreprises
+- 5 compétences : distribution verticale immeuble, raccordement multi-logements, config équipements, lecture plans, GTL
+- Matériel : boîtiers FTTB Moov, terminaux optiques, OPM, SC/APC, tirage câbles armés
+
+**Bloc SEO bas :** mention Angré/Cocody/Abidjan + éligibilité FDFP + AEJ + CTA catalogue
+
+### 5. CORRECTIF TECHNIQUE CSS ✅
+
+- `overflow-x: hidden` → `overflow-x: clip` sur `body` dans `global.css`
+- Raison : `overflow: hidden` sur body casse `position: sticky` (bug navigateurs)
+
+---
+
+## ⚠️ RESTE À FAIRE
+
+| Priorité | Tâche | Notes |
+|---|---|---|
+| 🟡 | Photos sections NRO, SRO, PBO, ClientFinal | Voir tableau section "PROCHAINE ÉTAPE" |
+| 🟡 | Enrichir SectionNRO, SectionSRO, SectionPBO | Même traitement SEO que SectionOperators |
+| 🟡 | Connecter domaine `kmc.ci` à Vercel | Vercel → Settings → Domains |
+| 🟢 | Enrichir le blog | Ajouter articles, images |
+| 🟢 | Pousser les changements sur GitHub/Vercel | `git add . && git commit && git push` |
+
+---
 
 ---
 

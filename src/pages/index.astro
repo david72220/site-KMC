@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import Navigation from '../components/Navigation.astro';
 import HeroTunnel from '../components/HeroTunnel.astro';
 import FiberLine from '../components/FiberLine.astro';
+import ScrollytellingScene from '../components/ScrollytellingScene.astro';
 import SectionOperators from '../components/SectionOperators.astro';
 import SectionNRO from '../components/SectionNRO.astro';
 import SectionSRO from '../components/SectionSRO.astro';
@@ -48,14 +49,10 @@ const pageImage = 'https://kmc.ci/og-image.jpg';
   <Navigation />
   
   <main id="main-content">
+    <ScrollytellingScene />
+
     <HeroTunnel />
     <FiberLine />
-
-    <!-- 📸 IMAGE 1 : Vue aérienne d'Abidjan ou infrastructure télécom -->
-    <ImageSeparator
-      label="Photo 1 — Vue Abidjan / infrastructure télécom"
-      height="50vh"
-    />
 
     <SectionOperators />
 
