@@ -1,17 +1,75 @@
 ---
 /**
- * ScrollytellingScene — Séquence en 3 temps :
- *   1. Image 1 (centre de formation) statique
- *   2. Texte + logos apparaissent en overlay sur Image 1
- *   3. Tout disparaît → vidéo animée réseau
+ * ScrollytellingScene — Séquence en 5 temps :
+ *   PHASE 0 (0-15%): Image 0 + titre KMC (fond noir complet)
+ *   PHASE 1 (15-45%): Image 1 centre formation (disparait par fondu)
+ *   PHASE 2 (45-55%): Fade noir léger
+ *   PHASE 3 (55-80%): Image 2 réseau (plus petite, centrée)
+ *   PHASE 4 (80-100%): Vidéo + Zoom vers haut-gauche
  */
 ---
 
-<section id="scrolly-scene" aria-label="Présentation KMC — Institut de Formation" style="height: 500vh;">
-  <div id="scrolly-pin" class="sticky top-0 w-full overflow-hidden bg-[#0a1628]" style="height: 100vh;">
+<section id="scrolly-scene" aria-label="Présentation KMC — Institut de Formation" style="height: 550vh;">
+  <div id="scrolly-pin" class="sticky top-0 left-0 right-0 bg-[#0a1628] overflow-hidden" style="height: 100vh; pointer-events: none;">
 
-    <!-- COUCHE 1 (fond) — Vidéo réseau animée -->
-    <div id="scrolly-video-wrap" class="absolute inset-0 z-10 will-change-transform">
+    <!-- PHASE 0 — Image 0 + Titre KMC (première séquence) -->
+    <div id="scrolly-img0" class="absolute inset-0 z-0 will-change-transform">
+      <img
+        src="/images/Image 0 - Elephant.png"
+        alt="KMC — Institut de formation professionnel"
+        class="w-full h-full object-cover select-none"
+        draggable="false"
+        loading="eager"
+        decoding="async"
+      />
+      <!-- Fond noir complet -->
+      <div class="absolute inset-0 bg-[#0a1628]"></div>
+      <!-- Titre KMC + sous-titre -->
+      <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
+        <h1 class="font-display text-6xl md:text-7xl lg:text-8xl font-bold text-[#1e9ad7] mb-3 tracking-wide">
+          KMC
+        </h1>
+        <h2 class="text-xl md:text-2xl lg:text-3xl text-white font-light tracking-wide">
+          Institut de formation professionnel<br/>en fibre optique
+        </h2>
+      </div>
+    </div>
+
+    <!-- PHASE 1 — Image 1 : centre de formation (disparaît puis réapparaît) -->
+    <div id="scrolly-img1" class="absolute inset-0 z-10 will-change-transform">
+      <img
+        src="/images/Image 1 - centre de formation.png"
+        alt="Centre de formation fibre optique KMC, Abidjan"
+        class="w-full h-full object-cover select-none"
+        draggable="false"
+        loading="eager"
+        decoding="async"
+      />
+      <!-- Dégradé bas pour lisibilité texte -->
+      <div class="absolute inset-0 bg-gradient-to-t from-[#0a1628]/90 via-[#0a1628]/40 to-transparent"></div>
+    </div>
+
+    <!-- PHASE 2 — Fade noir intermédiaire (transition) -->
+    <div id="scrolly-fade" class="absolute inset-0 z-20 will-change-transform" style="background: rgba(10,22,40,0);"></div>
+
+    <!-- PHASE 3 — Image 2 : réseau (plus petite, centrée sous le menu) -->
+    <div id="scrolly-img2" class="absolute inset-0 z-21 will-change-transform" style="opacity: 0;">
+      <img
+        src="/images/Image 2 - reseau.png"
+        alt="Réseau fibre optique KMC"
+        class="w-full h-full object-cover select-none"
+        draggable="false"
+        loading="lazy"
+        decoding="async"
+      />
+      <!-- Dégradé haut pour transition avec fade -->
+      <div class="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#0a1628] to-transparent"></div>
+      <!-- Dégradé bas -->
+      <div class="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#0a1628] to-transparent"></div>
+    </div>
+
+    <!-- PHASE 4 — Vidéo + Zoom (fond principal) -->
+    <div id="scrolly-video-wrap" class="absolute inset-0 z-30 will-change-transform">
       <video
         class="w-full h-full object-cover"
         autoplay
@@ -22,35 +80,25 @@
       >
         <source src="/images/video flux fibre.mp4" type="video/mp4" />
       </video>
+      <!-- Dégradé haut pour lisibilité du menu -->
+      <div class="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#0a1628]/90 to-transparent"></div>
+      <!-- Dégradé bas -->
+      <div class="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#0a1628]/80 to-transparent"></div>
     </div>
 
-    <!-- COUCHE 2 — Image 1 : centre de formation -->
-    <div id="scrolly-img1" class="absolute inset-0 z-20">
-      <img
-        src="/images/Image 1 - centre de formation.png"
-        alt="KMC — Institut de formation fibre optique et photovoltaïque, Abidjan, Côte d'Ivoire"
-        class="w-full h-full object-cover select-none"
-        draggable="false"
-        loading="eager"
-        decoding="async"
-      />
-      <!-- Dégradé sombre en bas pour lisibilité du texte -->
-      <div class="absolute inset-0 bg-gradient-to-t from-[#0a1628]/85 via-[#0a1628]/30 to-transparent"></div>
-    </div>
-
-    <!-- COUCHE 3 (avant-plan) — Texte + logos, par-dessus Image 1 -->
+    <!-- Texte overlay (sur la vidéo) -->
     <div
       id="scrolly-text"
-      class="absolute inset-0 z-30 flex flex-col items-center justify-end pb-10 px-4 text-center"
+      class="absolute inset-0 z-40 flex flex-col items-center justify-end pb-12 px-4 text-center pointer-events-none"
       style="opacity: 0;"
     >
       <!-- Carte verre dépoli -->
-      <div class="max-w-3xl w-full rounded-2xl border border-white/10 px-8 py-7"
-           style="backdrop-filter: blur(14px); background: rgba(10,22,40,0.68);">
+      <div class="max-w-3xl w-full rounded-2xl border border-white/10 px-8 py-8"
+           style="backdrop-filter: blur(14px); background: rgba(10,22,40,0.75);">
 
         <!-- Logo KMC -->
-        <div class="flex justify-center mb-5">
-          <div class="bg-white/95 rounded-xl px-5 py-2">
+        <div class="flex justify-center mb-6">
+          <div class="bg-white/95 rounded-xl px-6 py-3">
             <img
               src="/images/logo-kmc.png"
               alt="KMC — Knowledge Management Center"
@@ -59,20 +107,20 @@
           </div>
         </div>
 
-        <!-- H1 — grand titre -->
-        <h1 class="font-display text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight mb-4">
+        <!-- H1 -->
+        <h1 class="font-display text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight mb-5">
           Institut Professionnel<br/>
           de Formation en&nbsp;<span class="text-[#1e9ad7]">Fibre Optique</span>
         </h1>
 
         <!-- H2 -->
-        <h2 class="text-base md:text-xl text-white/80 font-light max-w-2xl mx-auto mb-4 leading-relaxed">
+        <h2 class="text-base md:text-xl text-white/80 font-light max-w-2xl mx-auto mb-5 leading-relaxed">
           Devenez technicien <span class="text-[#F59E0B] font-medium">reconnu par l'état Ivoirien</span>
           en fibre optique à Abidjan avec notre institut de formation certifié.
         </h2>
 
         <!-- Texte enrichi -->
-        <p class="text-white/60 text-sm md:text-base max-w-xl mx-auto mb-6 leading-relaxed">
+        <p class="text-white/60 text-sm md:text-base max-w-xl mx-auto mb-7 leading-relaxed">
           KMC forme des professionnels aux métiers d'avenir : raccordement&nbsp;FTTH,
           supervision&nbsp;NRO, installation photovoltaïque.
           Nos programmes sont <span class="text-[#1e9ad7] font-medium">éligibles au financement&nbsp;FDFP</span>
@@ -80,13 +128,13 @@
         </p>
 
         <!-- Séparateur + logos -->
-        <div class="flex items-center justify-center gap-4 mb-5">
+        <div class="flex items-center justify-center gap-4 mb-6">
           <div class="h-px w-16 bg-[#1e9ad7]/30"></div>
           <span class="text-white/35 text-xs tracking-widest uppercase">Partenaires officiels</span>
           <div class="h-px w-16 bg-[#1e9ad7]/30"></div>
         </div>
 
-        <div class="flex items-center justify-center gap-8 flex-wrap mb-6">
+        <div class="flex items-center justify-center gap-8 flex-wrap mb-7">
           <a
             href="https://fdfp.ci/"
             target="_blank"
@@ -107,8 +155,8 @@
           </a>
         </div>
 
-        <!-- Label habilitation — en bas, gros, gras -->
-        <div class="border-t border-white/10 pt-4">
+        <!-- Label habilitation -->
+        <div class="border-t border-white/10 pt-5">
           <p class="text-white font-bold text-base md:text-lg tracking-wide">
             Habilité par l'État Ivoirien &nbsp;·&nbsp; Abidjan, Côte d'Ivoire
           </p>
@@ -126,39 +174,80 @@
   initLenis();
 
   function initScrollytelling() {
+    const img0 = document.getElementById('scrolly-img0');
     const img1 = document.getElementById('scrolly-img1');
+    const fade = document.getElementById('scrolly-fade');
+    const img2 = document.getElementById('scrolly-img2');
     const textPanel = document.getElementById('scrolly-text');
-    if (!img1 || !textPanel) return;
+    const videoWrap = document.getElementById('scrolly-video-wrap');
+    if (!img0 || !img1 || !fade || !img2 || !textPanel || !videoWrap) return;
 
     const tl = gsap.timeline();
 
-    // Phase 1 — Texte apparaît par-dessus Image 1 (progress 0 → 0.35)
+    // === PHASE 0 → 1 : Image 0 disparait → Image 1 apparait ===
+    // 0% → 15% scroll : Image 0 disparait par fondu vers noir
+    tl.to(img0, {
+      opacity: 0,
+      duration: 2,
+      ease: 'power1.inOut',
+    }, '0px');
+    tl.to(fade, {
+      opacity: 1,
+      duration: 1,
+      ease: 'power1.inOut',
+    }, '-0.5'); // overlap pour fondu doux
+
+    // 15% → 45% scroll : Image 1 visible
+    // (déjà visible, aucun changement)
+
+    // === PHASE 1 → 2 : Image 1 disparait par fondu noir ===
+    // 45% → 55% scroll : Image 1 disparait
+    tl.to(img1, {
+      opacity: 0,
+      duration: 2,
+      ease: 'power1.inOut',
+    }, '15%'); // ~15% de la hauteur de la section
+
+    // Fade complet
+    tl.to(fade, {
+      opacity: 0.6,
+      duration: 1,
+      ease: 'power1.inOut',
+    }, '14%');
+
+    // === PHASE 2 → 3 : Fade disparait → Image 2 apparait ===
+    // 55% → 65% scroll : Fade disparait
+    tl.to(fade, {
+      opacity: 0,
+      duration: 1.5,
+      ease: 'power1.inOut',
+    }, '17%');
+
+    // === PHASE 3 : Image 2 centrée, plus petite ===
+    // 65% → 80% scroll : Image 2 apparait (scale 0 → 1)
+    tl.to(img2, {
+      scale: 1,
+      opacity: 1,
+      duration: 1.5,
+      ease: 'power2.out',
+    }, '17%');
+
+    // === PHASE 4 : Vidéo + Zoom vers HAUT-GAUCHE ===
+    // 80% → 100% scroll : Zoom vers haut-gauche pour centrer sur opérateurs
+    // On zoom à partir du haut-gauche de l'image
+    tl.to(videoWrap, {
+      scale: 1.6,
+      transformOrigin: 'top left',
+      duration: 1.5,
+      ease: 'power2.inOut',
+    }, '20%'); // ~20% de la section
+
+    // Text panel apparait avant la fin (70% → 100%)
     tl.to(textPanel, {
       opacity: 1,
       duration: 1,
       ease: 'power1.out',
-    });
-
-    // Phase 2 — Image 1 + texte disparaissent ensemble → vidéo (progress 0.45 → 0.75)
-    tl.to([img1, textPanel], {
-      opacity: 0,
-      duration: 1,
-      ease: 'power1.inOut',
-    }, 1.4);
-
-    // Phase 3 — Temps pour profiter de la vidéo
-    tl.to({}, { duration: 0.6 });
-
-    // Phase 4 — Zoom vers la gauche (opérateurs Orange, Moov, MTN)
-    const videoWrap = document.getElementById('scrolly-video-wrap');
-    if (videoWrap) {
-      tl.to(videoWrap, {
-        scale: 1.45,
-        transformOrigin: 'left center',
-        duration: 1,
-        ease: 'power2.inOut',
-      });
-    }
+    }, '19%');
 
     ScrollTrigger.create({
       trigger: '#scrolly-scene',
