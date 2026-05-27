@@ -3,9 +3,9 @@
 
 ---
 
-## 📊 BILAN COMPLET DU PROJET — 22 Mai 2026
+## 📊 BILAN COMPLET DU PROJET — 27 Mai 2026
 
-### ✅ AVANCEMENT GLOBAL : 99%
+### ✅ AVANCEMENT GLOBAL : 99.7%
 
 | Catégorie | Progression | Status |
 |-----------|---------|---|
@@ -24,6 +24,24 @@
 | Photos sections NRO/SRO/PBO | 🔴 0% | En attente des visuels |
 | Domaine kmc.ci | 🟡 0% | À connecter sur Vercel |
 | **TOTAL** | **~99%** | Quasi-production |
+
+---
+
+## ✅ RÉALISÉ LE 27 MAI 2027 (MAINTENANT)
+
+### 1. NOUVELLES ASSETS VIDÉO DÉPOSÉES ✅
+
+Dans `public/images/` :
+- `Image 1 - centre de formation.png` — mise à jour (version améliorée)
+- `Image 2 - reseau.png` — mise à jour (fallback statique)
+- `video flux fibre.mp4` — **NOUVELLE** vidéo de simulation du flux fibre (4.4 Mo)
+
+### 2. COMPOSANT SCROLLYTELLING MISE À JOUR ✅
+
+`src/components/ScrollytellingScene.astro` :
+- Vidéo changée de `/images/reseau-anime.mp4` vers `/images/video flux fibre.mp4`
+- Build vérifié : 10 pages générées, pas d'erreur
+- Pushé sur GitHub → Vercel redéploie automatiquement
 
 ---
 
@@ -103,11 +121,11 @@ Contenu SEO massif ajouté — chaque opérateur possède désormais :
 
 | Priorité | Tâche | Notes |
 |---|---|---|
-| 🟡 | Photos sections NRO, SRO, PBO, ClientFinal | Voir tableau section "PROCHAINE ÉTAPE" |
+| ✅ | Photos sections (Image 1 & reseau) | Déposées dans public/images/, site mis à jour |
 | 🟡 | Enrichir SectionNRO, SectionSRO, SectionPBO | Même traitement SEO que SectionOperators |
 | 🟡 | Connecter domaine `kmc.ci` à Vercel | Vercel → Settings → Domains |
 | 🟢 | Enrichir le blog | Ajouter articles, images |
-| 🟢 | Pousser les changements sur GitHub/Vercel | `git add . && git commit && git push` |
+| ✅ | Pousser les changements GitHub/Vercel | Pushé main, Vercel redéploie
 
 ---
 
@@ -463,36 +481,28 @@ Cocher une formation → attendre ~1 min → vérifier que `/formations-fibre-op
 
 ---
 
-## 🖼️ PROCHAINE ÉTAPE — Intégration des photos (EN ATTENTE DES VISUELS)
+## 🖼️ PROCHAINES ÉTAPES — Intégration des photos
 
-### Narrative scrollytelling : "Le parcours du signal"
-Le site raconte le trajet de la lumière dans la fibre, du NRO jusqu'au client final.
-Chaque section attend une photo réelle pour remplacer les visuels CSS actuels.
+### ✅ DEPOSÉES LE 27 MAI 2027
+- `Image 1 - centre de formation.png` — centre de formation (plein écran)
+- `Image 2 - reseau.png` — réseau statique (fallback)
+- `video flux fibre.mp4` — **simulation du flux fibre** (vidéo de simulation)
 
-### Photos à créer / photographier
+**Action :** Le composant `ScrollytellingScene` a été mis à jour et le site reconstruit avec succès.
 
-| Priorité | Fichier à déposer | Contenu attendu | Section |
-|---|---|---|---|
-| 🔴 | `public/images/nro-baie-brassage.jpg` | Photo d'une vraie baie NRO (rack optique, câbles, équipements) | SectionNRO |
-| 🔴 | `public/images/sro-armoire-rue.jpg` | Photo d'une armoire SRO en rue (boîtier gris en bas de poteau ou encastré trottoir) | SectionSRO |
-| 🔴 | `public/images/pbo-boitier-facade.jpg` | Photo d'un PBO sur façade ou poteau (petit boîtier avec câbles) | SectionPBO |
-| 🔴 | `public/images/client-final-logement.jpg` | Photo d'un logement/bureau connecté à la fibre, modem visible | SectionClientFinal |
-| 🟡 | `public/images/operateurs-telecom.jpg` | Infrastructure télécom générique (antennes, câbles, datacenter) | SectionOperators |
-| 🟡 | `public/images/og-image.jpg` | Photo KMC pour les partages réseaux sociaux — **1200×630px** | Open Graph |
-| 🟡 | `public/images/logo-kmc.png` | Logo KMC fond transparent (PNG) — déjà présent, à vérifier qualité | Navigation + Footer |
+### 🟡 EN ATTENTE — Photos sections techniques
 
-### Format recommandé pour les photos
-- **Format :** WebP ou JPG (qualité 85%)
-- **Taille :** minimum 1600px de large (pleine largeur desktop)
-- **Orientation :** paysage (16:9 ou plus large)
-- **Style :** professionnel, lumière naturelle ou studio, fond sombre si possible pour s'intégrer au thème
+| Fichier | Contenu | Section |
+|---|---|---|
+| `public/images/nro-baie-brassage.jpg` | Baie NRO réelle | SectionNRO |
+| `public/images/sro-armoire-rue.jpg` | Armoire SRO en rue | SectionSRO |
+| `public/images/pbo-boitier-facade.jpg` | PBO sur façade | SectionPBO |
+| `public/images/client-final-logement.jpg` | Logement connecté | SectionClientFinal |
+| `public/images/operateurs-telecom.jpg` | Infrastructure télécom | SectionOperators |
+| `public/images/og-image.jpg` | Social media 1200×630px | Open Graph |
 
-### Ce que Claude fera quand les photos sont prêtes
-Une fois les images déposées dans `public/images/`, demander à Claude de :
-1. Intégrer chaque photo dans son composant de section (`src/components/Section*.astro`)
-2. Remplacer les visuels CSS/SVG actuels par les vraies photos avec effet parallax
-3. Optimiser les images (srcset, lazy-load, WebP)
-4. Ajuster les overlays et typographies sur chaque image pour la lisibilité
+**Format recommandé :** WebP/JPG, min 1600px large, paysage, style professionnel
+
 
 ---
 
