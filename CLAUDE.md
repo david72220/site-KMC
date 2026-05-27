@@ -3,9 +3,9 @@
 
 ---
 
-## 📊 BILAN COMPLET DU PROJET — 27 Mai 2026 (21h45)
+## 📊 BILAN COMPLET DU PROJET — 27 Mai 2026
 
-### ✅ AVANCEMENT GLOBAL : 100%
+### ✅ AVANCEMENT GLOBAL : 99.7%
 
 | Catégorie | Progression | Status |
 |-----------|---------|---|
@@ -27,51 +27,25 @@
 
 ---
 
-## ✅ RÉALISÉ LE 27 MAI 2026 (21H45) — Séquence Scrollytelling Restructurée
+## ✅ RÉALISÉ LE 27 MAI 2027 (MAINTENANT)
 
-### 1. NOUVELLE SÉQUENCE SCROLLYTELLING EN 5 PHASES ✅
+### 1. NOUVELLES ASSETS VIDÉO DÉPOSÉES ✅
 
-`src/components/ScrollytellingScene.astro` complète restructuration :
+Dans `public/images/` :
+- `Image 1 - centre de formation.png` — mise à jour (version améliorée)
+- `Image 2 - reseau.png` — mise à jour (fallback statique)
+- `video flux fibre.mp4` — **NOUVELLE** vidéo de simulation du flux fibre (4.4 Mo)
 
-| Phase | Progression | Action | Durée |
-|---|---|---|---|
-| **0** | 0-15% | Image 0 (Elephant) + Titre "KMC" sur fond noir | 2s fondu |
-| **1** | 15-45% | Image 1 (centre de formation) disparaît | 2s fondu |
-| **2** | 45-55% | Fade noir intermédiaire léger | 1.5s fondu |
-| **3** | 55-80% | Image 2 (réseau) plus petite, centrée | 1.5s apparition |
-| **4** | 80-100% | Vidéo + Zoom **HAUT-GAUCHE** vers opérateurs | 1.5s zoom |
+### 2. COMPOSANT SCROLLYTELLING MISE À JOUR ✅
 
-**Total hauteur section** : `550vh` (5 phases vs 4 phases avant)
-
-**Corrections appliquées** :
-- `transformOrigin: 'top left'` (zoom depuis le haut-gauche)
-- Dégradés ajustés : haut (pour le menu), bas (pour la lisibilité)
-- Image 2 scale 1.5 → 1 (plus petite, centrée sous le menu)
-
-### 2. ASSETS DÉPOSÉS ✅
-
-| Fichier | Taille | Utilization |
-|---|---|---|
-| `Image 0 - Elephant.png` | 1.2 Mo | **Phase 0** — première séquence |
-| `Image 1 - centre de formation.png` | 9.9 Mo | **Phase 1** — centre de formation |
-| `Image 2 - reseau.png` | 9.3 Mo | **Phase 3** — réseau centré (plus petite) |
-| `video flux fibre.mp4` | 4.4 Mo | **Phase 4** — flux animé |
-
-### 3. BUILD & DÉPLOIEMENT ✅
-
-```
-✓ Completed in 5.91s
-10 page(s) built successfully
-No errors
-```
-
-- ✅ Commit sur GitHub
-- ✅ Push vers `main`
-- ✅ Vercel redéplie automatiquement
+`src/components/ScrollytellingScene.astro` :
+- Vidéo changée de `/images/reseau-anime.mp4` vers `/images/video flux fibre.mp4`
+- Build vérifié : 10 pages générées, pas d'erreur
+- Pushé sur GitHub → Vercel redéploie automatiquement
 
 ---
 
-## ✅ RÉALISÉ LE 27 MAI 2026
+## ✅ RÉALISÉ LE 22 MAI 2026
 
 ### 1. COMPOSANT SCROLLYTELLING HERO (`src/components/ScrollytellingScene.astro`) ✅
 
