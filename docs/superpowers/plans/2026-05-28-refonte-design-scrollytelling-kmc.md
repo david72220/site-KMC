@@ -658,7 +658,9 @@ const formation = await getFormationByName('FTTH-D2');
     // Scène 9 : dézoom pour inclure le NRO (valeurs à caler — Task 9)
       .to(img2, { scale: 1.2, transformOrigin: '35% center', duration: 0.8 }, 6.6)
     // Scène 10 : fiche formation
-      .to(formation, { opacity: 1, duration: 0.6 }, 7.4);
+      .to(formation, { opacity: 1, duration: 0.6 }, 7.4)
+    // Sortie : maintien de la fiche + CTA (réserve du scroll, scène « Sortie » 0.96→1)
+      .to({}, { duration: 1.2 }, 8.0);
 
     ScrollTrigger.create({
       trigger: '#scrolly', start: 'top top', end: 'bottom bottom',
@@ -715,21 +717,40 @@ import Footer from '../components/Footer.astro';
 
 Retirer les imports/usages de `HeroTunnel`, `FiberLine`, `SectionOperators`, `SectionNRO`,
 `SectionSRO`, `SectionPBO`, `SectionClientFinal`, `SectionCatalogue`, `ImageSeparator`.
-Conserver le `<script>` Lenis pour les ancres (adapter `/#operators`, voir §4 spec).
 
-- [ ] **Step 2 : Supprimer l'ancien composant**
+- [ ] **Step 2 : Gérer l'ancre « Opérateurs » (`/#operators`)**
+
+Dans le `<script>` Lenis de `index.astro`, ajouter un défilement vers la scène 8 du scrolly.
+Le `#operators` étant dans un étage pinné, on cible une position de scroll calculée plutôt que
+l'élément lui-même :
+
+```js
+// Au clic sur un lien /#operators (ou #operators)
+const scrolly = document.getElementById('scrolly');
+if (scrolly) {
+  // ≈ progression 0.52 (scène 8) sur la hauteur du #scrolly
+  const target = scrolly.offsetTop + scrolly.offsetHeight * 0.52;
+  lenis.scrollTo(target, { offset: 0 });
+}
+```
+
+> **Échappatoire (spec §4/§10) :** si ce calcul s'avère trop fragile, pointer simplement
+> « Opérateurs » vers `/infrastructure/` dans `Navigation.astro` et supprimer cette logique.
+
+- [ ] **Step 3 : Supprimer l'ancien composant**
 
 ```bash
 git rm src/components/ScrollytellingScene.astro
 ```
 
-- [ ] **Step 3 : Build + contrôle visuel complet**
+- [ ] **Step 4 : Build + contrôle visuel complet**
 
 Run: `npm run build` (vérifier le nombre de pages générées, aucune erreur).
 Run: `npm run dev`, ouvrir `/` : dérouler les 10 scènes au scroll (desktop). Vérifier chaque
-transition. Tester en mobile (< 1024px) et avec `prefers-reduced-motion` → version empilée.
+transition + l'ancre « Opérateurs ». Tester en mobile (< 1024px) et avec
+`prefers-reduced-motion` → version empilée.
 
-- [ ] **Step 4 : Commit**
+- [ ] **Step 5 : Commit**
 
 ```bash
 git add src/pages/index.astro
