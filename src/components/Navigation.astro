@@ -1,69 +1,44 @@
 ---
-const navLinks = [
-  { href: '/#hero', label: 'Accueil' },
+const links = [
+  { href: '/', label: 'Accueil' },
   { href: '/#operators', label: 'Opérateurs' },
-  { href: '/#nro', label: 'NRO' },
-  { href: '/#sro', label: 'SRO' },
-  { href: '/#pbo', label: 'PBO' },
-  { href: '/#client', label: 'Client' },
-  { href: '/#catalogue', label: 'Formations' },
-];
-
-const pageLinks = [
-  { href: '/formations-fibre-optique/', label: 'Catalogue complet' },
+  { href: '/formations-fibre-optique/', label: 'Formations' },
+  { href: '/infrastructure/', label: 'Infrastructure' },
   { href: '/habilitations/', label: 'Habilitations' },
   { href: '/blog/', label: 'Blog' },
-  { href: '/contact/', label: 'Contact' },
 ];
 ---
 
-<header id="main-nav" class="fixed top-0 left-0 w-full z-50 transition-all duration-500 border-b border-transparent">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex items-center justify-between h-16 lg:h-20">
+<header id="main-nav" class="fixed top-0 left-0 w-full z-50">
+  <div class="navzone relative mx-auto max-w-7xl px-4 pt-4 pb-8" style="perspective:1000px;">
+    <div class="navzone-halo" aria-hidden="true"></div>
+    <div class="navzone-band" aria-hidden="true"></div>
+
+    <nav class="relief-panel relief-2 fiber-pulse flex items-center justify-between px-5 py-3"
+         style="background:linear-gradient(rgba(16,50,88,.78),rgba(11,33,58,.82)) padding-box,linear-gradient(100deg,#f59e0b,#1e9ad7) border-box;">
+
       {/* Logo */}
-      <a href="/" class="flex items-center group">
-        <div class="bg-white/95 group-hover:bg-white rounded-lg px-3 py-1.5 transition-all duration-300 group-hover:shadow-[0_0_16px_rgba(30,154,215,0.35)]">
-          <img
-            src="/images/logo-kmc.png"
-            alt="KMC — Knowledge Management Center"
-            class="h-8 w-auto object-contain"
-          />
-        </div>
+      <a href="/" class="relative z-10 flex items-center">
+        <span class="bg-white/95 rounded-lg px-3 py-1.5">
+          <img src="/images/logo-kmc.png" alt="KMC — Knowledge Management Center" class="h-8 w-auto object-contain" />
+        </span>
       </a>
 
       {/* Desktop Navigation */}
-      <nav class="hidden lg:flex items-center gap-1">
-        {navLinks.map((link) => (
-          <a
-            href={link.href}
-            class="px-3 py-2 rounded-lg text-sm font-medium text-white/70 hover:text-white hover:bg-white/10 transition-all duration-300"
-          >
-            {link.label}
-          </a>
+      <div class="relative z-10 hidden lg:flex items-center gap-1">
+        {links.map((l) => (
+          <a href={l.href} class="px-3 py-2 rounded-lg text-sm font-medium text-white/75 hover:text-white hover:bg-white/10 transition">{l.label}</a>
         ))}
-        <div class="w-px h-5 bg-white/20 mx-2" />
-        {pageLinks.map((link) => (
-          <a
-            href={link.href}
-            class="px-3 py-2 rounded-lg text-sm font-medium text-[#1e9ad7]/80 hover:text-[#1e9ad7] hover:bg-[#1e9ad7]/10 transition-all duration-300"
-          >
-            {link.label}
-          </a>
-        ))}
-      </nav>
+      </div>
 
       {/* CTA Desktop */}
-      <a
-        href="/contact/"
-        class="hidden lg:inline-flex items-center px-4 py-2 rounded-lg bg-gradient-to-r from-[#1e9ad7] to-[#1565a8] text-[#0f172a] font-semibold text-sm hover:shadow-lg hover:shadow-[#1e9ad7]/30 hover:scale-105 transition-all duration-300"
-      >
-        Nous contacter
-      </a>
+      <a href="/contact/" class="relative z-10 hidden lg:inline-flex items-center px-4 py-2 rounded-lg text-sm font-bold text-[#06121f]"
+         style="background:linear-gradient(100deg,#f59e0b,#1e9ad7);">Nous contacter</a>
 
       {/* Mobile Hamburger */}
       <button
         id="menu-toggle"
-        class="lg:hidden relative w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors"
+        class="relative z-10 lg:hidden w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors"
         aria-label="Ouvrir le menu"
         aria-expanded="false"
       >
@@ -74,7 +49,7 @@ const pageLinks = [
           <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
         </svg>
       </button>
-    </div>
+    </nav>
   </div>
 
   {/* Mobile Menu */}
@@ -83,29 +58,19 @@ const pageLinks = [
     class="lg:hidden absolute top-full left-0 w-full bg-[#0B1120]/95 backdrop-blur-xl border-b border-white/10 opacity-0 invisible transition-all duration-300 translate-y-[-10px]"
   >
     <div class="px-4 py-6 space-y-1">
-      <p class="px-3 text-xs font-semibold text-white/40 uppercase tracking-wider mb-2">Sections</p>
-      {navLinks.map((link) => (
+      {links.map((l) => (
         <a
-          href={link.href}
+          href={l.href}
           class="mobile-link block px-3 py-2.5 rounded-lg text-base font-medium text-white/80 hover:text-white hover:bg-white/10 transition-all"
         >
-          {link.label}
-        </a>
-      ))}
-      <div class="my-3 border-t border-white/10" />
-      <p class="px-3 text-xs font-semibold text-white/40 uppercase tracking-wider mb-2">Pages</p>
-      {pageLinks.map((link) => (
-        <a
-          href={link.href}
-          class="mobile-link block px-3 py-2.5 rounded-lg text-base font-medium text-[#1e9ad7]/80 hover:text-[#1e9ad7] hover:bg-[#1e9ad7]/10 transition-all"
-        >
-          {link.label}
+          {l.label}
         </a>
       ))}
       <div class="mt-4 pt-4 border-t border-white/10">
         <a
           href="/contact/"
-          class="mobile-link block w-full text-center px-4 py-3 rounded-lg bg-gradient-to-r from-[#1e9ad7] to-[#1565a8] text-[#0f172a] font-semibold hover:shadow-lg hover:shadow-[#1e9ad7]/30 transition-all"
+          class="mobile-link block w-full text-center px-4 py-3 rounded-lg text-[#0f172a] font-semibold hover:shadow-lg hover:shadow-[#1e9ad7]/30 transition-all"
+          style="background:linear-gradient(100deg,#f59e0b,#1e9ad7);"
         >
           Nous contacter
         </a>
@@ -113,6 +78,24 @@ const pageLinks = [
     </div>
   </div>
 </header>
+
+<style>
+  .navzone-halo {
+    position: absolute; left: 4%; right: 4%; top: 6px; height: 120px; z-index: -2;
+    border-radius: 30px; filter: blur(10px);
+    background: radial-gradient(ellipse at 50% 0%, #103258 0%, rgba(16,50,88,.35) 45%, transparent 75%);
+  }
+  .navzone-band {
+    position: absolute; left: 8%; right: 8%; top: 60px; height: 26px; z-index: -1;
+    filter: blur(22px); opacity: .7; transition: opacity .45s ease;
+    background: linear-gradient(100deg, rgba(245,158,11,.4), rgba(30,154,215,.45));
+  }
+  .navzone:hover .navzone-band { opacity: 1; }
+  @media (max-width: 1023px) {
+    .navzone-halo, .navzone-band { display: none; }
+    #main-nav .fiber-pulse::after { display: none; }
+  }
+</style>
 
 <script>
   const header = document.getElementById('main-nav');
@@ -125,11 +108,9 @@ const pageLinks = [
   // Scroll effect: transparent to solid
   const onScroll = () => {
     if (window.scrollY > 50) {
-      header?.classList.add('bg-[#0B1120]/90', 'backdrop-blur-xl', 'border-white/10', 'shadow-lg', 'shadow-black/20');
-      header?.classList.remove('border-transparent');
+      header?.classList.add('bg-[#0B1120]/90', 'backdrop-blur-xl', 'shadow-lg', 'shadow-black/20');
     } else {
-      header?.classList.remove('bg-[#0B1120]/90', 'backdrop-blur-xl', 'border-white/10', 'shadow-lg', 'shadow-black/20');
-      header?.classList.add('border-transparent');
+      header?.classList.remove('bg-[#0B1120]/90', 'backdrop-blur-xl', 'shadow-lg', 'shadow-black/20');
     }
   };
 
