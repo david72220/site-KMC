@@ -202,9 +202,9 @@ git commit -m "fix(relief): renforce l'effet relief/fibre + perspective sur #lay
 **Files:**
 - Modify: `src/components/ScrollytellingHero.astro` (`#layer-img0` : h1, `#elephant`, `#technicians`)
 
-- [ ] **Step 1: Recolorer le titre serif (1a + 1b)**
+- [ ] **Step 1: Recolorer le titre serif (1a + 1b) + remonter le titre (1c)**
 
-Remplacer le `<h1>` (lignes ~28-30) par une version avec spans colorés. K+M bleu, C orange, « fibre optique » orange :
+Remplacer le `<h1>` (lignes ~28-30) par une version avec spans colorés. K+M bleu, C orange, « fibre optique » orange. **Note : ceci change aussi `lg:top-[12%]` → `lg:top-[10%]`** (remonte le titre pour dégager de l'espace avec l'éléphant, cf. 1c) :
 
 ```astro
 <h1 class="font-serif text-3xl md:text-5xl font-bold text-white text-center max-w-4xl lg:absolute lg:top-[10%] lg:left-1/2 lg:-translate-x-1/2 lg:w-full lg:px-6">
@@ -280,6 +280,8 @@ Remplacer `.to([img1, text], { opacity: 0, … }, 2.6)` + `.to(img2,{opacity:1},
 Run: `npm run build` → succès.
 Visuel desktop : en scrollant, la couche éléphant/techniciens **monte** pour révéler Image 1 (plus de passage au noir), la carte texte apparaît plus tôt, Image 1+texte **montent** pour révéler le réseau + vidéo, le zoom opérateurs est moins fort, le dézoom inclut le NRO. Vérifier l'absence de saut/clignotement aux transitions.
 
+⚠️ Le cadrage du dézoom (`scale: 1.25`, origine `6% 45%`) suppose que le bâtiment NRO est visible au bord gauche d'`Image 2 - reseau.png` à ce niveau de zoom. **À affiner visuellement** : ajuster `scale` et/ou `transformOrigin` pour que le NRO soit effectivement cadré. Si le NRO n'est pas au bord gauche de l'image, ajuster l'origine en conséquence.
+
 - [ ] **Step 6: Commit**
 
 ```bash
@@ -289,18 +291,20 @@ git commit -m "feat(hero): transitions par glissement vertical, timing texte, zo
 
 ---
 
-## Task 6 : Section NRO + texte centre de formation + CTA contextuel
+## Task 6 : Section présentation centre de formation + CTA contextuel
+
+> Précision de vocabulaire : le « NRO » de la spec (§8) désigne le **bâtiment visible après le dézoom de `Image 2`**, pas cette couche. Cette couche est un **calque de texte de présentation** affiché APRÈS le dézoom. On la nomme donc `#layer-presentation` pour éviter la confusion.
 
 **Files:**
-- Modify: `src/components/ScrollytellingHero.astro` (nouvelle couche `#layer-nro` + ajout dans la timeline ; CTA dans `#layer-text`)
+- Modify: `src/components/ScrollytellingHero.astro` (nouvelle couche `#layer-presentation` + ajout dans la timeline ; CTA dans `#layer-text`)
 
-- [ ] **Step 1: Ajouter la couche NRO dans le markup**
+- [ ] **Step 1: Ajouter la couche présentation dans le markup**
 
-Avant la couche `#layer-formation` (ligne ~138), ajouter une couche `#layer-nro` (z-55, sous formation z-60) avec le texte adapté de `KMC_presentation_site_SEO.md`. Hiérarchie : `<h2>`/`<h3>` (le `<h1>` reste le titre serif). Contenu condensé :
+Avant la couche `#layer-formation` (ligne ~138), ajouter une couche `#layer-presentation` (z-55, sous formation z-60) avec le texte adapté de `KMC_presentation_site_SEO.md`. Hiérarchie : `<h2>`/`<h3>` (le `<h1>` reste le titre serif). Contenu condensé :
 
 ```astro
-<!-- Texte centre de formation (z-55) : scène 8b -->
-<div id="layer-nro" class="absolute inset-0 z-[55] flex items-center justify-center px-4 opacity-0 bg-[#070d18]/70">
+<!-- Texte présentation centre de formation (z-55) : après le dézoom NRO -->
+<div id="layer-presentation" class="absolute inset-0 z-[55] flex items-center justify-center px-4 opacity-0 bg-[#070d18]/70">
   <div class="max-w-3xl text-center">
     <h2 class="font-display text-3xl md:text-4xl font-bold text-white mb-5">Centre de formation de techniciens <span class="text-[#1e9ad7]">fibre optique</span> à Abidjan</h2>
     <p class="text-white/70 text-base md:text-lg leading-relaxed mb-4">KMC forme des techniciens immédiatement opérationnels sur les réseaux FTTH des trois grands opérateurs ivoiriens (Orange, MTN, Moov), en associant enseignement théorique et ateliers pratiques intensifs sur matériel professionnel.</p>
@@ -310,16 +314,22 @@ Avant la couche `#layer-formation` (ligne ~138), ajouter une couche `#layer-nro`
 </div>
 ```
 
-- [ ] **Step 2: Insérer la couche dans la timeline**
+- [ ] **Step 2: Insérer la couche dans la timeline (APRÈS la fin du dézoom)**
 
-Récupérer l'élément : `const nro = document.getElementById('layer-nro');` (avec les autres `getElementById`). Insérer entre le dézoom (position ~7.3) et la fiche formation (position ~8.3) :
+Récupérer l'élément : `const presentation = document.getElementById('layer-presentation');` (avec les autres `getElementById`).
+
+⚠️ **Timing à respecter** : le dézoom est `.to(img2, { scale: 1.25, duration: 0.9 }, 7.3)` → il se **termine à 8.2**. Le texte de présentation ne doit apparaître qu'après, sinon il masque le dézoom NRO que la spec veut montrer. Donc **décaler aussi la fiche formation et le hold final** :
 
 ```js
-.to(nro, { opacity: 1, duration: 0.4 }, 7.6)
-.to(nro, { opacity: 0, duration: 0.3 }, 8.1)
+// dézoom finit à 8.2
+.to(presentation, { opacity: 1, duration: 0.4 }, 8.3)   // apparaît après le dézoom
+.to(presentation, { opacity: 0, duration: 0.3 }, 9.0)
+// Scène 10 : fiche formation — décalée après la présentation
+.to(formation, { opacity: 1, duration: 0.6 }, 9.2)
+.to({}, { duration: 1.0 }, 10.0);                        // hold final allongé
 ```
 
-Ajuster les positions de la fiche formation si besoin pour garder l'enchaînement fluide (la fiche reste la dernière scène).
+Remplacer les anciennes positions `.to(formation,{opacity:1},8.3)` et `.to({},{duration:1.0},9.1)` par celles ci-dessus. (Le `scrub` remappe l'ensemble sur la hauteur de scroll — pas besoin d'allonger `#scrolly`.)
 
 - [ ] **Step 3: Ajouter un CTA dans la carte texte (#layer-text)**
 
@@ -332,7 +342,7 @@ Dans `#layer-text`, sous le label habilitation (après ligne ~115), ajouter un C
 - [ ] **Step 4: Build + vérification visuelle**
 
 Run: `npm run build` → succès.
-Visuel : après le dézoom (NRO visible), la section texte « Centre de formation… » apparaît avec son CTA, puis la fiche formation. Un seul `<h1>` sur la page (vérifier : `grep -c "<h1" ` sur le rendu n'est pas fiable ; vérifier manuellement dans le markup que seul le titre serif est `h1`).
+Visuel : le dézoom NRO est bien **visible quelques instants** AVANT que la section texte « Centre de formation… » n'apparaisse (vérifier qu'il n'est plus masqué), puis le CTA, puis la fiche formation. Un seul `<h1>` sur la page (vérifier manuellement dans le markup que seul le titre serif est `h1`).
 
 - [ ] **Step 5: Commit**
 
@@ -362,10 +372,12 @@ git commit -m "feat(hero): section NRO + texte centre de formation (SEO) + CTA c
 
 S'assurer que `#layer-ops`/`#operators` a bien `perspective` (ajouté en Task 3) pour que `.relief-2:hover` produise le relief sur les fenêtres opérateurs.
 
+Note : `OperatorWindow` utilise `.relief-2` **sans** `.fiber-pulse` aujourd'hui (donc pas de comète sur ces fenêtres). C'est conforme à la spec (relief + survol dynamique). Si l'on souhaite la comète fibre ici aussi, ajouter la classe `fiber-pulse` à l'`<article>` — optionnel, à valider visuellement (ne pas surcharger).
+
 - [ ] **Step 3: Build + vérification visuelle**
 
 Run: `npm run build` → succès.
-Visuel : chaque fenêtre opérateur a son CTA (couleur de l'opérateur) ; au survol, relief visible.
+Visuel : chaque fenêtre opérateur a son CTA (couleur de l'opérateur) ; au survol, relief visible (translation + halos accentués). La comète n'est attendue que si `fiber-pulse` a été ajoutée.
 
 - [ ] **Step 4: Commit**
 
@@ -390,13 +402,15 @@ Remplacer le bloc `<article class="formation-card …">…</article>` (lignes ~8
 
 ```astro
 {formations.length > 0 && (
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8" style="perspective:1200px;">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8" style="perspective:1200px;">
     {formations.map((formation) => (
       <FormationCard formation={formation} />
     ))}
   </div>
 )}
 ```
+
+(1 colonne téléphone, 2 colonnes dès la tablette `md:` — conforme à la spec « 2 tablette, 2 desktop » pour des fiches denses.)
 
 `FormationCard` utilise `.relief-1 fiber-pulse` et `max-w-2xl mx-auto` ; pour une grille 2 colonnes, retirer/neutraliser le `max-w-2xl` via un wrapper `w-full` ou adapter la carte (vérifier le rendu ; au besoin envelopper chaque carte dans `<div class="w-full">`). Garder l'option 1 colonne mobile.
 
@@ -435,7 +449,12 @@ Approche recommandée : dans la branche mobile du `matchMedia`, après avoir mis
 
 - [ ] **Step 2: Vérifier l'ordre logique en empilé**
 
-L'ordre DOM des couches détermine l'ordre vertical : img2(z-10) → img1(z-20) → img0(z-30) → text(z-40) → op-intro(z-50) → ops(z-50) → nro(z-55) → formation(z-60). En empilé, cet ordre DOM donne réseau → image1 → éléphant → texte → … ce qui n'est PAS l'ordre narratif souhaité (éléphant d'abord). **Réordonner le markup** pour que l'ordre DOM corresponde à la narration : éléphant/titre → image1 → carte texte → réseau+vidéo → intro opérateurs → fenêtres opérateurs → NRO → fiche formation. Vérifier que ce réordonnancement n'altère pas la timeline desktop (les `z-index` gèrent l'empilement visuel desktop indépendamment de l'ordre DOM ; tester desktop après).
+L'ordre DOM des couches détermine l'ordre vertical : img2(z-10) → img1(z-20) → img0(z-30) → text(z-40) → op-intro(z-50) → ops(z-50) → presentation(z-55) → formation(z-60). En empilé, cet ordre DOM donne réseau → image1 → éléphant → texte → … ce qui n'est PAS l'ordre narratif souhaité (éléphant d'abord). **Réordonner le markup** pour que l'ordre DOM corresponde à la narration : éléphant/titre → image1 → carte texte → réseau+vidéo → intro opérateurs → fenêtres opérateurs → présentation → fiche formation.
+
+⚠️ **GARDE-FOU (à respecter absolument) :**
+- Réordonner **uniquement à l'intérieur de `#scrolly-stage`**, et garder **tous les `#layer-*` comme enfants directs de `#scrolly-stage`**. Sortir une couche du stage casserait le `pin`/`scrub`.
+- La timeline desktop cible les couches par `getElementById` (lignes ~154-164) et l'empilement visuel par `z-index` — donc le réordonnancement DOM **n'affecte pas** la séquence desktop. Le teardown mobile (`querySelectorAll('#scrolly-stage > div')`) et le stagger `.op-win` (sélecteur de classe) sont aussi indépendants de l'ordre.
+- **Tester le desktop ≥1024px après réordonnancement** pour confirmer que rien n'a bougé.
 
 - [ ] **Step 3: Build + vérification visuelle multi-écrans**
 
