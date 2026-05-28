@@ -93,7 +93,7 @@ piloté par Lenis comme l'actuel `lib/scroll`).
 | 2 | **Menu** | persistant | Voir §4. Présent en `fixed` au-dessus de toute la séquence. |
 | 3 | **Fondu → Image 1** | 0.06 → 0.16 | Léger fondu au noir, puis `Image 1 - centre de formation.png` apparaît en fondu (plein cadre, `object-cover`). |
 | 4 | **Fenêtre texte + 2 logos** | 0.16 → 0.20 | Scroll très court (quasi instantané) : la carte texte actuelle (H1/H2/texte enrichi + logos **FDFP** et **AEJ**) apparaît en overlay sur Image 1. Réutilise le contenu de l'actuel `ScrollytellingScene` (carte verre dépoli). |
-| 5 | **Fondu → Image 2 + flux fibre** | 0.20 → 0.34 | Fondu vers `Image 2 - reseau.png`. Quasi instantanément, la `video flux fibre.mp4` se révèle par-dessus (effet « image par image » du flux). **Décision technique §6.3.** |
+| 5 | **Fondu → Image 2 + flux fibre** | 0.20 → 0.34 | Fondu vers `Image 2 - reseau.png`. Quasi instantanément, la `video flux fibre.mp4` se révèle par-dessus (autoplay loop dévoilé par `opacity` — option A par défaut, voir **§6.3** pour la variante « image par image » stricte). |
 | 6 | **Zoom opérateurs** | 0.34 → 0.44 | Zoom sur la **partie gauche** de l'image (bâtiments Orange / MOOV / MTN) : `scale ~1.45, transform-origin: left center` (comme l'actuel). |
 | 7 | **Texte intro opérateurs** | 0.44 → 0.52 | Overlay du texte existant : « KMC forme les techniciens des **3 opérateurs nationaux** » + paragraphe (repris tel quel de `SectionOperators`). Fond assombri pour lisibilité. |
 | 8 | **3 fenêtres opérateurs** | 0.52 → 0.72 | Apparition successive de 3 fenêtres **relief signature niveau 2** : **Orange**, puis **MOOV**, puis **MTN** (ordre du client). Chaque fenêtre = spécificités réseau + compétences + matériel (contenu SEO repris de `SectionOperators`). Dynamique au survol. |
@@ -117,7 +117,7 @@ piloté par Lenis comme l'actuel `lib/scroll`).
 - Lumières **intensifiées au survol** du menu.
 - Logo dans pastille blanche, wordmark possible en Playfair.
 - **Menu mobile** : conserver le pattern hamburger existant ; halo/relief simplifiés, impulsion
-  fibre désactivée sur mobile.
+  fibre **et bande lumineuse persistante désactivées** sur mobile (barre solide simple).
 
 ### Liens de navigation (mis à jour)
 
@@ -127,7 +127,7 @@ pertinentes. Nouveaux liens :
 | Libellé | Cible |
 |---------|-------|
 | Accueil | `/` |
-| Opérateurs | `/#operators` (ancre vers la scène 7/8 du scrolly — voir §6.5) |
+| Opérateurs | Défilement vers la scène 7/8 : Lenis `scrollTo` à une position calculée = `#scrolly.offsetTop + hauteur_scrolly × progression_scène8` (≈ 0.52). À défaut, fallback simple vers `/infrastructure/`. |
 | Formations | `/formations-fibre-optique/` |
 | Infrastructure | `/infrastructure/` (nouvelle page, §7) |
 | Habilitations | `/habilitations/` |
@@ -239,6 +239,10 @@ prévoir une variante (overlay label « NRO » ou recadrage différent).
   version empilée en flux normal — chaque scène devient une section verticale classique
   (image + texte + fenêtres + fiche), sans zoom ni comètes. Détection : media query +
   garde JS (ne pas initialiser ScrollTrigger pin si mobile/reduced-motion).
+  - **Scènes 6 et 9** (mouvements de caméra purs : zoom/dézoom sur Image 2) n'ont pas de
+    contenu propre → en mode empilé elles sont **fusionnées avec la scène 8** : Image 2
+    affichée statiquement (recadrée sur les opérateurs) en arrière-plan des fenêtres
+    opérateurs. Pas de section dédiée pour 6/9 sur mobile.
 - **Préchargement** : `Image 0` et `Image 1` en `loading="eager"` ; vidéo `preload="auto"` ;
   reste en `lazy`.
 - **`@property` / `conic-gradient`** : dégradation gracieuse (§2.2) — la bordure statique reste.
