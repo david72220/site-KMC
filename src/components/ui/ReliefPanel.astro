@@ -4,6 +4,8 @@ interface Props {
   fiber?: boolean;
   class?: string;
 }
+// NOTE: level={2} applies a 3D rotateX on hover — an ancestor element MUST set
+// `perspective` (e.g. perspective: 1000px) for the tilt to render correctly.
 const { level = 2, fiber = false, class: extra = '' } = Astro.props;
 const classes = ['relief-panel', `relief-${level}`, fiber ? 'fiber-pulse' : '', extra]
   .filter(Boolean).join(' ');

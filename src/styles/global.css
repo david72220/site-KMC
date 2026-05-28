@@ -182,4 +182,5 @@ html.lenis body {
     .fiber-pulse::after,
     .fiber-flow::before { animation: none; opacity: 0; }
     .relief-1:hover, .relief-2:hover { transform: none; }
+    .relief-panel { will-change: auto; }
 }
