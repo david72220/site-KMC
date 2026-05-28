@@ -1,0 +1,15 @@
+---
+interface Props {
+  level?: 1 | 2;
+  fiber?: boolean;
+  class?: string;
+}
+const { level = 2, fiber = false, class: extra = '' } = Astro.props;
+const classes = ['relief-panel', `relief-${level}`, fiber ? 'fiber-pulse' : '', extra]
+  .filter(Boolean).join(' ');
+---
+<div class={classes}>
+  <div class="relative z-10">
+    <slot />
+  </div>
+</div>
