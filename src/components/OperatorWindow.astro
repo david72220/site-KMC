@@ -1,0 +1,24 @@
+---
+import type { Operator } from '../data/operators';
+interface Props { op: Operator; }
+const { op } = Astro.props;
+---
+<article class="relief-panel relief-2 px-7 py-7" aria-label={`Formation fibre ${op.name}`}>
+  <div class="relative z-10">
+    <h3 class="font-display text-xl font-bold" style={`color:${op.color}`}>{op.name}</h3>
+    <p class="text-white/40 text-xs mb-4">{op.tagline}</p>
+    <p class="text-white/65 text-sm leading-relaxed mb-4">{op.description}</p>
+    <p class="text-xs font-semibold uppercase tracking-wider mb-2" style={`color:${op.color}`}>Compétences</p>
+    <ul class="space-y-1.5 mb-4">
+      {op.skills.map((s) => (
+        <li class="flex items-start gap-2 text-sm text-white/60"><span style={`color:${op.color}`}>▸</span>{s}</li>
+      ))}
+    </ul>
+    <p class="text-xs font-semibold uppercase tracking-wider mb-2" style={`color:${op.color}`}>Matériel</p>
+    <div class="flex flex-wrap gap-1.5">
+      {op.gear.map((g) => (
+        <span class="px-2 py-1 rounded-md text-xs border" style={`color:${op.color};border-color:${op.color}33;background:${op.color}14`}>{g}</span>
+      ))}
+    </div>
+  </div>
+</article>
