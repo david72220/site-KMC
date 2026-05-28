@@ -29,13 +29,12 @@ const formation = await getFormationByName('FTTH-D2');
         KMC — Institut de formation professionnel en fibre optique
       </h1>
       <div class="relief-panel relief-2 fiber-pulse p-3">
-        <img src="/images/Image 0 - Elephant.png" alt="KMC" class="relative z-10 max-h-[50vh] w-auto object-contain" />
+        <img src="/images/Image 0 - Elephant.png" alt="Éléphant, emblème de KMC — Institut de formation en fibre optique" class="relative z-10 max-h-[50vh] w-auto object-contain" />
       </div>
     </div>
 
     <!-- Carte texte + logos (z-40) : scène 4 -->
     <div id="layer-text" class="absolute inset-0 z-40 flex items-end justify-center pb-12 px-4 opacity-0">
-      <!-- Carte verre dépoli (copiée depuis ScrollytellingScene.astro, lignes 48–117) -->
       <div class="max-w-3xl w-full rounded-2xl border border-white/10 px-8 py-7 text-center"
            style="backdrop-filter: blur(14px); background: rgba(10,22,40,0.68);">
 
@@ -51,10 +50,10 @@ const formation = await getFormationByName('FTTH-D2');
         </div>
 
         <!-- H1 — grand titre -->
-        <h1 class="font-display text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight mb-4">
+        <h2 class="font-display text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight mb-4">
           Institut Professionnel<br/>
           de Formation en&nbsp;<span class="text-[#1e9ad7]">Fibre Optique</span>
-        </h1>
+        </h2>
 
         <!-- H2 -->
         <h2 class="text-base md:text-xl text-white/80 font-light max-w-2xl mx-auto mb-4 leading-relaxed">
@@ -138,25 +137,10 @@ const formation = await getFormationByName('FTTH-D2');
   import { gsap, ScrollTrigger, initLenis } from '../lib/scroll';
   initLenis();
 
-  function isMobileOrReduced() {
-    return window.matchMedia('(max-width: 1023px)').matches
-        || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  }
+  const mm = gsap.matchMedia();
 
-  function initStacked() {
-    document.querySelectorAll('#scrolly-stage > div').forEach((el) => {
-      (el as HTMLElement).style.opacity = '1';
-      (el as HTMLElement).style.position = 'relative';
-    });
-    const stage = document.getElementById('scrolly-stage');
-    const scrolly = document.getElementById('scrolly');
-    if (stage) { stage.style.position = 'static'; stage.style.height = 'auto'; }
-    if (scrolly) scrolly.style.height = 'auto';
-    const v = document.getElementById('flux-video') as HTMLVideoElement | null;
-    if (v) v.style.opacity = '1';
-  }
-
-  function initScrolly() {
+  // Desktop avec motion autorisé → scrollytelling complet
+  mm.add('(min-width: 1024px) and (prefers-reduced-motion: no-preference)', () => {
     const img0 = document.getElementById('layer-img0');
     const img1 = document.getElementById('layer-img1');
     const img2 = document.getElementById('layer-img2');
@@ -184,13 +168,32 @@ const formation = await getFormationByName('FTTH-D2');
       .to(formation, { opacity: 1, duration: 0.6 }, 7.4)
       .to({}, { duration: 1.2 }, 8.0);
 
-    ScrollTrigger.create({
+    const st = ScrollTrigger.create({
       trigger: '#scrolly', start: 'top top', end: 'bottom bottom',
       scrub: 1.2, pin: '#scrolly-stage', invalidateOnRefresh: true, animation: tl,
     });
-  }
 
-  function boot() { isMobileOrReduced() ? initStacked() : initScrolly(); }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
-  else boot();
+    // Cleanup : matchMedia revert quand on quitte ce contexte
+    return () => { st.kill(); tl.kill(); };
+  });
+
+  // Mobile OU reduced-motion → layout empilé aplati
+  mm.add('(max-width: 1023px), (prefers-reduced-motion: reduce)', () => {
+    const stage = document.getElementById('scrolly-stage');
+    const scrolly = document.getElementById('scrolly');
+    const layers = document.querySelectorAll<HTMLElement>('#scrolly-stage > div');
+    layers.forEach((el) => { el.style.opacity = '1'; el.style.position = 'relative'; });
+    if (stage) { stage.style.position = 'static'; stage.style.height = 'auto'; }
+    if (scrolly) scrolly.style.height = 'auto';
+    const v = document.getElementById('flux-video') as HTMLVideoElement | null;
+    if (v) v.style.opacity = '1';
+
+    // Cleanup : on remet les styles inline à zéro pour repasser en desktop
+    return () => {
+      layers.forEach((el) => { el.style.opacity = ''; el.style.position = ''; });
+      if (stage) { stage.style.position = ''; stage.style.height = ''; }
+      if (scrolly) scrolly.style.height = '';
+      if (v) v.style.opacity = '';
+    };
+  });
 </script>
