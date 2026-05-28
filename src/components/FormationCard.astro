@@ -1,0 +1,40 @@
+---
+import type { Formation } from '../lib/notion';
+interface Props { formation: Formation; }
+const { formation: f } = Astro.props;
+---
+<article class="relief-panel relief-1 fiber-pulse mx-auto max-w-2xl px-8 py-9 md:px-10">
+  <div class="relative z-10">
+    <h3 class="text-center font-serif text-3xl md:text-4xl font-bold text-white tracking-wide">{f.nom}</h3>
+    <div class="fiber-flow w-3/5 mx-auto mt-3 mb-7"></div>
+
+    <div class="flex justify-between gap-8 text-sm">
+      <div class="flex-1 space-y-2.5">
+        <p><span class="text-[#7dd3fc] font-semibold">Durée de formation en institut :</span><br/>{f.dureeFormation}</p>
+        <p><span class="text-[#7dd3fc] font-semibold">Durée du stage en entreprise :</span><br/>{f.dureeStagePratique}</p>
+        <p><span class="text-[#7dd3fc] font-semibold">Participants maximum :</span><br/>{f.participants ?? '—'}</p>
+      </div>
+      <div class="flex-1 space-y-2.5 text-right">
+        <p><span class="text-[#7dd3fc] font-semibold">Prérequis :</span><br/>{f.prerequis}</p>
+        <p><span class="text-[#7dd3fc] font-semibold">Lieu de la formation :</span><br/>{f.lieu}</p>
+      </div>
+    </div>
+
+    <h4 class="text-center text-lg font-bold text-white mt-6 mb-2.5">Programme de formation</h4>
+    <p class="text-center text-sm text-white/60 leading-relaxed max-w-xl mx-auto">{f.programme}</p>
+
+    <p class="text-center text-sm text-[#7dd3fc] font-semibold mt-6 mb-2">À l'issue de cette formation, vous saurez :</p>
+    <p class="text-center text-sm text-white/75 leading-relaxed max-w-xl mx-auto">{f.issue}</p>
+
+    <div class="flex justify-between mt-7 pt-4 border-t border-white/10">
+      <div>
+        <span class="block text-[11px] uppercase tracking-wider text-white/50">Taux de réussite</span>
+        <span class="text-xl font-bold text-[#34d399]">{f.tauxReussite}</span>
+      </div>
+      <div class="text-right">
+        <span class="block text-[11px] uppercase tracking-wider text-white/50">Taux d'abandon</span>
+        <span class="text-xl font-bold text-[#fb923c]">{f.tauxAbandon}</span>
+      </div>
+    </div>
+  </div>
+</article>
