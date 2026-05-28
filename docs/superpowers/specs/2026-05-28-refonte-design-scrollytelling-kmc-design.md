@@ -93,7 +93,7 @@ piloté par Lenis comme l'actuel `lib/scroll`).
 | 2 | **Menu** | persistant | Voir §4. Présent en `fixed` au-dessus de toute la séquence. |
 | 3 | **Fondu → Image 1** | 0.06 → 0.16 | Léger fondu au noir, puis `Image 1 - centre de formation.png` apparaît en fondu (plein cadre, `object-cover`). |
 | 4 | **Fenêtre texte + 2 logos** | 0.16 → 0.20 | Scroll très court (quasi instantané) : la carte texte actuelle (H1/H2/texte enrichi + logos **FDFP** et **AEJ**) apparaît en overlay sur Image 1. Réutilise le contenu de l'actuel `ScrollytellingScene` (carte verre dépoli). |
-| 5 | **Fondu → Image 2 + flux fibre** | 0.20 → 0.34 | Fondu vers `Image 2 - reseau.png`. Quasi instantanément, la `video flux fibre.mp4` se révèle par-dessus (autoplay loop dévoilé par `opacity` — option A par défaut, voir **§6.3** pour la variante « image par image » stricte). |
+| 5 | **Fondu → Image 2 + flux fibre** | 0.20 → 0.34 | Fondu vers `Image 2 - reseau.png`. Quasi instantanément, la `video flux fibre.mp4` se révèle par-dessus (**autoplay** loop dévoilé par `opacity` — voir §6.3). |
 | 6 | **Zoom opérateurs** | 0.34 → 0.44 | Zoom sur la **partie gauche** de l'image (bâtiments Orange / MOOV / MTN) : `scale ~1.45, transform-origin: left center` (comme l'actuel). |
 | 7 | **Texte intro opérateurs** | 0.44 → 0.52 | Overlay du texte existant : « KMC forme les techniciens des **3 opérateurs nationaux** » + paragraphe (repris tel quel de `SectionOperators`). Fond assombri pour lisibilité. |
 | 8 | **3 fenêtres opérateurs** | 0.52 → 0.72 | Apparition successive de 3 fenêtres **relief signature niveau 2** : **Orange**, puis **MOOV**, puis **MTN** (ordre du client). Chaque fenêtre = spécificités réseau + compétences + matériel (contenu SEO repris de `SectionOperators`). Dynamique au survol. |
@@ -215,16 +215,12 @@ impulsion fibre + fine **ligne de flux animée** sous le titre.
   `opacity`, `scale`, `transformOrigin`, `y` par scène. `will-change: transform, opacity` sur
   les couches lourdes.
 
-### 6.3 Décision — effet « flux fibre » sur la vidéo (scène 5)
+### 6.3 Scène 5 — vidéo en autoplay (décidé)
 
-Deux options ; **défaut recommandé : A** (robuste, fidèle à l'actuel) :
-- **A — Autoplay révélé** : la vidéo (`autoplay loop muted playsinline`) est dévoilée par
-  `opacity` au point 5. Simple, fluide mobile. ✅ par défaut.
-- **B — Scrub frame-by-frame** : `video.currentTime` piloté par la progression de scroll
-  (vrai « image par image »). Plus fidèle au brief mais lourd/saccadé sur mobile et fragile
-  (décodage). À considérer en amélioration desktop uniquement.
-
-> Question ouverte à confirmer avec le client si « image par image » est impératif.
+**Décision (verrouillée) : option A — autoplay révélé.** La vidéo
+(`autoplay loop muted playsinline preload="auto"`) est dévoilée par `opacity` au point 5.
+Simple, fluide sur mobile, fidèle à l'implémentation actuelle. On ne fait **pas** de scrub
+frame-by-frame (`video.currentTime` piloté au scroll) : écarté car lourd/saccadé sur mobile.
 
 ### 6.4 Point d'attention — scène 9 (dézoom NRO)
 
@@ -292,7 +288,6 @@ prévoir une variante (overlay label « NRO » ou recadrage différent).
 
 ## 10. Risques / questions ouvertes
 
-- **Scène 5** : « image par image » strict (option B) vs autoplay révélé (option A par défaut) — à confirmer.
 - **Scène 9** : position du NRO dans `Image 2` à vérifier (valeurs de zoom).
 - **Ancre « Opérateurs »** dans un scrolly pinné : navigation par ancre vers une scène pinnée
   nécessite un calcul de scroll (offset dans la hauteur du `#scrolly`) — à implémenter ou
