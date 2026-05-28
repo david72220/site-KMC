@@ -1,0 +1,196 @@
+---
+import { getFormationByName } from '../lib/notion';
+import { operators } from '../data/operators';
+import OperatorWindow from './OperatorWindow.astro';
+import FormationCard from './FormationCard.astro';
+const formation = await getFormationByName('FTTH-D2');
+---
+<section id="scrolly" aria-label="Présentation KMC" style="height:950vh;">
+  <div id="scrolly-stage" class="sticky top-0 h-screen w-full overflow-hidden bg-[#070d18]" style="perspective:1200px;">
+
+    <!-- Couche IMG2 + vidéo (z-10) : scènes 5,6,9 -->
+    <div id="layer-img2" class="absolute inset-0 z-10 opacity-0 will-change-transform">
+      <img src="/images/Image 2 - reseau.png" alt="Réseau fibre optique" class="w-full h-full object-cover" />
+      <video id="flux-video" class="absolute inset-0 w-full h-full object-cover opacity-0"
+             autoplay loop muted playsinline preload="auto">
+        <source src="/images/video flux fibre.mp4" type="video/mp4" />
+      </video>
+    </div>
+
+    <!-- Couche IMG1 (z-20) : scènes 3,4 -->
+    <div id="layer-img1" class="absolute inset-0 z-20 opacity-0">
+      <img src="/images/Image 1 - centre de formation.png" alt="Centre de formation KMC" class="w-full h-full object-cover" />
+      <div class="absolute inset-0 bg-gradient-to-t from-[#070d18]/85 via-[#070d18]/30 to-transparent"></div>
+    </div>
+
+    <!-- Couche IMG0 éléphant + titre serif (z-30) : scène 1 -->
+    <div id="layer-img0" class="absolute inset-0 z-30 flex flex-col items-center justify-center bg-[#070d18] px-6">
+      <h1 class="font-serif text-3xl md:text-5xl font-bold text-white text-center mb-8 max-w-4xl">
+        KMC — Institut de formation professionnel en fibre optique
+      </h1>
+      <div class="relief-panel relief-2 fiber-pulse p-3">
+        <img src="/images/Image 0 - Elephant.png" alt="KMC" class="relative z-10 max-h-[50vh] w-auto object-contain" />
+      </div>
+    </div>
+
+    <!-- Carte texte + logos (z-40) : scène 4 -->
+    <div id="layer-text" class="absolute inset-0 z-40 flex items-end justify-center pb-12 px-4 opacity-0">
+      <!-- Carte verre dépoli (copiée depuis ScrollytellingScene.astro, lignes 48–117) -->
+      <div class="max-w-3xl w-full rounded-2xl border border-white/10 px-8 py-7 text-center"
+           style="backdrop-filter: blur(14px); background: rgba(10,22,40,0.68);">
+
+        <!-- Logo KMC -->
+        <div class="flex justify-center mb-5">
+          <div class="bg-white/95 rounded-xl px-5 py-2">
+            <img
+              src="/images/logo-kmc.png"
+              alt="KMC — Knowledge Management Center"
+              class="h-10 w-auto object-contain"
+            />
+          </div>
+        </div>
+
+        <!-- H1 — grand titre -->
+        <h1 class="font-display text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight mb-4">
+          Institut Professionnel<br/>
+          de Formation en&nbsp;<span class="text-[#1e9ad7]">Fibre Optique</span>
+        </h1>
+
+        <!-- H2 -->
+        <h2 class="text-base md:text-xl text-white/80 font-light max-w-2xl mx-auto mb-4 leading-relaxed">
+          Devenez technicien <span class="text-[#F59E0B] font-medium">reconnu par l'état Ivoirien</span>
+          en fibre optique à Abidjan avec notre institut de formation certifié.
+        </h2>
+
+        <!-- Texte enrichi -->
+        <p class="text-white/60 text-sm md:text-base max-w-xl mx-auto mb-6 leading-relaxed">
+          KMC forme des professionnels aux métiers d'avenir : raccordement&nbsp;FTTH,
+          supervision&nbsp;NRO, installation photovoltaïque.
+          Nos programmes sont <span class="text-[#1e9ad7] font-medium">éligibles au financement&nbsp;FDFP</span>
+          et reconnus par l'Agence Emploi Jeunes.
+        </p>
+
+        <!-- Séparateur + logos -->
+        <div class="flex items-center justify-center gap-4 mb-5">
+          <div class="h-px w-16 bg-[#1e9ad7]/30"></div>
+          <span class="text-white/35 text-xs tracking-widest uppercase">Partenaires officiels</span>
+          <div class="h-px w-16 bg-[#1e9ad7]/30"></div>
+        </div>
+
+        <div class="flex items-center justify-center gap-8 flex-wrap mb-6">
+          <a
+            href="https://fdfp.ci/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="FDFP — Fonds de Développement de la Formation Professionnelle"
+            class="block bg-white/95 hover:bg-white rounded-xl px-4 py-2.5 transition-all duration-300 hover:scale-105 hover:shadow-[0_0_20px_rgba(30,154,215,0.4)]"
+          >
+            <img src="/images/FDFP.png" alt="FDFP" class="h-12 w-auto object-contain" loading="lazy" />
+          </a>
+          <a
+            href="https://agenceemploijeunes.ci/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Agence Emploi Jeunes — Guichet Unique de l'Emploi en Côte d'Ivoire"
+            class="block bg-white/95 hover:bg-white rounded-xl px-4 py-2.5 transition-all duration-300 hover:scale-105 hover:shadow-[0_0_20px_rgba(30,154,215,0.4)]"
+          >
+            <img src="/images/AEJ.png" alt="Agence Emploi Jeunes" class="h-12 w-auto object-contain" loading="lazy" />
+          </a>
+        </div>
+
+        <!-- Label habilitation — en bas, gros, gras -->
+        <div class="border-t border-white/10 pt-4">
+          <p class="text-white font-bold text-base md:text-lg tracking-wide">
+            Habilité par l'État Ivoirien &nbsp;·&nbsp; Abidjan, Côte d'Ivoire
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Texte intro opérateurs (z-50) : scène 7 -->
+    <div id="layer-op-intro" class="absolute inset-0 z-50 flex items-center justify-center px-4 opacity-0 bg-[#070d18]/60">
+      <div class="max-w-3xl text-center">
+        <h2 class="font-display text-4xl md:text-5xl font-bold text-white mb-6">KMC forme les techniciens des<br/><span class="text-[#1e9ad7]">3 opérateurs nationaux</span></h2>
+        <p class="text-white/70 text-lg leading-relaxed">KMC est le premier centre de formation en Côte d'Ivoire à former des techniciens fibre optique pour Orange CI, MTN Côte d'Ivoire et Moov Africa. Nos programmes couvrent à la fois la maîtrise technique du raccordement FTTH et la manipulation du matériel spécifique à chaque opérateur — pour une insertion professionnelle immédiate sur le terrain.</p>
+      </div>
+    </div>
+
+    <!-- 3 fenêtres opérateurs (z-50) : scène 8 -->
+    <div id="layer-ops" class="absolute inset-0 z-50 flex items-center justify-center px-4 opacity-0">
+      <div id="operators" class="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-6xl w-full">
+        {operators.map((op, i) => (
+          <div class={`op-win op-win-${i}`}><OperatorWindow op={op} /></div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Fiche formation (z-60) : scène 10 -->
+    <div id="layer-formation" class="absolute inset-0 z-60 flex flex-col items-center justify-center px-4 opacity-0">
+      <FormationCard formation={formation} />
+      <a href="/formations-fibre-optique/" class="btn-cta-gradient mt-7 inline-flex px-6 py-3 rounded-lg font-bold text-[#06121f]">Voir le catalogue complet</a>
+    </div>
+
+  </div>
+</section>
+
+<script>
+  import { gsap, ScrollTrigger, initLenis } from '../lib/scroll';
+  initLenis();
+
+  function isMobileOrReduced() {
+    return window.matchMedia('(max-width: 1023px)').matches
+        || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
+
+  function initStacked() {
+    document.querySelectorAll('#scrolly-stage > div').forEach((el) => {
+      (el as HTMLElement).style.opacity = '1';
+      (el as HTMLElement).style.position = 'relative';
+    });
+    const stage = document.getElementById('scrolly-stage');
+    const scrolly = document.getElementById('scrolly');
+    if (stage) { stage.style.position = 'static'; stage.style.height = 'auto'; }
+    if (scrolly) scrolly.style.height = 'auto';
+    const v = document.getElementById('flux-video') as HTMLVideoElement | null;
+    if (v) v.style.opacity = '1';
+  }
+
+  function initScrolly() {
+    const img0 = document.getElementById('layer-img0');
+    const img1 = document.getElementById('layer-img1');
+    const img2 = document.getElementById('layer-img2');
+    const video = document.getElementById('flux-video');
+    const text = document.getElementById('layer-text');
+    const opIntro = document.getElementById('layer-op-intro');
+    const ops = document.getElementById('layer-ops');
+    const formation = document.getElementById('layer-formation');
+    const opWins = gsap.utils.toArray<HTMLElement>('.op-win');
+
+    const tl = gsap.timeline();
+    tl.to(img0, { opacity: 0, duration: 0.6 }, 0.6)
+      .to(img1, { opacity: 1, duration: 0.6 }, 0.8)
+      .to(text, { opacity: 1, duration: 0.3 }, 1.3)
+      .to([img1, text], { opacity: 0, duration: 0.6 }, 2.0)
+      .to(img2, { opacity: 1, duration: 0.6 }, 2.0)
+      .to(video, { opacity: 1, duration: 0.4 }, 2.3)
+      .to(img2, { scale: 1.45, transformOrigin: 'left center', duration: 1 }, 2.8)
+      .to(opIntro, { opacity: 1, duration: 0.5 }, 3.9)
+      .to(opIntro, { opacity: 0, duration: 0.4 }, 4.7)
+      .to(ops, { opacity: 1, duration: 0.2 }, 4.8)
+      .from(opWins, { opacity: 0, y: 40, stagger: 0.4, duration: 0.5 }, 4.9)
+      .to(ops, { opacity: 0, duration: 0.4 }, 6.4)
+      .to(img2, { scale: 1.2, transformOrigin: '35% center', duration: 0.8 }, 6.6)
+      .to(formation, { opacity: 1, duration: 0.6 }, 7.4)
+      .to({}, { duration: 1.2 }, 8.0);
+
+    ScrollTrigger.create({
+      trigger: '#scrolly', start: 'top top', end: 'bottom bottom',
+      scrub: 1.2, pin: '#scrolly-stage', invalidateOnRefresh: true, animation: tl,
+    });
+  }
+
+  function boot() { isMobileOrReduced() ? initStacked() : initScrolly(); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+</script>
