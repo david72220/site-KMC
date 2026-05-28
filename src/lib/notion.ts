@@ -87,3 +87,26 @@ export async function getFormations(): Promise<Formation[]> {
         return [];
     }
 }
+
+// Fallback statique si Notion est indisponible au build (évite une fiche vide).
+export const FALLBACK_FORMATION: Formation = {
+  id: 'fallback-ftth-d2',
+  nom: 'FTTH-D2',
+  issue: "Réaliser un raccordement FTTH complet, souder des fibres optiques, effectuer des mesures de réflectométrie OTDR et diagnostiquer une coupure réseau en autonomie.",
+  programme: "Soudure et épissure de fibres monomodes · Raccordement PBO / PTO · Mesures OTDR · Lecture de plans FTTH · Pose de câbles façade et conduit · Sécurité chantier télécom.",
+  prerequis: "Niveau 3ᵉ, savoir lire et écrire",
+  lieu: "Centre KMC — Angré, Cocody, Abidjan",
+  dureeFormation: "3 semaines (105 h)",
+  dureeStagePratique: "2 semaines",
+  coutFormation: '',
+  fraisAdministratifs: null,
+  participants: 12,
+  tauxReussite: "94 %",
+  tauxAbandon: "4 %",
+};
+
+export async function getFormationByName(nom: string): Promise<Formation> {
+  const all = await getFormations();
+  const match = all.find((f) => f.nom?.trim().toUpperCase() === nom.trim().toUpperCase());
+  return match ?? all[0] ?? FALLBACK_FORMATION;
+}
