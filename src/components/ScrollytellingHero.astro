@@ -8,21 +8,6 @@ const formation = await getFormationByName('FTTH-D2');
 <section id="scrolly" aria-label="Présentation KMC" style="height:950vh;">
   <div id="scrolly-stage" class="sticky top-0 h-screen w-full overflow-hidden bg-[#070d18]" style="perspective:1200px;">
 
-    <!-- Couche IMG2 + vidéo (z-10) : scènes 5,6,9 -->
-    <div id="layer-img2" class="absolute inset-0 z-10 opacity-0 will-change-transform">
-      <img src="/images/Image 2 - reseau.png" alt="Réseau fibre optique" class="w-full h-full object-contain" />
-      <video id="flux-video" class="absolute inset-0 w-full h-full object-contain opacity-0"
-             autoplay loop muted playsinline preload="auto">
-        <source src="/images/video flux fibre.mp4" type="video/mp4" />
-      </video>
-    </div>
-
-    <!-- Couche IMG1 (z-20) : scènes 3,4 -->
-    <div id="layer-img1" class="absolute inset-0 z-20 opacity-0">
-      <img src="/images/Image 1 - centre de formation.png" alt="Centre de formation KMC" class="w-full h-full object-cover" />
-      <div class="absolute inset-0 bg-gradient-to-t from-[#070d18]/85 via-[#070d18]/30 to-transparent"></div>
-    </div>
-
     <!-- Couche IMG0 éléphant + techniciens + titre serif (z-30) : scène 1 -->
     <div id="layer-img0" class="absolute inset-0 z-30 flex flex-col items-center justify-center gap-10 bg-[#070d18] px-6">
       <h1 class="font-serif text-3xl md:text-5xl font-bold text-white text-center max-w-4xl lg:absolute lg:top-[10%] lg:left-1/2 lg:-translate-x-1/2 lg:w-full lg:px-6">
@@ -41,6 +26,12 @@ const formation = await getFormationByName('FTTH-D2');
           <img src="/images/deux-techniciens-ivoiriens-fibre.png" alt="Deux techniciens ivoiriens en intervention sur la fibre optique" class="relative z-10 max-h-[40vh] w-auto object-contain object-center" />
         </div>
       </div>
+    </div>
+
+    <!-- Couche IMG1 (z-20) : scènes 3,4 -->
+    <div id="layer-img1" class="absolute inset-0 z-20 opacity-0">
+      <img src="/images/Image 1 - centre de formation.png" alt="Centre de formation KMC" class="w-full h-full object-cover" />
+      <div class="absolute inset-0 bg-gradient-to-t from-[#070d18]/85 via-[#070d18]/30 to-transparent"></div>
     </div>
 
     <!-- Carte texte + logos (z-40) : scène 4 -->
@@ -117,6 +108,15 @@ const formation = await getFormationByName('FTTH-D2');
         <a href="/contact/" class="btn-cta-gradient mt-5 inline-flex px-5 py-2.5 rounded-lg font-bold text-[#06121f]">Demander un devis</a>
 
       </div>
+    </div>
+
+    <!-- Couche IMG2 + vidéo (z-10) : scènes 5,6,9 -->
+    <div id="layer-img2" class="absolute inset-0 z-10 opacity-0 will-change-transform">
+      <img src="/images/Image 2 - reseau.png" alt="Réseau fibre optique" class="w-full h-full object-contain" />
+      <video id="flux-video" class="absolute inset-0 w-full h-full object-contain opacity-0"
+             autoplay loop muted playsinline preload="auto">
+        <source src="/images/video flux fibre.mp4" type="video/mp4" />
+      </video>
     </div>
 
     <!-- Texte intro opérateurs (z-50) : scène 7 -->
@@ -220,23 +220,47 @@ const formation = await getFormationByName('FTTH-D2');
     return () => { st.kill(); tl.kill(); };
   });
 
-  // Mobile OU reduced-motion → layout empilé aplati
+  // Mobile OU reduced-motion → sections empilées soignées (pas de pin/scrub)
   mm.add('(max-width: 1023px), (prefers-reduced-motion: reduce)', () => {
     const stage = document.getElementById('scrolly-stage');
     const scrolly = document.getElementById('scrolly');
-    const layers = document.querySelectorAll<HTMLElement>('#scrolly-stage > div');
-    layers.forEach((el) => { el.style.opacity = '1'; el.style.position = 'relative'; });
-    if (stage) { stage.style.position = 'static'; stage.style.height = 'auto'; }
-    if (scrolly) scrolly.style.height = 'auto';
     const v = document.getElementById('flux-video') as HTMLVideoElement | null;
+    stage?.classList.add('is-stacked');
+    if (scrolly) scrolly.style.height = 'auto';
     if (v) v.style.opacity = '1';
 
-    // Cleanup : on remet les styles inline à zéro pour repasser en desktop
     return () => {
-      layers.forEach((el) => { el.style.opacity = ''; el.style.position = ''; });
-      if (stage) { stage.style.position = ''; stage.style.height = ''; }
+      stage?.classList.remove('is-stacked');
       if (scrolly) scrolly.style.height = '';
       if (v) v.style.opacity = '';
     };
   });
 </script>
+
+<style is:global>
+  /* Mode empilé téléphone/tablette (<1024px) — sections verticales soignées */
+  #scrolly-stage.is-stacked {
+    position: static;
+    height: auto;
+    overflow: visible;
+  }
+  #scrolly-stage.is-stacked > [id^="layer-"] {
+    position: relative;
+    inset: auto;
+    opacity: 1 !important;
+    min-height: 60vh;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+    transform: none !important;
+  }
+  /* Couches image : hauteur garantie pour que les images object-cover/contain s'affichent */
+  #scrolly-stage.is-stacked > #layer-img1,
+  #scrolly-stage.is-stacked > #layer-img2 {
+    min-height: 70vh;
+  }
+  /* Éléphant + techniciens : empilés, taille adaptée */
+  #scrolly-stage.is-stacked #elephant,
+  #scrolly-stage.is-stacked #technicians {
+    opacity: 1 !important;
+  }
+</style>
