@@ -26,3 +26,6 @@ pnpm-debug.log*
 
 # Brainstorm visual companion
 .superpowers/
+
+# npm cache (offline cache, must not be tracked)
+.npm-cache/
