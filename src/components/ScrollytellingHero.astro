@@ -114,6 +114,8 @@ const formation = await getFormationByName('FTTH-D2');
           </p>
         </div>
 
+        <a href="/contact/" class="btn-cta-gradient mt-5 inline-flex px-5 py-2.5 rounded-lg font-bold text-[#06121f]">Demander un devis</a>
+
       </div>
     </div>
 
@@ -131,6 +133,16 @@ const formation = await getFormationByName('FTTH-D2');
         {operators.map((op, i) => (
           <div class={`op-win op-win-${i}`} style="transform-style:preserve-3d;"><OperatorWindow op={op} /></div>
         ))}
+      </div>
+    </div>
+
+    <!-- Texte présentation centre de formation (z-55) : affiché APRÈS le dézoom NRO -->
+    <div id="layer-presentation" class="absolute inset-0 z-[55] flex items-center justify-center px-4 opacity-0 bg-[#070d18]/70">
+      <div class="max-w-3xl text-center">
+        <h2 class="font-display text-3xl md:text-4xl font-bold text-white mb-5">Centre de formation de techniciens <span class="text-[#1e9ad7]">fibre optique</span> à Abidjan</h2>
+        <p class="text-white/70 text-base md:text-lg leading-relaxed mb-4">KMC forme des techniciens immédiatement opérationnels sur les réseaux FTTH des trois grands opérateurs ivoiriens (Orange, MTN, Moov), en associant enseignement théorique et ateliers pratiques intensifs sur matériel professionnel.</p>
+        <p class="text-white/60 text-sm md:text-base leading-relaxed mb-7">Sécurité chantier, habilitations de base, raccordement, soudure et mesures OTDR : nos apprenants sont évalués tout au long du parcours puis mis en situation en entreprise. Exemple de parcours : la formation <span class="text-[#F59E0B] font-semibold">FTTH-D2</span>.</p>
+        <a href="/contact/" class="btn-cta-gradient inline-flex px-6 py-3 rounded-lg font-bold text-[#06121f]">Demander un devis ou des informations</a>
       </div>
     </div>
 
@@ -160,6 +172,7 @@ const formation = await getFormationByName('FTTH-D2');
     const text = document.getElementById('layer-text');
     const opIntro = document.getElementById('layer-op-intro');
     const ops = document.getElementById('layer-ops');
+    const presentation = document.getElementById('layer-presentation');
     const formation = document.getElementById('layer-formation');
     const opWins = gsap.utils.toArray<HTMLElement>('.op-win');
 
@@ -191,9 +204,12 @@ const formation = await getFormationByName('FTTH-D2');
       .to(ops, { opacity: 0, duration: 0.4 }, 7.1)
       // Scène 9 : dézoom depuis les opérateurs vers le NRO — MÊME origine (6% 45%) → pas de saut
       .to(img2, { scale: 1.25, duration: 0.9 }, 7.3)
-      // Scène 10 : fiche formation
-      .to(formation, { opacity: 1, duration: 0.6 }, 8.3)
-      .to({}, { duration: 1.0 }, 9.1);
+      // Scène 9b : texte de présentation APRÈS la fin du dézoom (8.2) — laisse voir le NRO d'abord
+      .to(presentation, { opacity: 1, duration: 0.4 }, 8.3)
+      .to(presentation, { opacity: 0, duration: 0.3 }, 9.0)
+      // Scène 10 : fiche formation (décalée après la présentation)
+      .to(formation, { opacity: 1, duration: 0.6 }, 9.2)
+      .to({}, { duration: 1.0 }, 10.0);
 
     const st = ScrollTrigger.create({
       trigger: '#scrolly', start: 'top top', end: 'bottom bottom',
