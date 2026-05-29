@@ -20,5 +20,8 @@ const { op } = Astro.props;
         <span class="px-2 py-1 rounded-md text-xs border" style={`color:${op.color};border-color:${op.color}33;background:${op.color}14`}>{g}</span>
       ))}
     </div>
+    <a href="/contact/" class="mt-5 inline-flex items-center gap-1 text-sm font-semibold hover:underline" style={`color:${op.color}`} aria-label={`Demander des informations sur la formation ${op.name}`}>
+      Demander des informations →
+    </a>
   </div>
 </article>
