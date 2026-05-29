@@ -5,23 +5,23 @@ import OperatorWindow from './OperatorWindow.astro';
 import FormationCard from './FormationCard.astro';
 const formation = await getFormationByName('FTTH-D2');
 ---
-<section id="scrolly" aria-label="Présentation KMC" style="height:950vh;">
+<section id="scrolly" aria-label="Présentation KMC" style="height:1150vh;">
   <div id="scrolly-stage" class="sticky top-0 h-screen w-full overflow-hidden bg-[#070d18]" style="perspective:1200px;">
 
     <!-- Couche IMG0 éléphant + techniciens + titre serif (z-30) : scène 1 -->
     <div id="layer-img0" class="absolute inset-0 z-30 flex flex-col items-center justify-center gap-10 bg-[#070d18] px-6">
-      <h1 class="font-serif text-3xl md:text-5xl font-bold text-white text-center max-w-4xl lg:absolute lg:top-[10%] lg:left-1/2 lg:-translate-x-1/2 lg:w-full lg:px-6">
+      <h1 class="font-serif text-3xl md:text-5xl font-bold text-white text-center max-w-4xl lg:absolute lg:top-[16%] lg:left-1/2 lg:-translate-x-1/2 lg:w-full lg:px-6">
         <span class="text-[#1e9ad7]">K</span><span class="text-[#1e9ad7]">M</span><span class="text-[#F59E0B]">C</span> — Institut de formation professionnel en <span class="text-[#F59E0B]">fibre optique</span>
       </h1>
       <!-- Éléphant : centré au départ, glisse à gauche (desktop) — empilé en mobile.
            Wrapper de positionnement séparé de .relief-panel (sinon position:relative écrase lg:absolute). -->
-      <div id="elephant" class="max-w-[80%] lg:max-w-none lg:absolute lg:left-1/2 lg:top-1/2">
+      <div id="elephant" class="max-w-[80%] lg:max-w-none lg:absolute lg:left-1/2 lg:top-[57%]">
         <div class="relief-panel relief-2 fiber-pulse p-3" style="background:linear-gradient(rgba(28,70,116,.85),rgba(20,52,90,.88)) padding-box,linear-gradient(100deg,#f59e0b,#1e9ad7) border-box;">
-          <img src="/images/Image 0 - Elephant.png" alt="Éléphant, emblème de KMC — Institut de formation en fibre optique" class="relative z-10 max-h-[46vh] w-auto object-contain" />
+          <img src="/images/Image 0 - Elephant.png" alt="Éléphant, emblème de KMC — Institut de formation en fibre optique" class="relative z-10 max-h-[42vh] w-auto object-contain" />
         </div>
       </div>
       <!-- Techniciens : entrent par la droite en miroir de l'éléphant (desktop) — empilés sous l'éléphant en mobile -->
-      <div id="technicians" class="max-w-[80%] lg:max-w-[38vw] lg:absolute lg:left-1/2 lg:top-1/2 lg:opacity-0">
+      <div id="technicians" class="max-w-[80%] lg:max-w-[38vw] lg:absolute lg:left-1/2 lg:top-[57%] lg:opacity-0">
         <div class="relief-panel relief-2 fiber-pulse p-3">
           <img src="/images/deux-techniciens-ivoiriens-fibre.png" alt="Deux techniciens ivoiriens en intervention sur la fibre optique" class="relative z-10 max-h-[40vh] w-auto object-contain object-center" />
         </div>
@@ -136,12 +136,21 @@ const formation = await getFormationByName('FTTH-D2');
       </div>
     </div>
 
-    <!-- Texte présentation centre de formation (z-55) : affiché APRÈS le dézoom NRO -->
-    <div id="layer-presentation" class="absolute inset-0 z-[55] flex items-center justify-center px-4 opacity-0 bg-[#070d18]/70">
+    <!-- Présentation A (z-55) : qui sommes-nous + 3 opérateurs — APRÈS le dézoom -->
+    <div id="layer-presentation" class="absolute inset-0 z-[55] flex items-center justify-center px-4 opacity-0 bg-[#070d18]/78">
       <div class="max-w-3xl text-center">
         <h2 class="font-display text-3xl md:text-4xl font-bold text-white mb-5">Centre de formation de techniciens <span class="text-[#1e9ad7]">fibre optique</span> à Abidjan</h2>
-        <p class="text-white/70 text-base md:text-lg leading-relaxed mb-4">KMC forme des techniciens immédiatement opérationnels sur les réseaux FTTH des trois grands opérateurs ivoiriens (Orange, MTN, Moov), en associant enseignement théorique et ateliers pratiques intensifs sur matériel professionnel.</p>
-        <p class="text-white/60 text-sm md:text-base leading-relaxed mb-7">Sécurité chantier, habilitations de base, raccordement, soudure et mesures OTDR : nos apprenants sont évalués tout au long du parcours puis mis en situation en entreprise. Exemple de parcours : la formation <span class="text-[#F59E0B] font-semibold">FTTH-D2</span>.</p>
+        <p class="text-white/80 text-base md:text-lg leading-relaxed mb-4">KMC est un centre de formation spécialisé dans les métiers de la fibre optique, basé à Abidjan. Notre mission : former des techniciens immédiatement opérationnels sur les réseaux optiques FTTH, avec rigueur, sécurité et professionnalisme.</p>
+        <p class="text-white/65 text-sm md:text-base leading-relaxed">Le marché ivoirien s'organise autour de trois grands opérateurs — <span class="text-white/90">Orange, MTN et Moov</span>. Nos formations sont conçues pour leurs réseaux : nos apprenants interviennent indifféremment sur les architectures et spécifications de chacun, ce qui les rend polyvalents et directement employables.</p>
+      </div>
+    </div>
+
+    <!-- Présentation B (z-56) : théorie & pratique + sécurité/parcours + CTA -->
+    <div id="layer-presentation-2" class="absolute inset-0 z-[56] flex items-center justify-center px-4 opacity-0 bg-[#070d18]/82">
+      <div class="max-w-3xl text-center">
+        <h2 class="font-display text-3xl md:text-4xl font-bold text-white mb-5">Théorie, <span class="text-[#1e9ad7]">ateliers pratiques</span> et sécurité</h2>
+        <p class="text-white/80 text-base md:text-lg leading-relaxed mb-4">La fibre optique est un métier de terrain. Notre pédagogie associe enseignement théorique — principes de la fibre, types de fibres, lecture de plans de câblage, mesures OTDR, code couleur — et <span class="text-white/90">ateliers pratiques intensifs</span> : l'apprenant manipule le matériel professionnel, réalise raccordements et soudures, installe les équipements et apprend à diagnostiquer les pannes.</p>
+        <p class="text-white/65 text-sm md:text-base leading-relaxed mb-7">La <span class="text-[#F59E0B] font-semibold">sécurité</span> est au cœur du programme : port des EPI, balisage de chantier, prévention des risques et habilitations de base. Chaque apprenant est évalué tout au long du parcours, puis mis en situation lors d'un stage en entreprise — de l'inscription au suivi post-formation, chaque étape est tracée.</p>
         <a href="/contact/" class="btn-cta-gradient inline-flex px-6 py-3 rounded-lg font-bold text-[#06121f]">Demander un devis ou des informations</a>
       </div>
     </div>
@@ -173,7 +182,9 @@ const formation = await getFormationByName('FTTH-D2');
     const opIntro = document.getElementById('layer-op-intro');
     const ops = document.getElementById('layer-ops');
     const presentation = document.getElementById('layer-presentation');
+    const presentation2 = document.getElementById('layer-presentation-2');
     const formation = document.getElementById('layer-formation');
+    const mainNav = document.getElementById('main-nav');
     const opWins = gsap.utils.toArray<HTMLElement>('.op-win');
 
     // État initial scène 1 (desktop) : éléphant centré ; techniciens centrés mais cachés, décalés à droite
@@ -193,8 +204,11 @@ const formation = await getFormationByName('FTTH-D2');
       .set(img2, { opacity: 1 }, 2.5)
       .to([img1, text], { yPercent: -100, duration: 0.6, ease: 'power2.in' }, 2.6)
       .to(video, { opacity: 1, duration: 0.4 }, 2.9)
-      // Scène 6 : zoom sur les 3 opérateurs (bord gauche) — origine fixée ici
+      // Menu masqué pendant l'image réseau (sinon il cache le centre de formation en haut à droite)
+      .to(mainNav, { autoAlpha: 0, duration: 0.3 }, 2.5)
+      // Scène 6 : zoom sur les 3 opérateurs (bord gauche) — origine fixée ici ; le menu réapparaît
       .to(img2, { scale: 1.65, transformOrigin: '6% 45%', duration: 1 }, 3.4)
+      .to(mainNav, { autoAlpha: 1, duration: 0.3 }, 3.4)
       // Scène 7 : intro opérateurs
       .to(opIntro, { opacity: 1, duration: 0.5 }, 4.6)
       .to(opIntro, { opacity: 0, duration: 0.4 }, 5.4)
@@ -202,14 +216,21 @@ const formation = await getFormationByName('FTTH-D2');
       .to(ops, { opacity: 1, duration: 0.2 }, 5.5)
       .from(opWins, { opacity: 0, y: 40, stagger: 0.4, duration: 0.5 }, 5.6)
       .to(ops, { opacity: 0, duration: 0.4 }, 7.1)
-      // Scène 9 : dézoom depuis les opérateurs vers le NRO — MÊME origine (6% 45%) → pas de saut
-      .to(img2, { scale: 1.25, duration: 0.9 }, 7.3)
-      // Scène 9b : texte de présentation APRÈS la fin du dézoom (8.2) — laisse voir le NRO d'abord
-      .to(presentation, { opacity: 1, duration: 0.4 }, 8.3)
-      .to(presentation, { opacity: 0, duration: 0.3 }, 9.0)
-      // Scène 10 : fiche formation (décalée après la présentation)
-      .to(formation, { opacity: 1, duration: 0.6 }, 9.2)
-      .to({}, { duration: 1.0 }, 10.0);
+      // Scène 9 : dézoom jusqu'à l'image ENTIÈRE (menu masqué) puis re-zoom sur le centre
+      //           de formation en haut à droite de l'image
+      .to(mainNav, { autoAlpha: 0, duration: 0.3 }, 7.3)
+      .to(img2, { scale: 1, transformOrigin: '6% 45%', duration: 0.8 }, 7.3)
+      .to(img2, { scale: 1.6, transformOrigin: '92% 12%', duration: 0.9 }, 8.2)
+      // Scène 10a : présentation A (qui sommes-nous + 3 opérateurs)
+      .to(presentation, { opacity: 1, duration: 0.4 }, 9.3)
+      .to(presentation, { opacity: 0, duration: 0.3 }, 10.0)
+      // Scène 10b : présentation B (théorie/pratique + sécurité + CTA)
+      .to(presentation2, { opacity: 1, duration: 0.4 }, 10.1)
+      .to(presentation2, { opacity: 0, duration: 0.3 }, 10.9)
+      // Scène 11 : fiche formation — le menu réapparaît
+      .to(formation, { opacity: 1, duration: 0.6 }, 11.1)
+      .to(mainNav, { autoAlpha: 1, duration: 0.3 }, 11.1)
+      .to({}, { duration: 1.0 }, 11.9);
 
     const st = ScrollTrigger.create({
       trigger: '#scrolly', start: 'top top', end: 'bottom bottom',
@@ -217,7 +238,7 @@ const formation = await getFormationByName('FTTH-D2');
     });
 
     // Cleanup : matchMedia revert quand on quitte ce contexte
-    return () => { st.kill(); tl.kill(); };
+    return () => { st.kill(); tl.kill(); gsap.set(mainNav, { clearProps: 'opacity,visibility' }); };
   });
 
   // Mobile OU reduced-motion → sections empilées soignées (pas de pin/scrub)
