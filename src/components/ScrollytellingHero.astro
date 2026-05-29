@@ -165,23 +165,23 @@ const formation = await getFormationByName('FTTH-D2');
 
     // État initial scène 1 (desktop) : éléphant centré ; techniciens centrés mais cachés, décalés à droite
     gsap.set(elephant, { xPercent: -50, yPercent: -50, x: 0 });
-    gsap.set(technicians, { xPercent: -50, yPercent: -50, opacity: 0, x: 420 });
+    gsap.set(technicians, { xPercent: -50, yPercent: -50, opacity: 0, x: 360 });
 
     const tl = gsap.timeline();
-    // Scène 1 : l'éléphant glisse à gauche, les techniciens entrent par la droite — fin = miroir (±300px)
-    tl.to(elephant, { x: -300, duration: 0.3, ease: 'sine.inOut' }, 0)
-      .to(technicians, { opacity: 1, x: 300, duration: 0.3, ease: 'power2.out' }, 0.05)
-      // Scène 1 → 3 : fondu (vers le noir) puis Image 1 apparaît
-      .to(img0, { opacity: 0, duration: 0.5 }, 0.4)
-      .to(img1, { opacity: 1, duration: 0.5 }, 0.6)
+    // Scène 1 : l'éléphant glisse à gauche, les techniciens entrent par la droite — fin = miroir (±240px)
+    tl.to(elephant, { x: -240, duration: 0.3, ease: 'sine.inOut' }, 0)
+      .to(technicians, { opacity: 1, x: 240, duration: 0.3, ease: 'power2.out' }, 0.05)
+      // Scène 1 → 3 : Image 1 révélée par le glissement vers le haut de la couche éléphant/techniciens
+      .set(img1, { opacity: 1 }, 0.35)
+      .to(img0, { yPercent: -100, duration: 0.6, ease: 'power2.in' }, 0.4)
       // Scène 4 : Image 1 tient un peu plus longtemps avant le texte
-      .to(text, { opacity: 1, duration: 0.4 }, 1.7)
-      // Scène 5 : Image 1 + texte → Image 2 + vidéo flux fibre
-      .to([img1, text], { opacity: 0, duration: 0.6 }, 2.6)
-      .to(img2, { opacity: 1, duration: 0.6 }, 2.6)
+      .to(text, { opacity: 1, duration: 0.4 }, 1.2)
+      // Scène 5 : Image 1 + carte texte glissent vers le haut → Image 2 réseau révélée
+      .set(img2, { opacity: 1 }, 2.5)
+      .to([img1, text], { yPercent: -100, duration: 0.6, ease: 'power2.in' }, 2.6)
       .to(video, { opacity: 1, duration: 0.4 }, 2.9)
       // Scène 6 : zoom sur les 3 opérateurs (bord gauche) — origine fixée ici
-      .to(img2, { scale: 2.3, transformOrigin: '6% 45%', duration: 1 }, 3.4)
+      .to(img2, { scale: 1.65, transformOrigin: '6% 45%', duration: 1 }, 3.4)
       // Scène 7 : intro opérateurs
       .to(opIntro, { opacity: 1, duration: 0.5 }, 4.6)
       .to(opIntro, { opacity: 0, duration: 0.4 }, 5.4)
@@ -190,7 +190,7 @@ const formation = await getFormationByName('FTTH-D2');
       .from(opWins, { opacity: 0, y: 40, stagger: 0.4, duration: 0.5 }, 5.6)
       .to(ops, { opacity: 0, duration: 0.4 }, 7.1)
       // Scène 9 : dézoom depuis les opérateurs vers le NRO — MÊME origine (6% 45%) → pas de saut
-      .to(img2, { scale: 1.3, duration: 0.9 }, 7.3)
+      .to(img2, { scale: 1.25, duration: 0.9 }, 7.3)
       // Scène 10 : fiche formation
       .to(formation, { opacity: 1, duration: 0.6 }, 8.3)
       .to({}, { duration: 1.0 }, 9.1);
