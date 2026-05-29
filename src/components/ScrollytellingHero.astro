@@ -243,20 +243,34 @@ const formation = await getFormationByName('FTTH-D2');
     position: static;
     height: auto;
     overflow: visible;
+    /* Dégage la 1re section sous le menu fixe */
+    padding-top: 4.5rem;
   }
   #scrolly-stage.is-stacked > [id^="layer-"] {
     position: relative;
     inset: auto;
     opacity: 1 !important;
-    min-height: 60vh;
-    padding-top: 3rem;
-    padding-bottom: 3rem;
+    min-height: auto;
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
     transform: none !important;
   }
-  /* Couches image : hauteur garantie pour que les images object-cover/contain s'affichent */
+  /* Couches image : l'image définit la hauteur (pas de vide sombre) */
   #scrolly-stage.is-stacked > #layer-img1,
   #scrolly-stage.is-stacked > #layer-img2 {
-    min-height: 70vh;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  #scrolly-stage.is-stacked > #layer-img1 img,
+  #scrolly-stage.is-stacked > #layer-img2 img {
+    position: relative;
+    height: 50vh;
+    width: 100%;
+    object-fit: cover;
+  }
+  /* En empilé : on garde l'image réseau statique, on masque la vidéo (autoplay peu fiable mobile) */
+  #scrolly-stage.is-stacked > #layer-img2 video {
+    display: none;
   }
   /* Éléphant + techniciens : empilés, taille adaptée */
   #scrolly-stage.is-stacked #elephant,
