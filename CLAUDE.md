@@ -3,6 +3,45 @@
 
 ---
 
+## 🆕 REFONTE SCROLLYTELLING & RESPONSIVE — 31 Mai 2026
+
+> Branche : `refonte-scrollytelling-design` — poussée sur GitHub, **preview Vercel généré** (build réussi).
+> La production `main` n'a **pas** été touchée (en attente de validation finale + fusion).
+> Spec : `docs/superpowers/specs/2026-05-28-refonte-scrollytelling-responsive-design.md`
+> Plan : `docs/superpowers/plans/2026-05-28-refonte-scrollytelling-responsive.md`
+
+### Ce qui a été fait
+
+| # | Demande | Réalisation |
+|---|---------|-------------|
+| A | Effet relief/fibre invisible | **Cause racine** : le fallback `@supports not (background: conic-gradient(from 0deg))` testait une syntaxe invalide → comète masquée partout. Corrigé. Halos renforcés + survol opérateurs (perspective ajoutée sur `#operators` + `transform-style:preserve-3d` sur `.op-win`). |
+| 1 | Éléphant + titre | Titre serif « **K**+**M** bleu `#1e9ad7`, **C** orange `#F59E0B` », « fibre optique » orange ; titre descendu (`lg:top-[16%]`) ; éléphant descendu (`lg:top-[57%]`, `max-h-[42vh]`) ; intérieur fenêtre éléphant éclairci vs menu ; image techniciens recadrée. |
+| 1 (scroll) | Logique scène 1 | **Séquentiel** : l'éléphant fond jusqu'au noir + part à gauche, **puis** les techniciens arrivent en fondu depuis la droite et se placent **au centre** (plus de superposition sur écran étroit). |
+| 2 | Fondu noir → Image 1 | Remplacé par **glissement vertical** (la couche éléphant/techniciens monte pour révéler l'Image 1). |
+| 3 | Carte texte + logos | Conservée + CTA « Demander un devis ». |
+| 4 | Fondu → Image 2 réseau | **Glissement vertical** ; **menu masqué** quand l'image réseau apparaît (il cachait le centre de formation en haut à droite). |
+| 5 | Zoom opérateurs | Réduit de moitié (`2.3 → 1.65`) ; **menu rétabli** pendant le zoom. |
+| 6-7 | Texte « 3 opérateurs » + 3 fenêtres | Conservés ; relief dynamique au survol ; **CTA « Demander des informations »** par opérateur. |
+| 8 | Dézoom + présentation | Dézoom jusqu'à **l'image entière** (menu masqué) puis **re-zoom sur le centre de formation en haut à droite** (`transformOrigin: 92% 12%`). Texte SEO **enrichi en 2 scènes** (A : qui sommes-nous + 3 opérateurs ; B : théorie/pratique + sécurité/parcours + CTA), tiré de `KMC_presentation_site_SEO.md`. |
+| 8b | Bouton contact partout | **`FloatingCTA.astro`** flottant « Demander un devis » global (dans `Layout.astro`) + CTA contextuels (carte texte, présentation, fenêtres opérateurs). |
+| 9 | Page Formations | Refondue au **format fenêtres relief** (`FormationCard`) ; affiche les formations cochées « A afficher sur le site web » dans Notion ; grille `md:grid-cols-2`. |
+| 10 | Page Infrastructure | **Supprimée** (`src/pages/infrastructure.astro`) + lien menu retiré. Composants `SectionNRO/SRO/PBO/ClientFinal` laissés dormants. |
+| B | Responsive | Sous 1024px : **sections empilées soignées** (ordre narratif via réordonnancement DOM + classe `.is-stacked`), 1ʳᵉ section dégagée du menu fixe, images 50vh, vidéo masquée (autoplay peu fiable mobile), CTA flottant. Vérifié 375 / 820 / 1440px. |
+
+### Détails techniques
+- **Timeline GSAP** (`ScrollytellingHero.astro`) : `gsap.matchMedia` — branche desktop (≥1024px, pin+scrub, hauteur `#scrolly` portée à `1150vh`) et branche mobile (<1024px, `.is-stacked`). Le menu (`#main-nav`) est animé en `autoAlpha` dans la timeline (masqué réseau/dézoom, visible au zoom opérateurs et à la fin).
+- **Hygiène dépôt** : `.npm-cache/` retiré du suivi + ajouté au `.gitignore` (2068 fichiers parasites) ; images du hero versionnées (`Image 0 - Elephant.png`, `deux-techniciens-ivoiriens-fibre.png`) — sinon le build Vercel manquerait des assets.
+
+### Build / déploiement
+- `npm run build` local : ✅ 10 pages (build **résilient** si Notion indisponible — fallback `FormationCard`).
+- Preview Vercel de la branche : **success** (alias `site-kmc-git-refonte-scrollytelling-design-david72220s-projects.vercel.app`, protégé → accès connecté au compte Vercel).
+
+### Reste à faire
+- ⏳ Validation finale du preview par le client (ressenti scroll, cadrage re-zoom centre de formation).
+- ⏳ **Fusion `refonte-scrollytelling-design` → `main`** pour passer en production (sur feu vert).
+
+---
+
 ## 📊 BILAN COMPLET DU PROJET — 27 Mai 2026
 
 ### ✅ AVANCEMENT GLOBAL : 99.7%
