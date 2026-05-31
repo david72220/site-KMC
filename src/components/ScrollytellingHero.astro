@@ -192,15 +192,15 @@ const formation = await getFormationByName('FTTH-D2');
     gsap.set(technicians, { xPercent: -50, yPercent: -50, x: 320, opacity: 0 });
 
     const tl = gsap.timeline();
-    // Scène 1 : crossfade — l'éléphant fond et part à gauche ; les techniciens arrivent en fondu
-    // depuis la droite et viennent AU CENTRE, à la place de l'éléphant (pas de superposition).
-    tl.to(elephant, { x: -320, opacity: 0, duration: 0.35, ease: 'power2.in' }, 0)
-      .to(technicians, { x: 0, opacity: 1, duration: 0.35, ease: 'power2.out' }, 0.1)
+    // Scène 1 : l'éléphant fond jusqu'au noir et part à gauche ; UNE FOIS l'éléphant quasiment
+    // disparu, les techniciens arrivent en fondu depuis la droite et viennent AU CENTRE (séquentiel).
+    tl.to(elephant, { x: -320, opacity: 0, duration: 0.4, ease: 'power2.in' }, 0)
+      .to(technicians, { x: 0, opacity: 1, duration: 0.4, ease: 'power2.out' }, 0.4)
       // Scène 1 → 3 : Image 1 révélée par le glissement vers le haut de la couche éléphant/techniciens
-      .set(img1, { opacity: 1 }, 0.35)
-      .to(img0, { yPercent: -100, duration: 0.6, ease: 'power2.in' }, 0.4)
-      // Scène 4 : Image 1 tient un peu plus longtemps avant le texte
-      .to(text, { opacity: 1, duration: 0.4 }, 1.2)
+      .set(img1, { opacity: 1 }, 0.95)
+      .to(img0, { yPercent: -100, duration: 0.6, ease: 'power2.in' }, 1.0)
+      // Scène 4 : Image 1 tient un peu avant l'apparition du texte
+      .to(text, { opacity: 1, duration: 0.4 }, 1.9)
       // Scène 5 : Image 1 + carte texte glissent vers le haut → Image 2 réseau révélée
       .set(img2, { opacity: 1 }, 2.5)
       .to([img1, text], { yPercent: -100, duration: 0.6, ease: 'power2.in' }, 2.6)
