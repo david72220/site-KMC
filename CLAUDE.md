@@ -49,15 +49,17 @@
 | Publication site | GitHub API PUT (GET SHA d'abord si fichier existe, sinon PUT sans SHA) |
 | Réseaux sociaux | DeepSeek génère post 150 mots → Facebook Graph API + LinkedIn API (parallèle) |
 
-### Nouveaux credentials N8N à créer
+### Credentials N8N — IDs confirmés
 
-| Credential | Service | Type |
-|---|---|---|
-| `Serper.dev API` | Recherche Google | HTTP Header Auth `X-API-KEY` |
-| `Google AI Studio` | Imagen 3 | HTTP Header Auth `x-goog-api-key` |
-| `GitHub PAT` | Commit fichiers | HTTP Header Auth `Authorization: token` (fine-grained, scope `contents:write`) |
-| `Facebook Page Token` | Post Facebook | HTTP Header Auth (long-lived ~60j) |
-| `LinkedIn OAuth2` | Post LinkedIn | OAuth2 (scopes: `w_organization_social` + `r_organization_social`) |
+| Credential | Service | ID N8N | Statut |
+|---|---|---|---|
+| Serper.dev HTTP Header Auth | Recherche Google | `midp2wJe64P0Lr3M` | ✅ Prêt |
+| Google AI Studio (Gemini/Palm API) | Imagen 3 | `hZP2Sl4kWrhYKkW4` | ✅ Prêt |
+| GitHub (repo + admin write) | Commit fichiers | `vyffXPl9ZMfL334s` | ✅ Prêt |
+| Facebook Page Token | Post Facebook | — | ⏳ Compte associé à configurer |
+| LinkedIn OAuth2 | Post LinkedIn | — | ⏳ Compte associé à configurer |
+
+> Facebook et LinkedIn : nœuds créés en mode **disabled** dans WF5, à activer quand les comptes de l'associé seront connectés.
 
 ### Gotchas critiques pipeline
 
@@ -79,14 +81,31 @@
 7. **`/security-review`** (webhooks auth, PAT scope, tokens logs)
 8. Tests end-to-end → mise en production
 
-### État d'avancement
+### État d'avancement — 2 Juin 2026
 
-- ✅ Architecture et design validés
-- ✅ Spec rédigée, relue, corrigée et committée
-- ⏳ Plan d'implémentation en cours de rédaction
-- 🔴 Workflows N8N : à créer
-- 🔴 Schémas Notion : à appliquer
-- 🔴 Templates Astro cours : à créer
+| Tâche | Statut |
+|---|---|
+| Architecture et design validés | ✅ |
+| Spec + plan rédigés, relus, corrigés et committés | ✅ |
+| DB Blog — 14 propriétés ajoutées | ✅ |
+| DB Cours gratuits — 12 propriétés ajoutées | ✅ |
+| Templates Astro : `cours.astro` + `cours/[id].astro` | ✅ |
+| Dossier `src/content/cours/` + `public/images/cours/` | ✅ |
+| Navigation : "Cours gratuits" séparé de "Blog" | ✅ |
+| **WF5 Publication N8N** | 🔄 En cours |
+| WF4 Génération-Contenu N8N | 🔴 À faire |
+| WF3 Suggestions N8N | 🔴 À faire |
+| WF1 SEO-KMC + WF2 Veille-Concurrents N8N | 🔴 À faire |
+| Automations Notion (4 webhooks) | 🔴 À faire (manuellement dans l'UI Notion) |
+| `/n8n-validate` + `/security-review` | 🔴 À faire |
+
+### Pages Astro déployées (main → Vercel)
+
+| Route | Fichier | Statut |
+|---|---|---|
+| `/cours/` | `src/pages/cours.astro` | ✅ Live |
+| `/cours/[id]/` | `src/pages/cours/[id].astro` | ✅ Live |
+| Fichier test | `src/content/cours/test-cours-fibre-optique.md` | ✅ (à supprimer après pipeline opérationnel) |
 
 ---
 
