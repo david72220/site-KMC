@@ -155,23 +155,27 @@ const formation = await getFormationByName('FTTH-D2');
       </div>
     </div>
 
-    <!-- Fiche formation (z-60) : scène 11 — fond sombre révélé après remontée de img2 -->
-    <div id="layer-formation" class="absolute inset-0 z-60 flex flex-col items-center justify-start pt-24 lg:pt-28 pb-16 px-4 opacity-0 overflow-y-auto">
-      <div class="w-full max-w-2xl mx-auto text-center mb-8">
-        <p class="text-[#2dd4bf] text-sm font-semibold tracking-widest uppercase mb-3">Formation exemple</p>
-        <h2 class="font-display text-3xl md:text-4xl font-bold text-[#f5f5f0] leading-tight">
-          Exemple de formation fibre proposée
-        </h2>
-      </div>
-      <FormationCard formation={formation} />
-      <a href="/formations-fibre-optique/" class="mt-8 inline-flex items-center justify-center rounded-full bg-[#f5f5f0] px-8 py-4 text-[#070a10] font-display font-bold text-lg hover:bg-[#eab308] transition-colors duration-300">
-        Nos formations
+  </div>
+</section>
+
+<!-- Section formation — flux normal, apparaît après la fin du scrollytelling sticky -->
+<section class="bg-[#070d18] py-20 md:py-28 px-4">
+  <div class="max-w-2xl mx-auto">
+    <div class="text-center mb-10">
+      <p class="text-[#2dd4bf] text-sm font-semibold tracking-widest uppercase mb-3">Formation exemple</p>
+      <h2 class="font-display text-3xl md:text-4xl font-bold text-[#f5f5f0] leading-tight">
+        Exemple de formation fibre proposée
+      </h2>
+    </div>
+    <FormationCard formation={formation} />
+    <div class="text-center mt-10">
+      <a href="/formations-fibre-optique/" class="inline-flex items-center justify-center rounded-full bg-[#f5f5f0] px-8 py-4 text-[#070a10] font-display font-bold text-lg hover:bg-[#eab308] transition-colors duration-300">
+        Liste de nos formations
         <svg class="ml-3 w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
         </svg>
       </a>
     </div>
-
   </div>
 </section>
 
@@ -194,7 +198,6 @@ const formation = await getFormationByName('FTTH-D2');
     const ops = document.getElementById('layer-ops');
     const presentation = document.getElementById('layer-presentation');
     const presentation2 = document.getElementById('layer-presentation-2');
-    const formation = document.getElementById('layer-formation');
     const mainNav = document.getElementById('main-nav');
     const opWins = gsap.utils.toArray<HTMLElement>('.op-win');
 
@@ -239,12 +242,11 @@ const formation = await getFormationByName('FTTH-D2');
       // Scène 10b : présentation B (théorie/pratique + sécurité + CTA)
       .to(presentation2, { opacity: 1, duration: 0.4 }, 10.1)
       .to(presentation2, { opacity: 0, duration: 0.3 }, 10.9)
-      // Transition : image réseau remonte pour révéler le fond sombre (dézoom + slide up)
+      // Transition finale : image réseau remonte pour révéler le fond sombre (dézoom + slide up)
       .to(img2, { yPercent: -100, scale: 1, duration: 1.0, ease: 'power2.inOut' }, 10.9)
-      // Scène 11 : fiche formation + titre + bouton — le menu réapparaît
-      .to(formation, { opacity: 1, duration: 0.6 }, 11.6)
-      .to(mainNav, { autoAlpha: 1, duration: 0.3 }, 11.6)
-      .to({}, { duration: 1.4 }, 12.3);
+      // Menu réapparaît quand le fond sombre est révélé
+      .to(mainNav, { autoAlpha: 1, duration: 0.3 }, 11.5)
+      .to({}, { duration: 1.5 }, 12.0);
 
     const st = ScrollTrigger.create({
       trigger: '#scrolly', start: 'top top', end: 'bottom bottom',
