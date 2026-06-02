@@ -129,7 +129,7 @@ Erreur dans WF4/WF5        → Statut: Erreur + message dans Description
 1. `[Execute Workflow Trigger]`
 2. `[Notion — Query DB Blog]` — filtre : `Fichier SEO` non vide + `Statut` = `Idée`
 3. `[IF]` — fichiers manuels présents ?
-   - OUI → `[HTTP Request]` télécharge chaque fichier → extrait contenu texte
+   - OUI → `[HTTP Request]` télécharge chaque fichier depuis l'URL directe de la propriété `files` (propriété directe sur la page, pas un rollup — URL accessible sans fetch indirect)
    - NON → continue
 4. `[HTTP Request × 3]` → Serper.dev
    - `"meilleur centre formation fibre optique Abidjan"`
@@ -154,7 +154,7 @@ Erreur dans WF4/WF5        → Statut: Erreur + message dans Description
 5. `[HTTP Request]` → DeepSeek V4 Pro (`172.18.0.1:11434/api/chat`)
    - `think: false`, `num_predict: 4000`
    - Prompt : génère 5 idées articles blog + 2 idées cours gratuits avec titre, mot-clé, description, catégorie, tags, slug
-6. `[Code]` — parse JSON DeepSeek → tableau de 7 entrées
+6. `[Code]` — nettoie la réponse DeepSeek (regex strip des balises ```json ... ```) puis `JSON.parse` → tableau de 7 entrées. Fallback : si parse échoue, mettre Statut `Erreur` sur les deux DBs.
 7. `[Loop]` — pour chaque suggestion :
    - Blog → `[Notion — Create page]` dans DB Blog (Statut: Idée, Source: Suggestion IA)
    - Cours → `[Notion — Create page]` dans DB Cours gratuits (Statut: Idée)
@@ -186,7 +186,7 @@ Erreur dans WF4/WF5        → Statut: Erreur + message dans Description
 8. `[HTTP Request]` → GitHub API : commit image en `public/images/blog/{slug}.jpg` (base64)
 
 **Branche COURS :**
-5. `[HTTP Request]` → télécharge `Fichier TXT` depuis l'URL Notion
+5. `[HTTP Request → Notion GET /v1/pages/{page_id}]` → lit la propriété `Fichier TXT` directement depuis la page (propriété `files` directe — URL du fichier accessible dans `properties.Fichier TXT.files[0].file.url`). Télécharger le fichier via cette URL temporaire signée.
 6. `[HTTP Request]` → DeepSeek V4 Pro
    - Prompt : transformer TXT brut en Markdown enrichi (H2/H3, tableaux, callouts, résumé), `think: false`, `num_predict: 8000`
 7. `[HTTP Request]` → Imagen 3 API → image hero
@@ -194,7 +194,8 @@ Erreur dans WF4/WF5        → Statut: Erreur + message dans Description
 
 **Nœuds communs (suite) :**
 9. `[Code]` — découpe Markdown en chunks ≤ 1900 chars (limite Notion rich_text)
-10. `[Notion — Update page body]` — écrit le contenu en blocks
+9b. `[IF Statut = "Généré" ou "Formaté"]` — si régénération : lister les blocks existants via `GET /v1/blocks/{page_id}/children` puis supprimer chacun via `DELETE /v1/blocks/{block_id}` avant de réécrire
+10. `[Notion — Append Block Children]` — `PATCH /v1/blocks/{page_id}/children` avec les chunks en `paragraph` blocks
 11. `[Notion — Update propriétés]`
     - `Image hero` ← URL raw GitHub
     - `Statut` ← `Généré` (blog) ou `Formaté` (cours)
@@ -235,9 +236,10 @@ duree: "2h30"
 [contenu markdown]
 ```
 
-6. `[HTTP Request → GitHub API]`
-   - GET d'abord pour récupérer le SHA si fichier existant
-   - PUT avec contenu base64 + SHA
+6. `[HTTP Request → GitHub API GET]` — tente de lire le fichier existant
+   - Si 200 → récupère `sha` → inclure dans le PUT
+   - Si 404 → premier commit → PUT **sans** champ `sha`
+   `[HTTP Request → GitHub API PUT]` avec contenu base64 ± sha conditionnel
    - Blog : `src/content/blog/{slug}.md`
    - Cours : `src/content/cours/{slug}.md`
    - Push → Vercel auto-deploy
@@ -302,7 +304,7 @@ Accueil | Formations | Cours gratuits | Blog | Contact
 | `Google AI Studio` | Imagen 3 | HTTP Header Auth (`x-goog-api-key`) | aistudio.google.com → API keys |
 | `GitHub PAT` | Commit fichiers | HTTP Header Auth (`Authorization: token xxx`) | GitHub → Settings → Developer → PAT (scope: `repo`) |
 | `Facebook Page Token` | Post Facebook | HTTP Header Auth | Facebook Developers → Page Access Token (long-lived) |
-| `LinkedIn OAuth2` | Post LinkedIn | OAuth2 | LinkedIn Developers → App (scope: `w_organization_social`) |
+| `LinkedIn OAuth2` | Post LinkedIn | OAuth2 | LinkedIn Developers → App (scopes: `w_organization_social` + `r_organization_social` — Marketing Developer Platform requis) |
 
 ### Variables Vercel — aucune nouvelle requise
 
@@ -339,7 +341,7 @@ L'API Notion retourne `files: []` vide pour les rollups de fichiers. Pour lire `
 Poster sur une page entreprise nécessite l'accès "Marketing Developer Platform". Délai d'approbation 1-2 semaines. À demander en amont.
 
 ### Facebook — token long-lived
-Générer un token long-lived (~60 jours) via l'API Graph. Mettre en place un rappel de renouvellement.
+Générer un token long-lived (~60 jours) via l'API Graph. Créer un cron N8N mensuel (J-7 avant expiration) qui vérifie la validité via `GET /me?fields=name&access_token={token}` : si erreur OAuthException → envoyer une notification (email ou Notion) pour renouveler manuellement.
 
 ### Imagen 3 — format réponse
 L'API retourne l'image encodée en base64 dans `predictions[0].bytesBase64Encoded`. Décoder avant de committer dans GitHub.
@@ -354,7 +356,7 @@ Free tier : 2500 requêtes/mois. WF1+WF2 : ~10 requêtes/semaine = ~40/mois. Suf
 1. Enrichir les schémas Notion (ajouter toutes les propriétés aux deux DBs)
 2. Créer les templates Astro (`cours.astro` + `cours/[id].astro`) + dossier `src/content/cours/`
 3. Mettre à jour la Navigation
-4. WF5 Publication (le plus critique — valide tout le pipeline de bout en bout)
+4. WF5 Publication (valide le pipeline de bout en bout — pour tester sans WF4, remplir manuellement le body d'une page Notion test + renseigner le slug)
 5. WF4 Génération-Contenu
 6. WF3 Suggestions
 7. WF1 SEO-KMC
