@@ -3,6 +3,121 @@
 
 ---
 
+## 🆕 PIPELINE SEO BLOG N8N — SPEC VALIDÉE — 2 Juin 2026
+
+> Spec complète rédigée, relue et corrigée. Prêt pour le plan d'implémentation.
+> Spec : `docs/superpowers/specs/2026-06-02-pipeline-seo-blog-kmc-design.md`
+
+### IDs Notion confirmés
+
+| Base / Page | ID |
+|---|---|
+| DB Blog | `3739628038de80348128de6db5f9e878` |
+| DB Cours gratuits | `3739628038de8063bf15fa861f76d028` |
+| Page Rapport SEO KMC | `3739628038de8059b56aeb2af9c73fbf` |
+| Page Rapport Veille Concurrents | `3739628038de806c8b0adf0343cb803f` |
+
+### Schéma DB Blog — propriétés à créer
+
+`Statut` (select) · `Mot-clé SEO` (rich_text) · `Catégorie` (select) · `Tags` (multi_select) · `Description` (rich_text) · `Slug` (rich_text) · `Source` (select) · `Fichier SEO` (files) · `Image hero` (url) · `Date publication` (date) · `URL publiée` (url) · `Moteur LLM` (select) · `▶ Lancer génération` (checkbox) · `▶ Lancer publication` (checkbox)
+
+### Schéma DB Cours gratuits — propriétés à créer
+
+`Statut` (select) · `Fichier TXT` (files) · `Niveau` (select) · `Durée estimée` (rich_text) · `Catégorie` (select) · `Tags` (multi_select) · `Slug` (rich_text) · `Image hero` (url) · `Date publication` (date) · `URL publiée` (url) · `▶ Lancer formatage` (checkbox) · `▶ Lancer publication` (checkbox)
+
+> Contenu Markdown stocké dans le **corps de page Notion** (blocks), pas dans une propriété.
+
+### 5 workflows N8N (Approche A — modulaire)
+
+| # | Nom | Déclencheur | Webhooks |
+|---|---|---|---|
+| WF1 | `SEO-KMC` | Cron lundi 8h | — |
+| WF2 | `Veille-Concurrents` | Appelé par WF1 | — |
+| WF3 | `Suggestions` | Appelé par WF2 | — |
+| WF4 | `Génération-Contenu` | Notion checkbox | `webhook/kmc-generer-blog` + `webhook/kmc-formater-cours` |
+| WF5 | `Publication` | Notion checkbox | `webhook/kmc-publier` (blog + cours) |
+
+### Décisions d'architecture validées
+
+| Élément | Choix |
+|---|---|
+| Entrées SEO | Serper.dev (auto) + `Fichier SEO` property directe dans DB Blog |
+| LLM génération | DeepSeek V4 Pro VPS (`172.18.0.1:11434`), `think: false`, `num_predict: 8000` |
+| Cours gratuits | TXT manuel (Claude/Perplexity) → WF4 beautifie en Markdown enrichi |
+| Images | Imagen 3 via Google AI Studio API (`x-goog-api-key`) |
+| Stockage images | `public/images/blog/` et `public/images/cours/` dans GitHub |
+| Publication site | GitHub API PUT (GET SHA d'abord si fichier existe, sinon PUT sans SHA) |
+| Réseaux sociaux | DeepSeek génère post 150 mots → Facebook Graph API + LinkedIn API (parallèle) |
+
+### Nouveaux credentials N8N à créer
+
+| Credential | Service | Type |
+|---|---|---|
+| `Serper.dev API` | Recherche Google | HTTP Header Auth `X-API-KEY` |
+| `Google AI Studio` | Imagen 3 | HTTP Header Auth `x-goog-api-key` |
+| `GitHub PAT` | Commit fichiers | HTTP Header Auth `Authorization: token` (fine-grained, scope `contents:write`) |
+| `Facebook Page Token` | Post Facebook | HTTP Header Auth (long-lived ~60j) |
+| `LinkedIn OAuth2` | Post LinkedIn | OAuth2 (scopes: `w_organization_social` + `r_organization_social`) |
+
+### Gotchas critiques pipeline
+
+- **GitHub API** : GET d'abord → récupérer SHA si 200, PUT sans SHA si 404 (premier commit)
+- **Notion Append Block Children** : utiliser `PATCH /v1/blocks/{id}/children`. Pour régénération : supprimer les blocks existants d'abord
+- **DeepSeek JSON** : nettoyer les balises ```json ... ``` (regex) avant `JSON.parse` — sinon erreur silencieuse
+- **Fichier TXT cours** : lire via `GET /v1/pages/{id}` → `properties.Fichier TXT.files[0].file.url` (URL signée temporaire)
+- **LinkedIn Marketing API** : délai approbation 1-2 semaines — à demander avant de commencer WF5
+- **Facebook token** : cron N8N mensuel de vérification expiration (GET `/me?fields=name`)
+
+### Ordre d'implémentation
+
+1. Schémas Notion (propriétés des 2 DBs)
+2. Templates Astro : `cours.astro` + `cours/[id].astro` + dossier `src/content/cours/`
+3. Navigation (ajout "Cours gratuits")
+4. WF5 Publication → WF4 → WF3 → WF1 → WF2
+5. Automations Notion (webhooks checkboxes)
+6. **`/n8n-validate`** (structure, expressions, timeouts)
+7. **`/security-review`** (webhooks auth, PAT scope, tokens logs)
+8. Tests end-to-end → mise en production
+
+### État d'avancement
+
+- ✅ Architecture et design validés
+- ✅ Spec rédigée, relue, corrigée et committée
+- ⏳ Plan d'implémentation en cours de rédaction
+- 🔴 Workflows N8N : à créer
+- 🔴 Schémas Notion : à appliquer
+- 🔴 Templates Astro cours : à créer
+
+---
+
+## 🎨 CHARTE GRAPHIQUE BLEU KMC — 2 Juin 2026
+
+### Remplacement couleur accent
+
+| Avant | Après | Portée |
+|---|---|---|
+| `#2dd4bf` (teal/vert) | `#3b97d3` (bleu logo KMC) | Tout le site — 13 fichiers |
+| `#0f766e` (teal foncé) | `#1a6fa3` (bleu foncé) | Gradients, ombres |
+
+Variables CSS mises à jour dans `src/styles/global.css` :
+- `--color-kmc-cyan: #3b97d3`
+- `--color-kmc-teal: #3b97d3`
+
+### Footer refonte
+
+- **Col 1** : icône SVG verte remplacée par `logo-kmc.png` (h-10), texte descriptif supprimé
+- **Col 2** (Formations) : supprimée entièrement
+- **Col 3** (Entreprise) → renommée **"À propos"** — liens : `/a-propos/`, `/formations-fibre-optique/`, `/blog/`, `/contact/`
+- Grille passée de `lg:grid-cols-4` à `lg:grid-cols-3`
+
+### Nouvelle page `/a-propos/`
+
+- Fichier : `src/pages/a-propos.astro`
+- Sections : hero, mission/valeurs (formations certifiantes, pratique terrain, formateurs experts), CTA
+- Commit pushé sur `main` → Vercel déployé ✅
+
+---
+
 ## 🆕 REFONTE SCROLLYTELLING & RESPONSIVE — 31 Mai 2026
 
 > Branche : `refonte-scrollytelling-design` — poussée sur GitHub, **preview Vercel généré** (build réussi).
@@ -199,7 +314,7 @@ Contenu SEO massif ajouté — chaque opérateur possède désormais :
 | SectionClientFinal | `src/components/SectionClientFinal.astro` | Salon + témoignage |
 | SectionCatalogue | `src/components/SectionCatalogue.astro` | Grid 6 formations (statique) |
 
-### 3. 5 PAGES PUBLIQUES + AUTOMATISATION SEO ✅
+### 3. PAGES PUBLIQUES ✅
 
 | Route | Page | Status |
 |-----------|--------|---|
@@ -208,7 +323,9 @@ Contenu SEO massif ajouté — chaque opérateur possède désormais :
 | `/habilitations/` | 3 formations élec | ✅ Complet |
 | `/blog/` | Liste articles | ✅ Structure OK |
 | `/blog/[id]/` | Template article | ✅ Fonctionnel |
-| `/formations-fibre-optique/` | Catalogue dynamique | 🟢 En ligne (dépend Notion) |
+| `/formations-fibre-optique/` | Catalogue dynamique | ✅ En ligne (dépend Notion) |
+| `/a-propos/` | À propos KMC | ✅ Créé le 2 juin 2026 |
+| `/cours/[id]/` | Cours gratuits | 🔴 À créer (pipeline N8N) |
 
 ### 4. AUTOMATISATION SEO 100% TERMINÉE ✅
 
@@ -271,7 +388,8 @@ Coche ✅ dans Notion
 ### 7. STYLE & DESIGN TOKENS ✅
 - **Tailwind config** dans `src/styles/global.css`
 - **Couleurs KMC :**
-  - Cyan : `#2DD4BF`
+  - Bleu KMC (accent) : `#3b97d3` ← remplace l'ancien teal `#2DD4BF` (2 juin 2026)
+  - Bleu KMC foncé : `#1a6fa3` ← remplace `#0f766e`
   - Ochre : `#C8913E`
   - Gold : `#F59E0B`
   - Night (fond) : `#0a1628`
