@@ -3,10 +3,11 @@
 
 ---
 
-## 🆕 PIPELINE SEO BLOG N8N — SPEC VALIDÉE — 2 Juin 2026
+## 🆕 PIPELINE SEO BLOG N8N — DÉPLOYÉ ✅ — 2 Juin 2026
 
-> Spec complète rédigée, relue et corrigée. Prêt pour le plan d'implémentation.
+> Pipeline complet opérationnel. 5 workflows N8N créés, validés, prêts à activer.
 > Spec : `docs/superpowers/specs/2026-06-02-pipeline-seo-blog-kmc-design.md`
+> Plan : `docs/superpowers/plans/2026-06-02-pipeline-seo-blog-kmc.md`
 
 ### IDs Notion confirmés
 
@@ -27,15 +28,18 @@
 
 > Contenu Markdown stocké dans le **corps de page Notion** (blocks), pas dans une propriété.
 
-### 5 workflows N8N (Approche A — modulaire)
+### 5 workflows N8N créés (inactifs — à activer manuellement)
 
-| # | Nom | Déclencheur | Webhooks |
-|---|---|---|---|
-| WF1 | `SEO-KMC` | Cron lundi 8h | — |
-| WF2 | `Veille-Concurrents` | Appelé par WF1 | — |
-| WF3 | `Suggestions` | Appelé par WF2 | — |
-| WF4 | `Génération-Contenu` | Notion checkbox | `webhook/kmc-generer-blog` + `webhook/kmc-formater-cours` |
-| WF5 | `Publication` | Notion checkbox | `webhook/kmc-publier` (blog + cours) |
+| # | Nom | ID N8N | Déclencheur | Webhook path |
+|---|---|---|---|---|
+| WF1 | `KMC — WF1 Analyse SEO` | `WExr1Z8AGPy2AKDv` | Cron lundi 8h | — |
+| WF2 | `KMC — WF2 Veille Concurrents` | `Lnr24EmlHmJ2N6iR` | Appelé par WF1 | — |
+| WF3 | `KMC — WF3 Suggestions SEO` | `1GHxvENwyAZBTbvE` | Appelé par WF2 | — |
+| WF4 | `KMC — WF4 Génération Contenu` | `gY3w0V6VGA53DdIi` | Notion checkbox | `kmc-generer-blog`, `kmc-formater-cours` |
+| WF5 | `KMC — WF5 Publication Blog et Cours` | `L3CNrClV6tohdFeu` | Notion checkbox | `kmc-publier` |
+
+> Tokens webhook : génération = `kmc-gen-secret-2026`, publication = `kmc-pub-secret-2026`
+> Credential Notion découvert automatiquement : `q9hB78Buwmsq8eck` ("Notion David account")
 
 ### Décisions d'architecture validées
 
@@ -81,23 +85,26 @@
 7. **`/security-review`** (webhooks auth, PAT scope, tokens logs)
 8. Tests end-to-end → mise en production
 
-### État d'avancement — 2 Juin 2026
+### État d'avancement — 2 Juin 2026 ✅ PIPELINE COMPLET
 
 | Tâche | Statut |
 |---|---|
-| Architecture et design validés | ✅ |
-| Spec + plan rédigés, relus, corrigés et committés | ✅ |
-| DB Blog — 14 propriétés ajoutées | ✅ |
-| DB Cours gratuits — 12 propriétés ajoutées | ✅ |
-| Templates Astro : `cours.astro` + `cours/[id].astro` | ✅ |
-| Dossier `src/content/cours/` + `public/images/cours/` | ✅ |
-| Navigation : "Cours gratuits" séparé de "Blog" | ✅ |
-| **WF5 Publication N8N** | 🔄 En cours |
-| WF4 Génération-Contenu N8N | 🔴 À faire |
-| WF3 Suggestions N8N | 🔴 À faire |
-| WF1 SEO-KMC + WF2 Veille-Concurrents N8N | 🔴 À faire |
-| Automations Notion (4 webhooks) | 🔴 À faire (manuellement dans l'UI Notion) |
-| `/n8n-validate` + `/security-review` | 🔴 À faire |
+| Architecture + spec + plan | ✅ |
+| DB Blog — 14 propriétés | ✅ |
+| DB Cours gratuits — 12 propriétés | ✅ |
+| Templates Astro `/cours/` + `/cours/[id]/` | ✅ Live sur Vercel |
+| Navigation "Cours gratuits" | ✅ |
+| WF5 Publication | ✅ Créé, inactif |
+| WF4 Génération-Contenu | ✅ Créé, inactif (17 typeVersion upgrades appliqués) |
+| WF3 Suggestions SEO | ✅ Créé, inactif |
+| WF1 Analyse SEO + WF2 Veille | ✅ Créés, inactifs |
+| 4 automations Notion (webhooks) | ✅ Configurées dans l'UI Notion |
+| `/n8n-validate` | ✅ WARN (0 bloquant — faux positifs brackets JS) |
+| `/security-review` | ✅ 0 finding |
+| **Activation workflows** | ⏳ À faire manuellement dans N8N |
+| **Test end-to-end** | ⏳ À faire avant mise en prod |
+| **Facebook / LinkedIn** | ⏳ Nœuds disabled — comptes associé à connecter |
+| Fichier test cours | ⚠️ `src/content/cours/test-cours-fibre-optique.md` à supprimer après premier vrai cours |
 
 ### Pages Astro déployées (main → Vercel)
 
