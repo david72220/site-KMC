@@ -37,6 +37,13 @@ const pageImage = 'https://kmc.ci/og-image.jpg';
     }
   }}
 >
+  <!-- Script inline dans le <head> : désactive la restauration de scroll AVANT que le
+       navigateur puisse la déclencher. Les scripts de type module (bundlés) s'exécutent
+       trop tard pour cela. -->
+  <script is:inline slot="head">
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  </script>
+
   <Navigation />
   <main id="main-content">
     <ScrollytellingHero />
@@ -47,8 +54,7 @@ const pageImage = 'https://kmc.ci/og-image.jpg';
 <script>
   import { initLenis } from '../lib/scroll';
 
-  // Toujours démarrer en haut — le scrollytelling dépend d'un scroll initial à 0.
-  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  // Forcer scroll à 0 après initialisation (double sécurité)
   window.scrollTo(0, 0);
 
   // initLenis() is idempotent — returns existing instance if ScrollytellingHero already called it
