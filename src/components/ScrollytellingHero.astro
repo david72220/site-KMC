@@ -5,7 +5,7 @@ import OperatorWindow from './OperatorWindow.astro';
 import FormationCard from './FormationCard.astro';
 const formation = await getFormationByName('FTTH-D2');
 ---
-<section id="scrolly" aria-label="Présentation KMC" style="height:1150vh;">
+<section id="scrolly" aria-label="Présentation KMC" style="height:1300vh;">
   <div id="scrolly-stage" class="sticky top-0 h-screen w-full overflow-hidden bg-[#070d18]" style="perspective:1200px;">
 
     <!-- Couche IMG0 éléphant + techniciens + titre serif (z-30) : scène 1 -->
@@ -166,17 +166,18 @@ const formation = await getFormationByName('FTTH-D2');
       <FormationCard formation={formation} />
     </div>
 
-  </div>
-</section>
+    <!-- CTA (z-61) : scène 12 — bouton centré sur la fiche à 50% -->
+    <div id="layer-cta" class="absolute inset-0 z-[61] flex items-center justify-center opacity-0 pointer-events-none">
+      <a href="/formations-fibre-optique/"
+         class="pointer-events-auto btn-cta-gradient inline-flex items-center justify-center gap-4 rounded-full px-14 py-7 font-display font-bold text-[#06121f] text-2xl md:text-3xl shadow-[0_0_60px_rgba(245,158,11,0.5)] hover:shadow-[0_0_80px_rgba(245,158,11,0.7)] transition-all duration-300 hover:scale-105">
+        Nos formations
+        <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+        </svg>
+      </a>
+    </div>
 
-<!-- Bouton en flux normal — apparaît quand le stage se décroche et remonte -->
-<section class="bg-[#070d18] py-16 px-4 text-center">
-  <a href="/formations-fibre-optique/" class="inline-flex items-center justify-center rounded-full bg-[#f5f5f0] px-8 py-4 text-[#070a10] font-display font-bold text-lg hover:bg-[#eab308] transition-colors duration-300">
-    Liste de nos formations
-    <svg class="ml-3 w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-    </svg>
-  </a>
+  </div>
 </section>
 
 <script>
@@ -204,6 +205,7 @@ const formation = await getFormationByName('FTTH-D2');
     const presentation = document.getElementById('layer-presentation');
     const presentation2 = document.getElementById('layer-presentation-2');
     const formation = document.getElementById('layer-formation');
+    const cta = document.getElementById('layer-cta');
     const mainNav = document.getElementById('main-nav');
     const opWins = gsap.utils.toArray<HTMLElement>('.op-win');
 
@@ -253,7 +255,10 @@ const formation = await getFormationByName('FTTH-D2');
       // Fiche formation + menu réapparaissent sur le fond sombre
       .to(formation, { opacity: 1, duration: 0.6 }, 11.6)
       .to(mainNav, { autoAlpha: 1, duration: 0.3 }, 11.6)
-      .to({}, { duration: 1.4 }, 12.3);
+      // Scène 12 : fader formation à 50% + gros bouton centré
+      .to(formation, { opacity: 0.5, duration: 0.5 }, 12.8)
+      .to(cta, { opacity: 1, duration: 0.5 }, 12.8)
+      .to({}, { duration: 1.2 }, 13.4);
 
     // Garantir scroll = 0 au moment où ScrollTrigger calcule ses positions
     window.scrollTo(0, 0);
