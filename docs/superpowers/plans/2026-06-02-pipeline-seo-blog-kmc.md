@@ -16,7 +16,7 @@
 Repo GitHub     : david72220/site-KMC
 Projet local    : /Users/davidollivier/Documents/Antigravity/Site KMC/
 N8N URL         : https://n8n.srv1179315.hstgr.cloud
-DeepSeek        : POST http://172.18.0.1:11434/api/chat  { think:false, num_predict:8000 }
+DeepSeek        : POST http://172.18.0.1:11434/api/chat  { think:false, num_predict:8000, timeout:540000 }
 Notion token    : credential N8N "Notion API" existant
 DB Blog         : 3739628038de80348128de6db5f9e878
 DB Cours        : 3739628038de8063bf15fa861f76d028
@@ -24,6 +24,8 @@ Page Rapport SEO: 3739628038de8059b56aeb2af9c73fbf
 Page Rapport Veille: 3739628038de806c8b0adf0343cb803f
 Spec            : docs/superpowers/specs/2026-06-02-pipeline-seo-blog-kmc-design.md
 ```
+
+> ⚠️ **Auth webhooks N8N :** Les automations Notion ne permettent pas d'ajouter des headers HTTP personnalisés. Le token de sécurité est donc passé dans le **body JSON** (`body.token`). Dans chaque webhook N8N (WF4, WF5), activer **"Never log request body"** pour éviter que le token soit loggué, et valider le token via un nœud Code en tête de workflow (`if (body.token !== 'SECRET') throw ...`).
 
 ---
 
@@ -91,7 +93,18 @@ git commit --allow-empty -m "feat: DB Cours Notion — schéma 12 propriétés a
 
 ## Phase 2 — Templates Astro
 
-### Task 3 : Dossier cours + placeholder
+### Task 3 : Vérification Content Collections + dossier cours
+
+> ⚠️ Avant de créer les fichiers glob, vérifier si `src/content/config.ts` existe. S'il existe, la collection `cours` doit y être déclarée.
+
+- [ ] **Vérifier l'existence de `src/content/config.ts`**
+```bash
+ls "/Users/davidollivier/Documents/Antigravity/Site KMC/src/content/"
+```
+- Si `config.ts` absent → le site utilise `import.meta.glob` direct (comme le blog existant). Continuer.
+- Si `config.ts` présent → ajouter la collection `cours` avec le même schéma que `blog`.
+
+### Task 3b : Dossier cours + placeholder
 
 **Files :**
 - Créer : `src/content/cours/.gitkeep`
@@ -100,6 +113,7 @@ git commit --allow-empty -m "feat: DB Cours Notion — schéma 12 propriétés a
 - [ ] **Créer les dossiers**
 ```bash
 mkdir -p "/Users/davidollivier/Documents/Antigravity/Site KMC/src/content/cours"
+mkdir -p "/Users/davidollivier/Documents/Antigravity/Site KMC/src/pages/cours"
 mkdir -p "/Users/davidollivier/Documents/Antigravity/Site KMC/public/images/cours"
 touch "/Users/davidollivier/Documents/Antigravity/Site KMC/src/content/cours/.gitkeep"
 touch "/Users/davidollivier/Documents/Antigravity/Site KMC/public/images/cours/.gitkeep"
@@ -537,9 +551,10 @@ Vercel déploie automatiquement.
 
 ---
 
-## Phase 3 — WF5 Publication (à implémenter en premier)
+## Phase 3 — WF5 Publication ⚡ PRIORITÉ ABSOLUE — commencer ici
 
-> WF5 est le workflow le plus critique. Il valide tout le pipeline de bout en bout. Pour tester sans WF4 : créer manuellement une page test dans DB Blog avec body Markdown, renseigner le slug, cocher `▶ Lancer publication`.
+> **WF5 est le workflow le plus critique — il valide tout le pipeline de bout en bout AVANT d'implémenter WF4, WF3, etc.**
+> Pour tester sans WF4 : créer manuellement une page test dans DB Blog avec body Markdown, renseigner le slug, cocher `▶ Lancer publication`.
 
 ### Task 7 : Créer WF5 — squelette + webhook
 
@@ -576,7 +591,33 @@ Attendu : statut Notion mis à jour à "En publication".
 
 - [ ] **Ajouter nœud "Lire propriétés page Notion"** → `GET /v1/pages/{page_id}` → extraire slug, titre, description, catégorie, tags, heroImage, niveau, duree
 
-- [ ] **Ajouter nœud "Lire body page Notion"** → `GET /v1/blocks/{page_id}/children` (avec pagination si nécessaire)
+- [ ] **Ajouter nœud Code "Lire body page Notion avec pagination"** — l'API Notion retourne max 100 blocks par appel, il faut paginer si `has_more === true` :
+```javascript
+const pageId = $input.first().json.body.page_id;
+const token = $env.NOTION_TOKEN; // ou utiliser this.helpers.httpRequest avec credential
+
+let allBlocks = [];
+let cursor = undefined;
+let hasMore = true;
+
+while (hasMore) {
+  const url = `https://api.notion.com/v1/blocks/${pageId}/children` + (cursor ? `?start_cursor=${cursor}` : '');
+  const res = await this.helpers.httpRequest({
+    method: 'GET',
+    url,
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Notion-Version': '2022-06-28',
+    },
+  });
+  allBlocks = allBlocks.concat(res.results || []);
+  hasMore = res.has_more;
+  cursor = res.next_cursor;
+}
+
+return allBlocks.map(b => ({ json: b }));
+```
+> Note : utiliser un nœud HTTP Request dédié avec le credential Notion si `this.helpers.httpRequest` pose problème (voir gotcha CLAUDE.md sur `httpRequestWithAuthentication`).
 
 - [ ] **Ajouter nœud Code "Convertir blocks en Markdown"** :
 ```javascript
@@ -610,23 +651,33 @@ const props = $('Lire propriétés').first().json;
 const { markdown } = $('Convertir blocks').first().json;
 const dbType = $('Webhook').first().json.body.db_type;
 
+// Échapper les guillemets pour YAML valide
+const esc = (s) => (s || '').replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+
+// Normaliser les tags (tableau de strings ou objets Notion {name:...})
+const rawTags = Array.isArray(props.tags) ? props.tags : [];
+const tagsYaml = rawTags.map(t => {
+  const name = typeof t === 'string' ? t : (t.name || '');
+  return `"${esc(name)}"`;
+}).join(', ');
+
 const today = new Date().toISOString().split('T')[0];
 const path = dbType === 'cours'
   ? `src/content/cours/${props.slug}.md`
   : `src/content/blog/${props.slug}.md`;
 
 const extraFrontmatter = dbType === 'cours'
-  ? `niveau: "${props.niveau}"\nduree: "${props.duree}"\n`
+  ? `niveau: "${esc(props.niveau)}"\nduree: "${esc(props.duree)}"\n`
   : '';
 
 const fileContent = `---
-title: "${props.title}"
+title: "${esc(props.title)}"
 pubDate: ${today}
 author: "Équipe KMC"
-category: "${props.category}"
-tags: [${props.tags.join(', ')}]
+category: "${esc(props.category)}"
+tags: [${tagsYaml}]
 heroImage: "/images/${dbType}/${props.slug}.jpg"
-description: "${props.description}"
+description: "${esc(props.description)}"
 ${extraFrontmatter}---
 
 ${markdown}`;
@@ -1067,7 +1118,7 @@ git commit --allow-empty -m "feat: WF1 SEO-KMC + WF2 Veille-Concurrents opérati
 - [ ] **Commit final + push**
 ```bash
 cd "/Users/davidollivier/Documents/Antigravity/Site KMC"
-git add -A
+git add src/ public/
 git commit -m "feat: pipeline SEO blog complet — WF1→WF5 validés, templates cours, navigation mise à jour"
 git push origin main
 ```
