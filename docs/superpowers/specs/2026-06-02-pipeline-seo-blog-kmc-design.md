@@ -362,7 +362,38 @@ Free tier : 2500 requêtes/mois. WF1+WF2 : ~10 requêtes/semaine = ~40/mois. Suf
 7. WF1 SEO-KMC
 8. WF2 Veille-Concurrents
 9. Configurer les automations Notion (webhooks)
-10. Tests end-to-end
+10. **`/n8n-validate`** — validation structurelle de chaque workflow (connexions, nœuds orphelins, expressions invalides)
+11. **`/security-review`** — audit de sécurité avant mise en production (webhooks sans auth, proxies ouverts, tokens exposés, CORS)
+12. Tests end-to-end
+13. Mise en production (push `main` → Vercel)
+
+---
+
+## Checklist sécurité pré-production (obligatoire)
+
+Les incidents passés (port Ollama VPS ouvert, webhooks N8N sans auth agissant comme proxies LLM gratuits) imposent une validation systématique avant chaque mise en production.
+
+### Points à vérifier avec `/security-review`
+
+| Risque | Vérification |
+|---|---|
+| Webhooks N8N sans authentification | Chaque webhook WF4/WF5 doit avoir un token secret en header ou query param |
+| GitHub PAT trop permissif | Scope limité à `contents:write` sur le repo `site-KMC` uniquement (fine-grained PAT) |
+| Clé Serper.dev exposée | Stockée uniquement dans les credentials N8N, jamais dans le body des requêtes loggées |
+| Clé Google AI Studio exposée | Idem — credential N8N uniquement |
+| Facebook/LinkedIn tokens dans les logs | Masquer dans les nœuds N8N (option "Never log") |
+| CORS sur les webhooks | Vérifier que les webhooks ne répondent qu'aux IPs Notion attendues |
+| Accès DB Notion non restreint | Token Notion avec accès limité aux 4 DBs/pages du projet uniquement |
+
+### Points à vérifier avec `/n8n-validate`
+
+| Risque | Vérification |
+|---|---|
+| Nœuds orphelins | Aucun nœud non connecté qui pourrait être déclenché accidentellement |
+| Expressions `{{ }}` invalides | Toutes les expressions testées en mode dry-run avant activation |
+| Boucles infinies | WF1→WF2→WF3 ne doit pas pouvoir se déclencher récursivement |
+| Timeout DeepSeek | Timeout 540s sur chaque nœud HTTP DeepSeek (pattern formations) |
+| Error handling | Chaque workflow a un nœud "Error Trigger" qui met Statut → `Erreur` dans Notion |
 
 ---
 
