@@ -1,0 +1,185 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+import Footer from '../../components/Footer.astro';
+
+interface CoursPost {
+  id: string;
+  data: {
+    title: string;
+    description: string;
+    pubDate: string;
+    category: string;
+    niveau: string;
+    duree: string;
+    tags: string[];
+    heroImage?: string;
+    author?: string;
+  };
+  Content: any;
+}
+
+export async function getStaticPaths() {
+  const postModules = import.meta.glob('../../content/cours/*.md', { eager: true });
+  const allCours = Object.entries(postModules).map(([path, mod]: [string, any]) => {
+    const id = path.split('/').pop()?.replace('.md', '') || '';
+    return { id, data: mod.frontmatter, Content: mod.Content } as CoursPost;
+  });
+  return allCours.map((c) => ({ params: { id: c.id }, props: { cours: c } }));
+}
+
+interface Props { cours: CoursPost; }
+
+const { cours } = Astro.props;
+const ContentComponent = cours.Content;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Course',
+  name: cours.data.title,
+  description: cours.data.description,
+  url: `https://kmc.ci/cours/${cours.id}/`,
+  provider: { '@type': 'Organization', name: 'KMC', url: 'https://kmc.ci' },
+  datePublished: new Date(cours.data.pubDate).toISOString(),
+  educationalLevel: cours.data.niveau,
+  image: cours.data.heroImage ? `https://kmc.ci${cours.data.heroImage}` : 'https://kmc.ci/images/og-default.jpg',
+};
+---
+
+<Layout
+  title={cours.data.title}
+  description={cours.data.description}
+  image={cours.data.heroImage ? `https://kmc.ci${cours.data.heroImage}` : undefined}
+  type="article"
+  jsonLd={jsonLd}
+>
+  <Navigation />
+
+  <main id="main-content" class="min-h-screen bg-[#0B1120] pt-24 pb-20">
+    <article class="max-w-4xl mx-auto px-6">
+      <div class="reveal-item opacity-0 translate-y-6 mb-8">
+        <a href="/cours/" class="inline-flex items-center gap-2 text-sm text-[#3b97d3] hover:text-[#3b97d3]/80 transition-colors mb-6">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          Retour aux cours
+        </a>
+
+        <div class="flex flex-wrap items-center gap-3 mb-6">
+          {cours.data.niveau && (
+            <span class="text-sm font-medium px-4 py-1.5 rounded-full bg-[#3b97d3]/10 text-[#3b97d3] border border-[#3b97d3]/20">
+              {cours.data.niveau}
+            </span>
+          )}
+          {cours.data.duree && (
+            <span class="flex items-center gap-1.5 text-sm text-white/50">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+              </svg>
+              {cours.data.duree}
+            </span>
+          )}
+          {cours.data.category && (
+            <span class="text-sm text-white/40">{cours.data.category}</span>
+          )}
+        </div>
+
+        <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white font-display mb-6 leading-tight">
+          {cours.data.title}
+        </h1>
+      </div>
+
+      {cours.data.heroImage && (
+        <div class="reveal-item opacity-0 translate-y-6 mb-12 rounded-xl overflow-hidden border border-white/[0.08]">
+          <img src={cours.data.heroImage} alt={cours.data.title} class="w-full h-auto object-cover" loading="eager" />
+        </div>
+      )}
+
+      <nav id="toc" class="reveal-item opacity-0 translate-y-6 mb-12 p-6 bg-white/[0.03] border border-white/[0.08] rounded-xl hidden">
+        <h2 class="text-sm font-semibold text-white/60 uppercase tracking-wider mb-3">Sommaire</h2>
+        <ul id="toc-list" class="space-y-2 text-sm"></ul>
+      </nav>
+
+      <div class="reveal-item opacity-0 translate-y-6 prose-content">
+        <ContentComponent />
+      </div>
+
+      <div class="reveal-item opacity-0 translate-y-6 mt-16 p-8 bg-[#3b97d3]/5 border border-[#3b97d3]/20 rounded-2xl text-center">
+        <h2 class="text-2xl font-display font-bold text-white mb-3">Aller plus loin ?</h2>
+        <p class="text-white/60 mb-6">Ce cours est un aperçu. Rejoignez une formation complète et certifiante chez KMC.</p>
+        <a href="/formations-fibre-optique/" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#3b97d3] text-[#0B1120] font-semibold text-sm hover:bg-[#3b97d3]/90 transition-colors">
+          Voir les formations complètes
+        </a>
+      </div>
+
+      <div class="reveal-item opacity-0 translate-y-6 mt-8 pt-8 border-t border-white/[0.08] flex justify-between items-center">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-[#3b97d3]/10 border border-[#3b97d3]/20 flex items-center justify-center">
+            <span class="text-[#3b97d3] font-display font-bold text-sm">K</span>
+          </div>
+          <div>
+            <p class="text-white font-medium text-sm">{cours.data.author || 'KMC'}</p>
+            <p class="text-white/50 text-xs">Centre de formation</p>
+          </div>
+        </div>
+        <a href="/cours/" class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[#3b97d3]/10 text-[#3b97d3] border border-[#3b97d3]/20 hover:bg-[#3b97d3]/20 transition-all text-sm font-medium">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          Tous les cours
+        </a>
+      </div>
+    </article>
+  </main>
+
+  <Footer />
+</Layout>
+
+<script>
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const el = entry.target as HTMLElement;
+          el.style.transition = 'opacity 0.7s ease, transform 0.7s ease';
+          el.style.opacity = '1';
+          el.style.transform = 'translateY(0)';
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.1 }
+  );
+  document.querySelectorAll('.reveal-item').forEach((el) => observer.observe(el));
+
+  const h2s = document.querySelectorAll('.prose-content h2');
+  if (h2s.length > 1) {
+    const toc = document.getElementById('toc');
+    const tocList = document.getElementById('toc-list');
+    if (toc && tocList) {
+      toc.classList.remove('hidden');
+      h2s.forEach((h2, i) => {
+        const id = `section-${i}`;
+        h2.id = id;
+        const li = document.createElement('li');
+        li.innerHTML = `<a href="#${id}" class="text-white/60 hover:text-[#3b97d3] transition-colors">${h2.textContent}</a>`;
+        tocList.appendChild(li);
+      });
+    }
+  }
+</script>
+
+<style>
+  .prose-content { color: #e2e8f0; line-height: 1.8; font-size: 1.125rem; }
+  .prose-content :global(h2) { font-family: 'Space Grotesk', sans-serif; font-size: 1.75rem; font-weight: 700; color: #f8fafc; margin-top: 2.5rem; margin-bottom: 1rem; }
+  .prose-content :global(h3) { font-family: 'Space Grotesk', sans-serif; font-size: 1.375rem; font-weight: 600; color: #f8fafc; margin-top: 2rem; margin-bottom: 0.75rem; }
+  .prose-content :global(p) { margin-bottom: 1.25rem; color: #cbd5e1; }
+  .prose-content :global(a) { color: #3b97d3; text-decoration: underline; text-underline-offset: 3px; }
+  .prose-content :global(ul), .prose-content :global(ol) { margin-bottom: 1.25rem; padding-left: 1.5rem; }
+  .prose-content :global(li) { margin-bottom: 0.5rem; color: #cbd5e1; }
+  .prose-content :global(strong) { color: #f8fafc; font-weight: 600; }
+  .prose-content :global(blockquote) { border-left: 3px solid #3b97d3; padding-left: 1.25rem; margin: 1.5rem 0; font-style: italic; color: #94a3b8; }
+  .prose-content :global(table) { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+  .prose-content :global(th), .prose-content :global(td) { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .prose-content :global(th) { font-weight: 600; color: #f8fafc; background: rgba(255,255,255,0.03); }
+  .prose-content :global(img) { border-radius: 0.75rem; margin: 1.5rem 0; border: 1px solid rgba(255,255,255,0.08); width: 100%; }
+  .prose-content :global(code) { background: rgba(59,151,211,0.1); color: #3b97d3; padding: 0.2rem 0.4rem; border-radius: 0.25rem; font-size: 0.875rem; }
+  .prose-content :global(pre) { background: rgba(15,23,42,0.8); border: 1px solid rgba(255,255,255,0.08); border-radius: 0.75rem; padding: 1.25rem; overflow-x: auto; margin: 1.5rem 0; }
+  .prose-content :global(pre code) { background: none; padding: 0; color: #cbd5e1; }
+</style>
