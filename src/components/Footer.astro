@@ -1,16 +1,9 @@
 ---
 const currentYear = new Date().getFullYear();
 
-const formations = [
-  { label: 'Technicien de raccordement', href: '/formations-fibre-optique/' },
-  { label: 'Monteur de lignes', href: '/formations-fibre-optique/' },
-  { label: 'Superviseur de chantier', href: '/formations-fibre-optique/' },
-  { label: 'Habilitations électriques', href: '/habilitations/' },
-];
-
-const entreprise = [
-  { label: 'À propos', href: '/#hero' },
-  { label: 'Nos formations', href: '/#catalogue' },
+const aPropos = [
+  { label: 'À propos', href: '/a-propos/' },
+  { label: 'Nos formations', href: '/formations-fibre-optique/' },
   { label: 'Blog', href: '/blog/' },
   { label: 'Contact', href: '/contact/' },
 ];
@@ -26,20 +19,12 @@ const legal = [
   <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#2dd4bf]/40 to-transparent" />
 
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-12">
+    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-12 lg:gap-8 mb-12">
       {/* Brand */}
       <div class="lg:col-span-1">
-        <a href="/" class="inline-flex items-center gap-2 group mb-4">
-          <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-[#2dd4bf] to-[#0f766e] flex items-center justify-center shadow-lg shadow-[#2dd4bf]/20">
-            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-            </svg>
-          </div>
-          <span class="text-white font-display font-bold text-xl tracking-tight">KMC</span>
+        <a href="/" class="inline-block mb-6">
+          <img src="/images/logo-kmc.png" alt="KMC — Knowledge Management Center" class="h-10 w-auto object-contain" />
         </a>
-        <p class="text-sm text-white/50 leading-relaxed mb-6">
-          Knowledge Management Center — Centre de formation aux métiers de la fibre optique et du photovoltaïque à Abidjan, Côte d'Ivoire.
-        </p>
         <div class="flex items-center gap-3">
           <a href="#" class="w-9 h-9 rounded-lg bg-white/[0.06] hover:bg-[#2dd4bf]/20 flex items-center justify-center transition-all duration-300 group" aria-label="LinkedIn">
             <svg class="w-4 h-4 text-white/60 group-hover:text-[#2dd4bf] transition-colors" fill="currentColor" viewBox="0 0 24 24">
@@ -59,25 +44,11 @@ const legal = [
         </div>
       </div>
 
-      {/* Formations */}
+      {/* À propos */}
       <div>
-        <h3 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Formations</h3>
+        <h3 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">À propos</h3>
         <ul class="space-y-3">
-          {formations.map((item) => (
-            <li>
-              <a href={item.href} class="text-sm text-white/50 hover:text-[#2dd4bf] transition-colors duration-300">
-                {item.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* Entreprise */}
-      <div>
-        <h3 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Entreprise</h3>
-        <ul class="space-y-3">
-          {entreprise.map((item) => (
+          {aPropos.map((item) => (
             <li>
               <a href={item.href} class="text-sm text-white/50 hover:text-[#2dd4bf] transition-colors duration-300">
                 {item.label}
