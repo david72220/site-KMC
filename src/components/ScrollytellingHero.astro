@@ -180,8 +180,13 @@ const formation = await getFormationByName('FTTH-D2');
 </section>
 
 <script>
-  import { gsap, ScrollTrigger, initLenis } from '../lib/scroll';
+  import { gsap, ScrollTrigger, initLenis, getLenis } from '../lib/scroll';
+
+  // Réinitialiser le scroll AVANT d'initialiser Lenis et ScrollTrigger.
+  // window.scrollTo seul ne suffit pas : Lenis maintient son propre état interne.
+  window.scrollTo(0, 0);
   initLenis();
+  getLenis()?.scrollTo(0, { immediate: true });
 
   const mm = gsap.matchMedia();
 
@@ -249,6 +254,10 @@ const formation = await getFormationByName('FTTH-D2');
       .to(formation, { opacity: 1, duration: 0.6 }, 11.6)
       .to(mainNav, { autoAlpha: 1, duration: 0.3 }, 11.6)
       .to({}, { duration: 1.4 }, 12.3);
+
+    // Garantir scroll = 0 au moment où ScrollTrigger calcule ses positions
+    window.scrollTo(0, 0);
+    getLenis()?.scrollTo(0, { immediate: true });
 
     const st = ScrollTrigger.create({
       trigger: '#scrolly', start: 'top top', end: 'bottom bottom',
