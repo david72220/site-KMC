@@ -37,6 +37,14 @@ function number(prop: any): number | null {
     return Number(prop.number);
 }
 
+// Recherche insensible à la casse et aux variantes d'apostrophe (droite vs typographique).
+function prop(p: Record<string, any>, name: string): any {
+    const norm = (s: string) => s.toLowerCase().replace(/[‘’‚‛`]/g, "'");
+    const target = norm(name);
+    const key = Object.keys(p).find(k => norm(k) === target);
+    return key ? p[key] : undefined;
+}
+
 function mapPage(page: any): Formation | null {
     const p = page.properties;
     const nom = title(p['Nom']);
@@ -44,17 +52,17 @@ function mapPage(page: any): Formation | null {
     return {
         id: page.id,
         nom,
-        issue: richText(p["A L'ISSUE DE CETTE FORMATION"]),
-        programme: richText(p['Programme de formation']),
-        prerequis: richText(p['Prérequis']),
+        issue: richText(prop(p, "A L'ISSUE DE CETTE FORMATION")),
+        programme: richText(prop(p, 'Programme de formation')),
+        prerequis: richText(prop(p, 'Prérequis')),
         lieu: richText(p['Lieu']),
-        dureeFormation: richText(p['Durée de la formation']),
-        dureeStagePratique: richText(p['Durée du stage en entreprise']),
-        coutFormation: richText(p['Coût de la formation']),
-        fraisAdministratifs: number(p['Coût des frais administratifs']),
+        dureeFormation: richText(prop(p, 'Durée de la formation')),
+        dureeStagePratique: richText(prop(p, 'Durée du stage en entreprise')),
+        coutFormation: richText(prop(p, 'Coût de la formation')),
+        fraisAdministratifs: number(prop(p, 'Coût des frais administratifs')),
         participants: number(p['Participants']),
-        tauxReussite: richText(p['Taux de réussite']),
-        tauxAbandon: richText(p["Taux d'abandon"]),
+        tauxReussite: richText(prop(p, 'Taux de réussite')),
+        tauxAbandon: richText(prop(p, "Taux d'abandon")),
         url: page.url,
     };
 }
