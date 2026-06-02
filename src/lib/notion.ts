@@ -19,6 +19,9 @@ export interface Formation {
     tauxReussite: string;
     tauxAbandon: string;
     url?: string;
+    resume: string;
+    domaines: string[];
+    classes: string[];
 }
 
 function richText(prop: any): string {
@@ -34,6 +37,11 @@ function title(prop: any): string {
 function number(prop: any): number | null {
     if (!prop || prop.number === null || prop.number === undefined) return null;
     return Number(prop.number);
+}
+
+function multiSelect(prop: any): string[] {
+    if (!prop?.multi_select?.length) return [];
+    return prop.multi_select.map((s: any) => s.name || '').filter(Boolean);
 }
 
 function mapPage(page: any): Formation | null {
@@ -55,6 +63,9 @@ function mapPage(page: any): Formation | null {
         tauxReussite: richText(p['Taux de réussite']),
         tauxAbandon: richText(p["Taux d'abandon"]),
         url: page.url,
+        resume: richText(p['Résumé']) || richText(p["A L'ISSUE DE CETTE FORMATION"]),
+        domaines: multiSelect(p['Domaines']),
+        classes: multiSelect(p['Classes']),
     };
 }
 

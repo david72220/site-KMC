@@ -7,13 +7,13 @@
 import Layout from '../layouts/Layout.astro';
 import Navigation from '../components/Navigation.astro';
 import Footer from '../components/Footer.astro';
-import { getFormationsWithClasses } from '../lib/notion';
+import { getFormations } from '../lib/notion';
 
-let formations: Awaited<ReturnType<typeof getFormationsWithClasses>> = [];
+let formations: Awaited<ReturnType<typeof getFormations>> = [];
 let notionError = false;
 
 try {
-  formations = await getFormationsWithClasses();
+  formations = await getFormations();
 } catch (e) {
   console.error('Notion API error fetching formations:', e);
   notionError = true;
