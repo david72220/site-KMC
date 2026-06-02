@@ -47,6 +47,10 @@ const pageImage = 'https://kmc.ci/og-image.jpg';
 <script>
   import { initLenis } from '../lib/scroll';
 
+  // Toujours démarrer en haut — le scrollytelling dépend d'un scroll initial à 0.
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  window.scrollTo(0, 0);
+
   // initLenis() is idempotent — returns existing instance if ScrollytellingHero already called it
   const lenis = initLenis();
 
