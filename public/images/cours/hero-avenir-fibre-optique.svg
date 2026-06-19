@@ -1,0 +1,27 @@
+<svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+<rect width="800" height="450" fill="#0B1120"/>
+<defs><pattern id="g" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0L0 0 0 40" fill="none" stroke="rgba(59,151,211,0.06)" stroke-width="1"/></pattern></defs><rect width="800" height="450" fill="url(#g)"/>
+
+<text x="70" y="130" fill="#f8fafc" font-family="Space Grotesk,system-ui" font-size="16" font-weight="700">Afrique subsaharienne — Fibre optique 2026</text>
+<rect x="70" y="150" width="320" height="220" rx="12" fill="#3b97d311" stroke="#3b97d333" stroke-width="1"/>
+<text x="90" y="185" fill="#3b97d3" font-family="system-ui" font-size="13" font-weight="700">Taux de pénétration fibre</text>
+<rect x="90" y="200" width="180" height="24" rx="4" fill="#3b97d333"/>
+<rect x="90" y="200" width="60" height="24" rx="4" fill="#3b97d3"/>
+<text x="165" y="217" text-anchor="middle" fill="#f8fafc" font-family="system-ui" font-size="11">33%</text>
+<text x="90" y="250" fill="#F59E0B" font-family="system-ui" font-size="13" font-weight="700">Croissance annuelle</text>
+<text x="90" y="280" fill="#f8fafc" font-family="Space Grotesk,system-ui" font-size="36" font-weight="800">+23%</text>
+<text x="90" y="310" fill="#94a3b8" font-family="system-ui" font-size="12">par an depuis 2020</text>
+<text x="90" y="350" fill="#22c55e" font-family="system-ui" font-size="13" font-weight="700">Emplois créés estimés</text>
+<text x="90" y="380" fill="#f8fafc" font-family="Space Grotesk,system-ui" font-size="28" font-weight="800">150 000+</text>
+<rect x="440" y="150" width="320" height="220" rx="12" fill="#3b97d311" stroke="#3b97d333" stroke-width="1"/>
+<text x="600" y="185" text-anchor="middle" fill="#3b97d3" font-family="Space Grotesk,system-ui" font-size="14" font-weight="700">Côte d'Ivoire</text>
+<text x="460" y="225" fill="#f8fafc" font-family="system-ui" font-size="12" font-weight="600">🏆 Leader fibre en Afrique de l'Ouest</text>
+<text x="460" y="260" fill="#94a3b8" font-family="system-ui" font-size="11">• Orange CI : FTTH Abidjan, Bouaké</text>
+<text x="460" y="280" fill="#94a3b8" font-family="system-ui" font-size="11">• MTN CI : expansion résidentielle</text>
+<text x="460" y="300" fill="#94a3b8" font-family="system-ui" font-size="11">• Moov Africa : FTTB entreprises</text>
+<text x="460" y="335" fill="#F59E0B" font-family="system-ui" font-size="12" font-weight="600">Opportunités pour les techniciens :</text>
+<text x="460" y="358" fill="#22c55e" font-family="system-ui" font-size="12">→ Poseur · Soudeur · Intégrateur</text>
+<text x="460" y="378" fill="#22c55e" font-family="system-ui" font-size="12">→ Salaire moyen : 250 000 – 600 000 FCFA</text>
+<text x="400" y="418" text-anchor="middle" fill="#f8fafc" font-family="Space Grotesk,system-ui" font-size="20" font-weight="700">Avenir de la fibre en Afrique et en Côte d'Ivoire</text>
+
+</svg>

@@ -118,3 +118,73 @@ export async function getFormationByName(nom: string): Promise<Formation> {
   const match = all.find((f) => f.nom?.trim().toUpperCase() === nom.trim().toUpperCase());
   return match ?? all[0] ?? FALLBACK_FORMATION;
 }
+
+// ─── Cours gratuits ───────────────────────────────────────────────────────────
+
+const COURS_DB_ID = '3739628038de8063bf15fa861f76d028';
+
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/['']/g, '')
+    .replace(/[^a-z0-9\s-]/g, ' ')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
+export interface CoursNotion {
+  id: string;
+  nom: string;
+  slug: string;
+  objectif: string;
+  niveau: string;
+  duree: string;
+  categorie: string;
+  tags: string[];
+  imageHero: string;
+}
+
+export async function getCours(): Promise<CoursNotion[]> {
+  try {
+    const response = await notion.databases.query({
+      database_id: COURS_DB_ID,
+      filter: {
+        property: '▶ Lancer publication',
+        checkbox: { equals: true },
+      },
+      sorts: [{ property: 'Nom', direction: 'ascending' }],
+      page_size: 100,
+    });
+    return response.results
+      .map((page: any) => {
+        const p = page.properties;
+        const nom = title(p['Nom']);
+        if (!nom) return null;
+        const rawSlug = richText(p['Slug']);
+        const isValidSlug = /^[a-z0-9-]+$/.test(rawSlug);
+        return {
+          id: page.id,
+          nom,
+          slug: isValidSlug ? rawSlug : slugify(nom),
+          objectif: isValidSlug ? '' : rawSlug,
+          niveau: p['Niveau']?.select?.name || '',
+          duree: richText(p['Durée estimée']),
+          categorie: p['Catégorie']?.select?.name || '',
+          tags: (p['Tags']?.multi_select || []).map((t: any) => t.name),
+          imageHero: p['Image hero']?.url || '',
+        } as CoursNotion;
+      })
+      .filter(Boolean) as CoursNotion[];
+  } catch (error) {
+    console.warn('Notion cours DB indisponible:', error);
+    return [];
+  }
+}
+
+export async function getAllCoursSlugs(): Promise<string[]> {
+  const cours = await getCours();
+  return cours.map((c) => c.slug);
+}

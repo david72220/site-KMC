@@ -1,0 +1,19 @@
+<svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+<rect width="800" height="450" fill="#0B1120"/>
+<defs><pattern id="g" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0L0 0 0 40" fill="none" stroke="rgba(59,151,211,0.06)" stroke-width="1"/></pattern></defs><rect width="800" height="450" fill="url(#g)"/>
+
+<circle cx="400" cy="200" r="150" fill="none" stroke="#3b97d322" stroke-width="60"/>
+<circle cx="400" cy="200" r="110" fill="none" stroke="#3b97d344" stroke-width="40"/>
+<circle cx="400" cy="200" r="80"  fill="none" stroke="#3b97d366" stroke-width="20"/>
+<circle cx="400" cy="200" r="55"  fill="#1a6fa355" stroke="#3b97d3" stroke-width="3"/>
+<circle cx="400" cy="200" r="22"  fill="#3b97d3" opacity="0.9"/>
+<line x1="100" y1="200" x2="370" y2="200" stroke="#3b97d3" stroke-width="2.5" stroke-dasharray="8,4" opacity="0.7"/>
+<polygon points="370,193 385,200 370,207" fill="#3b97d3" opacity="0.9"/>
+<text x="400" y="395" text-anchor="middle" fill="#f8fafc" font-family="Space Grotesk,system-ui" font-size="22" font-weight="700">Structure d'une fibre optique</text>
+<text x="400" y="418" text-anchor="middle" fill="#94a3b8" font-family="system-ui" font-size="13">Coeur · Gaine · Revêtement</text>
+<text x="460" y="175" fill="#94a3b8" font-family="system-ui" font-size="12">Revêtement</text>
+<text x="460" y="200" fill="#3b97d3" font-family="system-ui" font-size="12" font-weight="600">Gaine</text>
+<text x="415" y="205" fill="#f8fafc" font-family="system-ui" font-size="11" font-weight="700">Coeur</text>
+<text x="120" y="190" fill="#3b97d3" font-family="system-ui" font-size="12">Lumière →</text>
+
+</svg>

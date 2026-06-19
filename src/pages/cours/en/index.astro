@@ -1,8 +1,8 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Navigation from '../components/Navigation.astro';
-import Footer from '../components/Footer.astro';
-import { getAllCoursSlugs } from '../lib/notion';
+import Layout from '../../../layouts/Layout.astro';
+import Navigation from '../../../components/Navigation.astro';
+import Footer from '../../../components/Footer.astro';
+import { getAllCoursSlugs } from '../../../lib/notion';
 
 interface CoursPost {
   id: string;
@@ -19,13 +19,12 @@ interface CoursPost {
   };
 }
 
-const postModules = import.meta.glob('../content/cours/*.md', { eager: true });
+const postModules = import.meta.glob('../../../content/cours/en/*.md', { eager: true });
 
 let publishedSlugs: string[] = [];
 try {
   publishedSlugs = await getAllCoursSlugs();
 } catch {
-  // Fallback : afficher tous les cours si Notion indisponible
   publishedSlugs = Object.keys(postModules).map(p => p.split('/').pop()?.replace('.md', '') || '');
 }
 
@@ -38,8 +37,8 @@ const cours = allCours
   .filter((c) => publishedSlugs.includes(c.id))
   .sort((a, b) => new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf());
 
-const pageTitle = 'Cours gratuits fibre optique — KMC Abidjan';
-const pageDescription = 'Cours gratuits sur la fibre optique pour débutants : principes, composants, raccordement, sécurité. Formez-vous avec KMC à Abidjan, Côte d\'Ivoire.';
+const pageTitle = 'Free Fiber Optic Courses — KMC Abidjan';
+const pageDescription = 'Free fiber optic courses for beginners: principles, components, installation, safety. Learn with KMC in Abidjan, Côte d\'Ivoire.';
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
@@ -50,24 +49,24 @@ const pageDescription = 'Cours gratuits sur la fibre optique pour débutants : p
 
       <div class="text-center mb-14">
         <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#3b97d3]/10 border border-[#3b97d3]/20 text-[#3b97d3] text-sm font-medium mb-4">
-          Apprentissage gratuit · Free learning
+          Free learning · Apprentissage gratuit
         </span>
         <h1 class="text-4xl sm:text-5xl font-display font-bold text-white mb-4">
-          Cours gratuits KMC
+          Free KMC Courses
         </h1>
         <p class="text-lg text-white/60 max-w-2xl mx-auto mb-4">
-          Découvrez la fibre optique à travers des cours accessibles à tous, rédigés par nos formateurs certifiés.
+          Discover fiber optics through beginner-friendly courses written by our certified trainers in Abidjan.
         </p>
-        <a href="/cours/en/" class="inline-flex items-center gap-1.5 text-sm text-white/40 hover:text-[#3b97d3] transition-colors">
+        <a href="/cours/" class="inline-flex items-center gap-1.5 text-sm text-white/40 hover:text-[#3b97d3] transition-colors">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-          Switch to English courses
+          Passer en français
         </a>
       </div>
 
       {cours.length === 0 ? (
         <div class="text-center py-20">
-          <p class="text-white/40 mb-4">Les cours arrivent bientôt.</p>
-          <p class="text-white/25 text-sm">Revenez dans quelques jours — nos formateurs finalisent le contenu.</p>
+          <p class="text-white/40 mb-4">Courses coming soon.</p>
+          <p class="text-white/25 text-sm">Check back in a few days — our trainers are finalising the content.</p>
         </div>
       ) : (
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -84,11 +83,11 @@ const pageDescription = 'Cours gratuits sur la fibre optique pour débutants : p
                 ) : (
                   <div class="w-full h-full flex items-center justify-center">
                     <svg class="w-12 h-12 text-[#3b97d3]/30" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/>
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0118 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/>
                     </svg>
                   </div>
                 )}
-                <div class="absolute top-3 left-3 flex items-center gap-2">
+                <div class="absolute top-3 left-3">
                   {c.data.niveau && (
                     <span class="text-xs font-medium px-2.5 py-1 rounded-full bg-[#0B1120]/80 backdrop-blur text-[#3b97d3] border border-[#3b97d3]/30">
                       {c.data.niveau}
@@ -106,9 +105,6 @@ const pageDescription = 'Cours gratuits sur la fibre optique pour débutants : p
                       {c.data.duree}
                     </span>
                   )}
-                  {c.data.category && (
-                    <span class="text-xs text-white/30">{c.data.category}</span>
-                  )}
                 </div>
                 <h2 class="text-lg font-display font-bold text-white mb-2 line-clamp-2 group-hover:text-[#3b97d3] transition-colors">
                   {c.data.title}
@@ -116,15 +112,15 @@ const pageDescription = 'Cours gratuits sur la fibre optique pour débutants : p
                 <p class="text-sm text-white/50 mb-4 line-clamp-3">{c.data.description}</p>
                 <div class="flex items-center justify-between">
                   <a
-                    href={`/cours/${c.id}/`}
+                    href={`/cours/en/${c.id}/`}
                     class="inline-flex items-center gap-2 text-sm text-[#3b97d3] font-medium hover:gap-3 transition-all duration-300"
                   >
-                    Commencer le cours
+                    Start lesson
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                       <path d="m9 18 6-6-6-6"/>
                     </svg>
                   </a>
-                  <a href={`/cours/en/${c.id}/`} class="text-xs text-white/25 hover:text-white/50 transition-colors">EN</a>
+                  <a href={`/cours/${c.id}/`} class="text-xs text-white/25 hover:text-white/50 transition-colors">FR</a>
                 </div>
               </div>
             </article>
@@ -133,10 +129,10 @@ const pageDescription = 'Cours gratuits sur la fibre optique pour débutants : p
       )}
 
       <div class="mt-16 p-8 bg-[#3b97d3]/5 border border-[#3b97d3]/20 rounded-2xl text-center">
-        <h2 class="text-xl font-display font-bold text-white mb-2">Aller plus loin</h2>
-        <p class="text-white/60 mb-5 text-sm">Ces cours sont une introduction. Pour une certification reconnue par l'État ivoirien, rejoignez une formation KMC.</p>
+        <h2 class="text-xl font-display font-bold text-white mb-2">Go further</h2>
+        <p class="text-white/60 mb-5 text-sm">These courses are an introduction. For a state-recognised certification in Côte d'Ivoire, join a full KMC training programme.</p>
         <a href="/formations-fibre-optique/" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#3b97d3] text-[#0B1120] font-semibold text-sm hover:bg-[#3b97d3]/90 transition-colors">
-          Voir les formations certifiantes
+          View certified programmes
         </a>
       </div>
 

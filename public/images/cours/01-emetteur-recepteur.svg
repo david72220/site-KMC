@@ -1,0 +1,27 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+<rect width="800" height="500" fill="#0B1120"/>
+<defs><pattern id="g" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0L0 0 0 40" fill="none" stroke="rgba(59,151,211,0.06)" stroke-width="1"/></pattern></defs><rect width="800" height="500" fill="url(#g)"/>
+
+<text x="400" y="50" text-anchor="middle" fill="#f8fafc" font-family="Space Grotesk,system-ui" font-size="20" font-weight="700">Chaîne de transmission fibre optique</text>
+<rect x="40" y="180" width="150" height="100" rx="10" fill="#3b97d322" stroke="#3b97d3" stroke-width="2"/>
+<text x="115" y="225" text-anchor="middle" fill="#f8fafc" font-family="Space Grotesk,system-ui" font-size="14" font-weight="700">Émetteur</text>
+<text x="115" y="245" text-anchor="middle" fill="#94a3b8" font-family="system-ui" font-size="11">Laser / LED</text>
+<text x="115" y="263" text-anchor="middle" fill="#94a3b8" font-family="system-ui" font-size="10">Données → Lumière</text>
+<rect x="280" y="220" width="240" height="20" rx="10" fill="#3b97d3" opacity="0.4"/>
+<rect x="280" y="222" width="240" height="8" rx="4" fill="#3b97d3" opacity="0.7"/>
+<text x="400" y="212" text-anchor="middle" fill="#3b97d3" font-family="Space Grotesk,system-ui" font-size="13" font-weight="700">Fibre optique</text>
+<text x="400" y="265" text-anchor="middle" fill="#94a3b8" font-family="system-ui" font-size="11">200 000 km/s · 0,2 dB/km</text>
+<polygon points="280,225 290,230 280,235" fill="#F59E0B"/>
+<polygon points="515,225 525,230 515,235" fill="#F59E0B"/>
+<rect x="600" y="180" width="160" height="100" rx="10" fill="#F59E0B22" stroke="#F59E0B" stroke-width="2"/>
+<text x="680" y="225" text-anchor="middle" fill="#f8fafc" font-family="Space Grotesk,system-ui" font-size="14" font-weight="700">Récepteur</text>
+<text x="680" y="245" text-anchor="middle" fill="#94a3b8" font-family="system-ui" font-size="11">Photodiode</text>
+<text x="680" y="263" text-anchor="middle" fill="#94a3b8" font-family="system-ui" font-size="10">Lumière → Données</text>
+<text x="115" y="310" text-anchor="middle" fill="#3b97d3" font-family="system-ui" font-size="11">Signaux</text>
+<text x="115" y="325" text-anchor="middle" fill="#3b97d3" font-family="system-ui" font-size="11">électriques IN</text>
+<text x="680" y="310" text-anchor="middle" fill="#F59E0B" font-family="system-ui" font-size="11">Signaux</text>
+<text x="680" y="325" text-anchor="middle" fill="#F59E0B" font-family="system-ui" font-size="11">électriques OUT</text>
+<text x="400" y="380" text-anchor="middle" fill="#f8fafc" font-family="system-ui" font-size="13">Lumière allumée = <tspan fill="#22c55e" font-weight="700">1</tspan>   ·   Lumière éteinte = <tspan fill="#ef4444" font-weight="700">0</tspan>   ·   Milliards d'impulsions par seconde</text>
+<text x="400" y="430" text-anchor="middle" fill="#94a3b8" font-family="system-ui" font-size="12">La fibre optique transporte des données binaires sous forme d'impulsions lumineuses</text>
+
+</svg>

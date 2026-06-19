@@ -1,0 +1,19 @@
+<svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+<rect width="800" height="450" fill="#0B1120"/>
+<defs><pattern id="g" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0L0 0 0 40" fill="none" stroke="rgba(59,151,211,0.06)" stroke-width="1"/></pattern></defs><rect width="800" height="450" fill="url(#g)"/>
+
+<circle cx="150" cy="180" r="70" fill="none" stroke="#ef4444" stroke-width="3" opacity="0.7"/>
+<text x="150" y="170" text-anchor="middle" font-size="48">⚠️</text>
+<text x="150" y="225" text-anchor="middle" fill="#ef4444" font-family="Space Grotesk,system-ui" font-size="12" font-weight="700">LASER DANGER</text>
+<circle cx="400" cy="180" r="70" fill="none" stroke="#F59E0B" stroke-width="3" opacity="0.7"/>
+<text x="400" y="170" text-anchor="middle" font-size="48">🥽</text>
+<text x="400" y="225" text-anchor="middle" fill="#F59E0B" font-family="Space Grotesk,system-ui" font-size="12" font-weight="700">LUNETTES EPI</text>
+<circle cx="650" cy="180" r="70" fill="none" stroke="#22c55e" stroke-width="3" opacity="0.7"/>
+<text x="650" y="170" text-anchor="middle" font-size="48">🧤</text>
+<text x="650" y="225" text-anchor="middle" fill="#22c55e" font-family="Space Grotesk,system-ui" font-size="12" font-weight="700">GANTS PROTEC.</text>
+<rect x="60" y="290" width="680" height="60" rx="8" fill="#ef4444" opacity="0.1" stroke="#ef4444" stroke-width="1.5" opacity="0.4"/>
+<text x="400" y="315" text-anchor="middle" fill="#ef4444" font-family="Space Grotesk,system-ui" font-size="14" font-weight="700">Ne jamais regarder dans une fibre active</text>
+<text x="400" y="338" text-anchor="middle" fill="#94a3b8" font-family="system-ui" font-size="12">Le faisceau laser est invisible et peut endommager la rétine définitivement</text>
+<text x="400" y="410" text-anchor="middle" fill="#f8fafc" font-family="Space Grotesk,system-ui" font-size="22" font-weight="700">Sécurité sur un chantier fibre</text>
+
+</svg>

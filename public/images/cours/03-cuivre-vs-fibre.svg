@@ -1,0 +1,37 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+<rect width="800" height="500" fill="#0B1120"/>
+<defs><pattern id="g" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0L0 0 0 40" fill="none" stroke="rgba(59,151,211,0.06)" stroke-width="1"/></pattern></defs><rect width="800" height="500" fill="url(#g)"/>
+
+<text x="400" y="45" text-anchor="middle" fill="#f8fafc" font-family="Space Grotesk,system-ui" font-size="20" font-weight="700">Comparaison Cuivre vs Fibre optique</text>
+<text x="60" y="90" fill="#F59E0B" font-family="Space Grotesk,system-ui" font-size="14" font-weight="700">Câble Cuivre — signal se dégrade rapidement</text>
+<rect x="60" y="100" width="680" height="60" rx="8" fill="#F59E0B0A" stroke="#F59E0B33" stroke-width="1"/>
+<rect x="60" y="115" width="680" height="30" rx="4" fill="#F59E0B22"/>
+<rect x="60" y="115" width="500" height="30" rx="4" fill="#F59E0B44"/>
+<rect x="60" y="115" width="300" height="30" rx="4" fill="#F59E0B66"/>
+<rect x="60" y="115" width="150" height="30" rx="4" fill="#F59E0B" opacity="0.7"/>
+<text x="80" y="135" fill="#f8fafc" font-family="system-ui" font-size="11" font-weight="600">100%</text>
+<text x="220" y="135" fill="#f8fafc" font-family="system-ui" font-size="11">75%</text>
+<text x="380" y="135" fill="#f8fafc" font-family="system-ui" font-size="11">45%</text>
+<text x="580" y="135" fill="#f8fafc" font-family="system-ui" font-size="11">20%</text>
+<text x="770" y="135" fill="#94a3b8" font-family="system-ui" font-size="11">~5%</text>
+<text x="400" y="185" fill="#94a3b8" font-family="system-ui" font-size="11" text-anchor="middle">→ Nécessite des répéteurs tous les 1–5 km</text>
+<text x="60" y="225" fill="#3b97d3" font-family="Space Grotesk,system-ui" font-size="14" font-weight="700">Fibre optique — signal quasi constant sur des dizaines de km</text>
+<rect x="60" y="235" width="680" height="60" rx="8" fill="#3b97d30A" stroke="#3b97d333" stroke-width="1"/>
+<rect x="60" y="250" width="680" height="30" rx="4" fill="#3b97d3" opacity="0.7"/>
+<text x="80" y="270" fill="#f8fafc" font-family="system-ui" font-size="11" font-weight="600">100%</text>
+<text x="220" y="270" fill="#f8fafc" font-family="system-ui" font-size="11">98%</text>
+<text x="380" y="270" fill="#f8fafc" font-family="system-ui" font-size="11">96%</text>
+<text x="580" y="270" fill="#f8fafc" font-family="system-ui" font-size="11">94%</text>
+<text x="730" y="270" fill="#f8fafc" font-family="system-ui" font-size="11">92%</text>
+<text x="400" y="320" fill="#94a3b8" font-family="system-ui" font-size="11" text-anchor="middle">→ Peut atteindre 80 km+ sans amplification (0,2 dB/km)</text>
+<text x="80" y="175" fill="#94a3b8" font-family="system-ui" font-size="10">Départ</text>
+<text x="720" y="175" fill="#94a3b8" font-family="system-ui" font-size="10">500 m</text>
+<line x1="60" y1="355" x2="740" y2="355" stroke="#f8fafc11" stroke-width="1"/>
+<text x="400" y="385" text-anchor="middle" fill="#f8fafc" font-family="Space Grotesk,system-ui" font-size="14" font-weight="700">Atténuation fibre : ~0,2 dB/km · Cuivre : ~20 dB/km</text>
+<text x="400" y="410" text-anchor="middle" fill="#94a3b8" font-family="system-ui" font-size="12">Un câble cuivre perd 100× plus de signal par kilomètre qu'une fibre optique</text>
+<rect x="200" y="435" width="180" height="35" rx="6" fill="#F59E0B15" stroke="#F59E0B44" stroke-width="1"/>
+<rect x="420" y="435" width="180" height="35" rx="6" fill="#3b97d315" stroke="#3b97d344" stroke-width="1"/>
+<text x="290" y="457" text-anchor="middle" fill="#F59E0B" font-family="system-ui" font-size="12" font-weight="700">Cuivre : &lt; 100 Mbit/s</text>
+<text x="510" y="457" text-anchor="middle" fill="#3b97d3" font-family="system-ui" font-size="12" font-weight="700">Fibre : 1–100 Gbit/s</text>
+
+</svg>
