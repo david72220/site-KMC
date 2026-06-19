@@ -2,54 +2,54 @@
 import Layout from '../../layouts/Layout.astro';
 import Navigation from '../../components/Navigation.astro';
 import Footer from '../../components/Footer.astro';
-
-interface CoursPost {
-  id: string;
-  data: {
-    title: string;
-    description: string;
-    pubDate: string;
-    category: string;
-    niveau: string;
-    duree: string;
-    tags: string[];
-    heroImage?: string;
-    author?: string;
-  };
-  Content: any;
-}
+import { getCours, getCoursContent } from '../../lib/notion.ts';
+import { marked } from 'marked';
 
 export async function getStaticPaths() {
-  const postModules = import.meta.glob('../../content/cours/*.md', { eager: true });
-  const allCours = Object.entries(postModules).map(([path, mod]: [string, any]) => {
-    const id = path.split('/').pop()?.replace('.md', '') || '';
-    return { id, data: mod.frontmatter, Content: mod.Content } as CoursPost;
-  });
-  return allCours.map((c) => ({ params: { id: c.id }, props: { cours: c } }));
+  const allCours = await getCours();
+  const paths = await Promise.all(
+    allCours.map(async (c) => {
+      const content = await getCoursContent(c.id);
+      return { params: { id: c.slug }, props: { cours: c, content } };
+    })
+  );
+  return paths;
 }
 
-interface Props { cours: CoursPost; }
+interface Props {
+  cours: {
+    id: string;
+    nom: string;
+    slug: string;
+    objectif: string;
+    niveau: string;
+    duree: string;
+    categorie: string;
+    tags: string[];
+    imageHero: string;
+  };
+  content: string;
+}
 
-const { cours } = Astro.props;
-const ContentComponent = cours.Content;
+const { cours, content } = Astro.props;
+const htmlContent = marked(content || '');
 
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Course',
-  name: cours.data.title,
-  description: cours.data.description,
-  url: `https://kmc.ci/cours/${cours.id}/`,
+  name: cours.nom,
+  description: cours.objectif || cours.nom,
+  url: `https://kmc.ci/cours/${cours.slug}/`,
   provider: { '@type': 'Organization', name: 'KMC', url: 'https://kmc.ci' },
-  datePublished: new Date(cours.data.pubDate).toISOString(),
-  educationalLevel: cours.data.niveau,
-  image: cours.data.heroImage ? `https://kmc.ci${cours.data.heroImage}` : 'https://kmc.ci/images/og-default.jpg',
+  educationalLevel: cours.niveau,
+  image: cours.imageHero || 'https://kmc.ci/images/og-default.jpg',
 };
 ---
 
 <Layout
-  title={cours.data.title}
-  description={cours.data.description}
-  image={cours.data.heroImage ? `https://kmc.ci${cours.data.heroImage}` : undefined}
+  title={cours.nom}
+  description={cours.objectif || cours.nom}
+  image={cours.imageHero || undefined}
   type="article"
   jsonLd={jsonLd}
 >
@@ -64,32 +64,36 @@ const jsonLd = {
         </a>
 
         <div class="flex flex-wrap items-center gap-3 mb-6">
-          {cours.data.niveau && (
+          {cours.niveau && (
             <span class="text-sm font-medium px-4 py-1.5 rounded-full bg-[#3b97d3]/10 text-[#3b97d3] border border-[#3b97d3]/20">
-              {cours.data.niveau}
+              {cours.niveau}
             </span>
           )}
-          {cours.data.duree && (
+          {cours.duree && (
             <span class="flex items-center gap-1.5 text-sm text-white/50">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                 <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
               </svg>
-              {cours.data.duree}
+              {cours.duree}
             </span>
           )}
-          {cours.data.category && (
-            <span class="text-sm text-white/40">{cours.data.category}</span>
+          {cours.categorie && (
+            <span class="text-sm text-white/40">{cours.categorie}</span>
           )}
+          <a href={`/cours/en/${cours.slug}/`} class="ml-auto text-xs text-white/30 hover:text-[#3b97d3] transition-colors flex items-center gap-1">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            Read in English
+          </a>
         </div>
 
         <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white font-display mb-6 leading-tight">
-          {cours.data.title}
+          {cours.nom}
         </h1>
       </div>
 
-      {cours.data.heroImage && (
+      {cours.imageHero && (
         <div class="reveal-item opacity-0 translate-y-6 mb-12 rounded-xl overflow-hidden border border-white/[0.08]">
-          <img src={cours.data.heroImage} alt={cours.data.title} class="w-full h-auto object-cover" loading="eager" />
+          <img src={cours.imageHero} alt={cours.nom} class="w-full h-auto object-cover" loading="eager" />
         </div>
       )}
 
@@ -98,9 +102,7 @@ const jsonLd = {
         <ul id="toc-list" class="space-y-2 text-sm"></ul>
       </nav>
 
-      <div class="reveal-item opacity-0 translate-y-6 prose-content">
-        <ContentComponent />
-      </div>
+      <div class="reveal-item opacity-0 translate-y-6 prose-content" set:html={htmlContent} />
 
       <div class="reveal-item opacity-0 translate-y-6 mt-16 p-8 bg-[#3b97d3]/5 border border-[#3b97d3]/20 rounded-2xl text-center">
         <h2 class="text-2xl font-display font-bold text-white mb-3">Aller plus loin ?</h2>
@@ -116,7 +118,7 @@ const jsonLd = {
             <span class="text-[#3b97d3] font-display font-bold text-sm">K</span>
           </div>
           <div>
-            <p class="text-white font-medium text-sm">{cours.data.author || 'KMC'}</p>
+            <p class="text-white font-medium text-sm">Équipe KMC</p>
             <p class="text-white/50 text-xs">Centre de formation</p>
           </div>
         </div>

@@ -1,4 +1,5 @@
 import { Client } from '@notionhq/client';
+import { NotionToMarkdown } from 'notion-to-md';
 
 const FORMATION_DB_ID = import.meta.env.NOTION_FORMATION_DB_ID ?? process.env.NOTION_FORMATION_DB_ID ?? '1e49628038de8091a5d2c38db72951f4';
 
@@ -122,6 +123,7 @@ export async function getFormationByName(nom: string): Promise<Formation> {
 // ─── Cours gratuits ───────────────────────────────────────────────────────────
 
 const COURS_DB_ID = '3739628038de8063bf15fa861f76d028';
+const n2m = new NotionToMarkdown({ notionClient: notion });
 
 function slugify(text: string): string {
   return text
@@ -187,4 +189,14 @@ export async function getCours(): Promise<CoursNotion[]> {
 export async function getAllCoursSlugs(): Promise<string[]> {
   const cours = await getCours();
   return cours.map((c) => c.slug);
+}
+
+export async function getCoursContent(pageId: string): Promise<string> {
+  try {
+    const mdBlocks = await n2m.pageToMarkdown(pageId);
+    return n2m.toMarkdownString(mdBlocks).parent;
+  } catch (error) {
+    console.warn(`Notion content fetch failed for ${pageId}:`, error);
+    return '';
+  }
 }
