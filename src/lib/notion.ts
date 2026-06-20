@@ -122,7 +122,7 @@ export async function getFormationByName(nom: string): Promise<Formation> {
 
 // ─── Cours gratuits ───────────────────────────────────────────────────────────
 
-const COURS_DB_ID = '3739628038de8063bf15fa861f76d028';
+const COURS_DB_ID = import.meta.env.NOTION_COURS_DB_ID ?? process.env.NOTION_COURS_DB_ID ?? '3739628038de8063bf15fa861f76d028';
 const n2m = new NotionToMarkdown({ notionClient: notion });
 
 function slugify(text: string): string {
