@@ -35,7 +35,7 @@ const allCours = Object.entries(postModules).map(([path, mod]: [string, any]) =>
 
 const cours = allCours
   .filter((c) => publishedSlugs.includes(c.id))
-  .sort((a, b) => new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf());
+  .sort((a, b) => publishedSlugs.indexOf(a.id) - publishedSlugs.indexOf(b.id));
 
 const pageTitle = 'Free Fiber Optic Courses — KMC Abidjan';
 const pageDescription = 'Free fiber optic courses for beginners: principles, components, installation, safety. Learn with KMC in Abidjan, Côte d\'Ivoire.';
@@ -72,7 +72,7 @@ const pageDescription = 'Free fiber optic courses for beginners: principles, com
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {cours.map((c, idx) => (
             <article class="bg-white/[0.03] border border-white/[0.08] rounded-2xl overflow-hidden hover:border-[#3b97d3]/30 transition-all duration-300 group">
-              <div class="aspect-video overflow-hidden bg-[#0f1d35] relative">
+              <a href={`/cours/en/${c.id}/`} class="block aspect-video overflow-hidden bg-[#0f1d35] relative">
                 {c.data.heroImage ? (
                   <img
                     src={c.data.heroImage}
@@ -94,7 +94,7 @@ const pageDescription = 'Free fiber optic courses for beginners: principles, com
                     </span>
                   )}
                 </div>
-              </div>
+              </a>
               <div class="p-6">
                 <div class="flex items-center gap-3 mb-3">
                   {c.data.duree && (
@@ -106,9 +106,11 @@ const pageDescription = 'Free fiber optic courses for beginners: principles, com
                     </span>
                   )}
                 </div>
-                <h2 class="text-lg font-display font-bold text-white mb-2 line-clamp-2 group-hover:text-[#3b97d3] transition-colors">
-                  {c.data.title}
-                </h2>
+                <a href={`/cours/en/${c.id}/`} class="block">
+                  <h2 class="text-lg font-display font-bold text-white mb-2 line-clamp-2 group-hover:text-[#3b97d3] transition-colors">
+                    {c.data.title}
+                  </h2>
+                </a>
                 <p class="text-sm text-white/50 mb-4 line-clamp-3">{c.data.description}</p>
                 <div class="flex items-center justify-between">
                   <a

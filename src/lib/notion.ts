@@ -147,6 +147,7 @@ export interface CoursNotion {
   categorie: string;
   tags: string[];
   imageHero: string;
+  identifiant: number;
 }
 
 export async function getCours(): Promise<CoursNotion[]> {
@@ -157,10 +158,9 @@ export async function getCours(): Promise<CoursNotion[]> {
         property: '▶ Lancer publication',
         checkbox: { equals: true },
       },
-      sorts: [{ property: 'Nom', direction: 'ascending' }],
       page_size: 100,
     });
-    return response.results
+    const items = response.results
       .map((page: any) => {
         const p = page.properties;
         const nom = title(p['Nom']);
@@ -177,9 +177,12 @@ export async function getCours(): Promise<CoursNotion[]> {
           categorie: p['Catégorie']?.select?.name || '',
           tags: (p['Tags']?.multi_select || []).map((t: any) => t.name),
           imageHero: p['Image hero']?.url || '',
+          identifiant: p['Identifiant']?.unique_id?.number ?? 9999,
         } as CoursNotion;
       })
       .filter(Boolean) as CoursNotion[];
+    items.sort((a, b) => a.identifiant - b.identifiant);
+    return items;
   } catch (error: any) {
     console.error('[notion.ts] getCours() FAILED:', error?.code, error?.message);
     console.error('[notion.ts] NOTION_TOKEN présent :', !!NOTION_TOKEN);
