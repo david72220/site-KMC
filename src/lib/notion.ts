@@ -180,14 +180,17 @@ export async function getCours(): Promise<CoursNotion[]> {
         } as CoursNotion;
       })
       .filter(Boolean) as CoursNotion[];
-  } catch (error) {
-    console.warn('Notion cours DB indisponible:', error);
+  } catch (error: any) {
+    console.error('[notion.ts] getCours() FAILED:', error?.code, error?.message);
+    console.error('[notion.ts] NOTION_TOKEN présent :', !!NOTION_TOKEN);
+    console.error('[notion.ts] DB ID :', COURS_DB_ID);
     return [];
   }
 }
 
 export async function getAllCoursSlugs(): Promise<string[]> {
   const cours = await getCours();
+  console.log(`[notion.ts] getAllCoursSlugs : ${cours.length} cours publiés`, cours.map(c => c.slug));
   return cours.map((c) => c.slug);
 }
 

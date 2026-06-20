@@ -7,9 +7,11 @@ import { marked } from 'marked';
 
 export async function getStaticPaths() {
   const allCours = await getCours();
+  console.log(`[cours/[id].astro] ${allCours.length} cours Notion à générer`);
   const paths = await Promise.all(
     allCours.map(async (c) => {
       const content = await getCoursContent(c.id);
+      console.log(`[cours/[id].astro] ${c.slug} → ${content.length} chars`);
       return { params: { id: c.slug }, props: { cours: c, content } };
     })
   );
