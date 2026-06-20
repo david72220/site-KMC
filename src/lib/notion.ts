@@ -200,7 +200,9 @@ export async function getAllCoursSlugs(): Promise<string[]> {
 export async function getCoursContent(pageId: string): Promise<string> {
   try {
     const mdBlocks = await n2m.pageToMarkdown(pageId);
-    return n2m.toMarkdownString(mdBlocks).parent;
+    const md = n2m.toMarkdownString(mdBlocks).parent;
+    // Reconvertit les URLs absolues kmc.ci → relatives (utilisé pour les assets internes)
+    return md.replace(/https:\/\/kmc\.ci\//g, '/');
   } catch (error) {
     console.warn(`Notion content fetch failed for ${pageId}:`, error);
     return '';
