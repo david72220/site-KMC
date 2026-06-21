@@ -2,39 +2,43 @@
 import type { Formation } from '../lib/notion';
 interface Props { formation: Formation; }
 const { formation: f } = Astro.props;
+
+const programmeSummary = f.programme.length > 180
+  ? f.programme.slice(0, 180).replace(/\s+\S*$/, '') + '…'
+  : f.programme;
 ---
-<article aria-label={f.nom} class="relief-panel relief-1 fiber-pulse mx-auto max-w-2xl px-8 py-9 md:px-10">
-  <div class="relative z-10">
-    <h3 class="text-center font-serif text-3xl md:text-4xl font-bold text-white tracking-wide">{f.nom}</h3>
-    <div class="fiber-flow w-3/5 mx-auto mt-3 mb-7"></div>
+<a href={`/formations/${f.slug}/`} class="block group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#7dd3fc] rounded-2xl">
+  <article aria-label={f.nom} class="relief-panel relief-1 fiber-pulse px-8 py-9 md:px-10 h-full transition-all">
+    <div class="relative z-10 flex flex-col h-full">
+      <h3 class="text-center font-serif text-3xl md:text-4xl font-bold text-white tracking-wide">{f.nom}</h3>
+      <div class="fiber-flow w-3/5 mx-auto mt-3 mb-7"></div>
 
-    <div class="flex flex-col sm:flex-row sm:justify-between gap-4 sm:gap-8 text-sm">
-      <div class="flex-1 space-y-2.5">
-        <p><span class="text-[#7dd3fc] font-semibold">Durée de formation en institut :</span><br/>{f.dureeFormation || '—'}</p>
-        <p><span class="text-[#7dd3fc] font-semibold">Durée du stage en entreprise :</span><br/>{f.dureeStagePratique || '—'}</p>
-        <p><span class="text-[#7dd3fc] font-semibold">Participants maximum :</span><br/>{f.participants ?? '—'}</p>
+      <div class="flex flex-col sm:flex-row sm:justify-between gap-4 sm:gap-8 text-sm">
+        <div class="flex-1 space-y-2.5">
+          <p><span class="text-[#7dd3fc] font-semibold">Durée de formation :</span><br/>{f.dureeFormation || '—'}</p>
+          <p><span class="text-[#7dd3fc] font-semibold">Stage en entreprise :</span><br/>{f.dureeStagePratique || '—'}</p>
+        </div>
+        <div class="flex-1 space-y-2.5 sm:text-right">
+          <p><span class="text-[#7dd3fc] font-semibold">Participants max :</span><br/>{f.participants ?? '—'}</p>
+          {f.coutFormation && (
+            <p><span class="text-[#7dd3fc] font-semibold">Prix :</span><br/><span class="text-white font-bold">{f.coutFormation}</span></p>
+          )}
+        </div>
       </div>
-      <div class="flex-1 space-y-2.5 sm:text-right">
-        <p><span class="text-[#7dd3fc] font-semibold">Prérequis :</span><br/>{f.prerequis || '—'}</p>
-        <p><span class="text-[#7dd3fc] font-semibold">Lieu de la formation :</span><br/>{f.lieu || '—'}</p>
+
+      {programmeSummary && (
+        <div class="mt-6">
+          <h4 class="text-center text-sm font-bold text-white/70 uppercase tracking-widest mb-2">Programme</h4>
+          <p class="text-center text-sm text-white/55 leading-relaxed">{programmeSummary}</p>
+        </div>
+      )}
+
+      <div class="mt-auto pt-7 flex items-center justify-center gap-2 text-[#7dd3fc] text-sm font-semibold group-hover:text-[#eab308] transition-colors duration-300">
+        <span>Voir la fiche complète</span>
+        <svg class="w-4 h-4 translate-x-0 group-hover:translate-x-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+        </svg>
       </div>
     </div>
-
-    <h4 class="text-center text-lg font-bold text-white mt-6 mb-2.5">Programme de formation</h4>
-    <p class="text-center text-sm text-white/60 leading-relaxed max-w-xl mx-auto">{f.programme || '—'}</p>
-
-    <p class="text-center text-sm text-[#7dd3fc] font-semibold mt-6 mb-2">À l'issue de cette formation, vous saurez :</p>
-    <p class="text-center text-sm text-white/75 leading-relaxed max-w-xl mx-auto">{f.issue || '—'}</p>
-
-    <div class="flex justify-between mt-7 pt-4 border-t border-white/10">
-      <div>
-        <span class="block text-[11px] uppercase tracking-wider text-white/50">Taux de réussite</span>
-        <span class="text-xl font-bold text-[#34d399]">{f.tauxReussite || '—'}</span>
-      </div>
-      <div class="text-right">
-        <span class="block text-[11px] uppercase tracking-wider text-white/50">Taux d'abandon</span>
-        <span class="text-xl font-bold text-[#fb923c]">{f.tauxAbandon || '—'}</span>
-      </div>
-    </div>
-  </div>
-</article>
+  </article>
+</a>

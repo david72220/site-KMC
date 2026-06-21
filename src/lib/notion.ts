@@ -8,18 +8,25 @@ const notion = new Client({ auth: NOTION_TOKEN });
 
 export interface Formation {
     id: string;
+    slug: string;
     nom: string;
-    issue: string;           // "A L'ISSUE DE CETTE FORMATION"
-    programme: string;       // "Programme de formation"
+    issue: string;
+    programme: string;
     prerequis: string;
     lieu: string;
     dureeFormation: string;
     dureeStagePratique: string;
     coutFormation: string;
     fraisAdministratifs: number | null;
-    participants: number | null;
+    participants: string | null;
     tauxReussite: string;
     tauxAbandon: string;
+    objectifsCompetences: string;
+    publicCible: string;
+    organisation: string;
+    modalitesEvaluation: string;
+    modalitesPratiques: string;
+    versionDocument: string;
     url?: string;
 }
 
@@ -38,6 +45,17 @@ function number(prop: any): number | null {
     return Number(prop.number);
 }
 
+function slugifyFormation(text: string): string {
+    return text
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[̀-ͯ]/g, '')
+        .replace(/[^a-z0-9\s-]/g, '-')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-|-$/g, '');
+}
+
 // Recherche insensible à la casse et aux variantes d'apostrophe (droite vs typographique).
 function prop(p: Record<string, any>, name: string): any {
     const norm = (s: string) => s.toLowerCase().replace(/[‘’‚‛`]/g, "'");
@@ -52,6 +70,7 @@ function mapPage(page: any): Formation | null {
     if (!nom) return null;
     return {
         id: page.id,
+        slug: slugifyFormation(nom),
         nom,
         issue: richText(prop(p, "A L'ISSUE DE CETTE FORMATION")),
         programme: richText(prop(p, 'Programme de formation')),
@@ -61,9 +80,15 @@ function mapPage(page: any): Formation | null {
         dureeStagePratique: richText(prop(p, 'Durée du stage en entreprise')),
         coutFormation: richText(prop(p, 'Coût de la formation')),
         fraisAdministratifs: number(prop(p, 'Coût des frais administratifs')),
-        participants: number(p['Participants']),
+        participants: richText(p['Participants']) || null,
         tauxReussite: richText(prop(p, 'Taux de réussite')),
         tauxAbandon: richText(prop(p, "Taux d'abandon")),
+        objectifsCompetences: richText(prop(p, 'Objectifs et Compétences Visées')),
+        publicCible: richText(prop(p, 'Public Cible et Prérequis')),
+        organisation: richText(prop(p, 'Organisation et Modalités Pédagogiques')),
+        modalitesEvaluation: richText(prop(p, "Modalités d'Évaluation et de Suivi")),
+        modalitesPratiques: richText(prop(p, 'Modalités Pratiques, Accessibilité')),
+        versionDocument: richText(prop(p, 'Version du document')),
         url: page.url,
     };
 }
@@ -100,6 +125,7 @@ export async function getFormations(): Promise<Formation[]> {
 // Fallback statique si Notion est indisponible au build (évite une fiche vide).
 export const FALLBACK_FORMATION: Formation = {
   id: 'fallback-ftth-d2',
+  slug: 'ftth-d2',
   nom: 'FTTH-D2',
   issue: "Réaliser un raccordement FTTH complet, souder des fibres optiques, effectuer des mesures de réflectométrie OTDR et diagnostiquer une coupure réseau en autonomie.",
   programme: "Soudure et épissure de fibres monomodes · Raccordement PBO / PTO · Mesures OTDR · Lecture de plans FTTH · Pose de câbles façade et conduit · Sécurité chantier télécom.",
@@ -107,11 +133,17 @@ export const FALLBACK_FORMATION: Formation = {
   lieu: "Centre KMC — Angré, Cocody, Abidjan",
   dureeFormation: "3 semaines (105 h)",
   dureeStagePratique: "2 semaines",
-  coutFormation: '',
+  coutFormation: 'Sur devis',
   fraisAdministratifs: null,
-  participants: 12,
+  participants: '12',
   tauxReussite: "94 %",
   tauxAbandon: "4 %",
+  objectifsCompetences: '',
+  publicCible: '',
+  organisation: '',
+  modalitesEvaluation: '',
+  modalitesPratiques: '',
+  versionDocument: '',
 };
 
 export async function getFormationByName(nom: string): Promise<Formation> {

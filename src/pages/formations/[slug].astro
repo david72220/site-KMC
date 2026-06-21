@@ -1,0 +1,224 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+import Footer from '../../components/Footer.astro';
+import { getFormations } from '../../lib/notion';
+
+export async function getStaticPaths() {
+  const formations = await getFormations();
+  const seen = new Set<string>();
+  return formations
+    .filter(f => { if (seen.has(f.slug)) return false; seen.add(f.slug); return true; })
+    .map(f => ({ params: { slug: f.slug }, props: { formation: f } }));
+}
+
+const { formation: f } = Astro.props;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Course',
+  name: f.nom,
+  description: f.issue || f.programme,
+  url: `https://kmc.ci/formations/${f.slug}/`,
+  provider: {
+    '@type': 'EducationalOrganization',
+    name: 'KMC - Knowledge Management Center',
+    url: 'https://kmc.ci',
+  },
+  ...(f.coutFormation ? { offers: { '@type': 'Offer', price: f.coutFormation, priceCurrency: 'XOF' } } : {}),
+};
+
+// Helper : rendu d'un bloc de texte multi-lignes
+function lines(text: string): string[] {
+  return text.split('\n').map(l => l.trim()).filter(Boolean);
+}
+---
+
+<Layout
+  title={`${f.nom} — Formation KMC Abidjan`}
+  description={f.issue || f.programme || `Formation ${f.nom} au Centre KMC, Abidjan, Côte d'Ivoire.`}
+  jsonLd={jsonLd}
+>
+  <Navigation />
+
+  <!-- Hero -->
+  <section class="relative bg-[#070a10] pt-32 pb-16 md:pt-40 md:pb-20 overflow-hidden">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(30,154,215,0.07)_0%,_transparent_60%)]"></div>
+    <div class="max-w-4xl mx-auto px-6 lg:px-8 relative">
+      <a href="/formations-fibre-optique/" class="inline-flex items-center gap-2 text-[#a1a1aa] text-sm hover:text-[#7dd3fc] transition-colors mb-8">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+        </svg>
+        Toutes les formations
+      </a>
+      <p class="text-[#3b97d3] text-sm font-semibold tracking-widest uppercase mb-3">Fiche de formation</p>
+      <h1 class="font-display text-4xl md:text-6xl font-bold text-[#f5f5f0] mb-4 leading-tight">{f.nom}</h1>
+      {f.versionDocument && (
+        <p class="text-[#a1a1aa] text-sm">{f.versionDocument}</p>
+      )}
+    </div>
+  </section>
+
+  <!-- Corps -->
+  <section class="bg-[#070a10] pb-24 md:pb-32">
+    <div class="max-w-4xl mx-auto px-6 lg:px-8 space-y-10">
+
+      <!-- Informations clés -->
+      <div class="relief-panel fiber-pulse px-8 py-8">
+        <h2 class="font-display text-xl font-bold text-white mb-6">Informations clés</h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-6 text-sm">
+          {f.dureeFormation && (
+            <div>
+              <span class="block text-[#7dd3fc] font-semibold mb-1">Durée en centre</span>
+              <span class="text-white">{f.dureeFormation}</span>
+            </div>
+          )}
+          {f.dureeStagePratique && (
+            <div>
+              <span class="block text-[#7dd3fc] font-semibold mb-1">Stage en entreprise</span>
+              <span class="text-white">{f.dureeStagePratique}</span>
+            </div>
+          )}
+          {f.participants && (
+            <div>
+              <span class="block text-[#7dd3fc] font-semibold mb-1">Participants max</span>
+              <span class="text-white">{f.participants}</span>
+            </div>
+          )}
+          {f.lieu && (
+            <div>
+              <span class="block text-[#7dd3fc] font-semibold mb-1">Lieu</span>
+              <span class="text-white">{f.lieu}</span>
+            </div>
+          )}
+          {f.coutFormation && (
+            <div>
+              <span class="block text-[#7dd3fc] font-semibold mb-1">Prix</span>
+              <span class="text-white font-bold">{f.coutFormation}</span>
+            </div>
+          )}
+          {f.tauxReussite && f.tauxReussite !== '/' && (
+            <div>
+              <span class="block text-[#7dd3fc] font-semibold mb-1">Taux de réussite</span>
+              <span class="text-[#34d399] font-bold">{f.tauxReussite}</span>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <!-- Objectifs et Compétences -->
+      {f.objectifsCompetences && (
+        <div class="relief-panel px-8 py-8">
+          <h2 class="font-display text-xl font-bold text-white mb-5">Objectifs et compétences visées</h2>
+          <div class="space-y-1.5 text-sm text-white/75 leading-relaxed">
+            {lines(f.objectifsCompetences).map(line => (
+              <p class:list={[line.match(/^\d+\./) ? 'pl-2' : '', line.startsWith('-') || line.startsWith('•') ? 'pl-4' : '']}>{line}</p>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <!-- Public Cible et Prérequis -->
+      {f.publicCible && (
+        <div class="relief-panel px-8 py-8">
+          <h2 class="font-display text-xl font-bold text-white mb-5">Public cible et prérequis</h2>
+          <div class="space-y-1.5 text-sm text-white/75 leading-relaxed">
+            {lines(f.publicCible).map(line => (
+              <p class:list={[line.startsWith('-') || line.startsWith('•') ? 'pl-4' : '']}>{line}</p>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <!-- Prérequis (champ court) si publicCible vide -->
+      {!f.publicCible && f.prerequis && (
+        <div class="relief-panel px-8 py-8">
+          <h2 class="font-display text-xl font-bold text-white mb-5">Prérequis</h2>
+          <div class="space-y-1.5 text-sm text-white/75 leading-relaxed">
+            {lines(f.prerequis).map(line => <p>{line}</p>)}
+          </div>
+        </div>
+      )}
+
+      <!-- Organisation et Modalités Pédagogiques -->
+      {f.organisation && (
+        <div class="relief-panel px-8 py-8">
+          <h2 class="font-display text-xl font-bold text-white mb-5">Organisation et modalités pédagogiques</h2>
+          <div class="space-y-1.5 text-sm text-white/75 leading-relaxed">
+            {lines(f.organisation).map(line => (
+              <p class:list={[line.startsWith('-') || line.startsWith('•') ? 'pl-4' : '']}>{line}</p>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <!-- Programme de formation -->
+      {f.programme && (
+        <div class="relief-panel px-8 py-8">
+          <h2 class="font-display text-xl font-bold text-white mb-5">Programme de formation</h2>
+          <div class="space-y-1.5 text-sm text-white/75 leading-relaxed">
+            {lines(f.programme).map(line => (
+              <p class:list={[
+                line.match(/^Module\s*\d|^Jour\s*\d|^BLOC\s/i) ? 'font-semibold text-white mt-4 first:mt-0' : '',
+                line.startsWith('•') || line.startsWith('-') ? 'pl-4' : '',
+              ]}>{line}</p>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <!-- À l'issue de cette formation -->
+      {f.issue && (
+        <div class="relief-panel px-8 py-8">
+          <h2 class="font-display text-xl font-bold text-white mb-5">À l'issue de cette formation, vous saurez</h2>
+          <div class="space-y-1.5 text-sm text-white/75 leading-relaxed">
+            {lines(f.issue).map(line => (
+              <p class:list={[line.startsWith('-') || line.startsWith('•') ? 'pl-4' : '']}>{line}</p>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <!-- Modalités d'Évaluation et de Suivi -->
+      {f.modalitesEvaluation && (
+        <div class="relief-panel px-8 py-8">
+          <h2 class="font-display text-xl font-bold text-white mb-5">Modalités d'évaluation et de suivi</h2>
+          <div class="space-y-1.5 text-sm text-white/75 leading-relaxed">
+            {lines(f.modalitesEvaluation).map(line => (
+              <p class:list={[line.startsWith('-') || line.startsWith('•') ? 'pl-4' : '']}>{line}</p>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <!-- Modalités Pratiques et Accessibilité -->
+      {f.modalitesPratiques && (
+        <div class="relief-panel px-8 py-8">
+          <h2 class="font-display text-xl font-bold text-white mb-5">Modalités pratiques et accessibilité</h2>
+          <div class="space-y-1.5 text-sm text-white/75 leading-relaxed">
+            {lines(f.modalitesPratiques).map(line => (
+              <p class:list={[line.startsWith('-') || line.startsWith('•') ? 'pl-4' : '']}>{line}</p>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <!-- CTA contact -->
+      <div class="text-center pt-4">
+        <p class="text-[#a1a1aa] mb-6 text-lg">Intéressé(e) par cette formation ?</p>
+        <a
+          href="/contact/"
+          class="inline-flex items-center justify-center rounded-full btn-cta-gradient px-8 py-4 text-[#070a10] font-display font-bold text-lg hover:opacity-90 transition-opacity duration-300"
+        >
+          Demander un devis
+          <svg class="ml-3 w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
