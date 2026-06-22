@@ -14,18 +14,58 @@ export async function getStaticPaths() {
 
 const { formation: f } = Astro.props;
 
+const provider = {
+  '@type': 'EducationalOrganization',
+  name: 'KMC - Knowledge Management Center',
+  url: 'https://kmc.ci',
+  sameAs: 'https://kmc.ci',
+};
+
+const priceNumeric = f.coutFormation ? String(f.coutFormation).replace(/[^\d]/g, '') : null;
+
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Course',
   name: f.nom,
-  description: f.issue || f.programme,
+  description: f.issue || f.programme || `Formation ${f.nom} dispensée par KMC à Abidjan, Côte d'Ivoire.`,
   url: `https://kmc.ci/formations/${f.slug}/`,
-  provider: {
-    '@type': 'EducationalOrganization',
-    name: 'KMC - Knowledge Management Center',
-    url: 'https://kmc.ci',
+  inLanguage: 'fr-CI',
+  provider,
+  ...(f.dureeFormation ? { timeRequired: f.dureeFormation } : {}),
+  ...(f.publicCible ? { audience: { '@type': 'EducationalAudience', educationalRole: 'student' } } : {}),
+  hasCourseInstance: {
+    '@type': 'CourseInstance',
+    courseMode: 'onsite',
+    courseWorkload: f.dureeFormation || 'P5D',
+    location: {
+      '@type': 'Place',
+      name: f.lieu || 'KMC Abidjan',
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Abidjan',
+        addressCountry: 'CI',
+      },
+    },
+    ...(priceNumeric ? {
+      offers: {
+        '@type': 'Offer',
+        price: priceNumeric,
+        priceCurrency: 'XOF',
+        category: 'Paid',
+        availability: 'https://schema.org/InStock',
+        url: `https://kmc.ci/formations/${f.slug}/`,
+      },
+    } : {}),
   },
-  ...(f.coutFormation ? { offers: { '@type': 'Offer', price: f.coutFormation, priceCurrency: 'XOF' } } : {}),
+  ...(priceNumeric ? {
+    offers: {
+      '@type': 'Offer',
+      price: priceNumeric,
+      priceCurrency: 'XOF',
+      url: `https://kmc.ci/formations/${f.slug}/`,
+      availability: 'https://schema.org/InStock',
+    },
+  } : {}),
 };
 
 // Helper : rendu d'un bloc de texte multi-lignes
