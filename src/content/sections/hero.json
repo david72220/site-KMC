@@ -1,8 +1,8 @@
 {
     "id": "hero",
     "title": "KMC — Centre de Formation",
-    "subtitle": "Fibre optique & Photovoltaïque",
-    "content": "KMC est le centre de formation de référence en Côte d'Ivoire pour les métiers de la fibre optique et du photovoltaïque.",
+    "subtitle": "Fibre optique",
+    "content": "KMC est le centre de formation de référence en Côte d'Ivoire pour les métiers de la fibre optique.",
     "ctaText": "Découvrir nos formations",
     "ctaLink": "/formations-fibre-optique",
     "image": "/images/hero-kmc.jpg",

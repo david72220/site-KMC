@@ -1,6 +1,6 @@
 # KMC.ci — Knowledge Management Center
 
-> Premier institut de formation professionnelle en fibre optique et énergie photovoltaïque en Côte d'Ivoire. Basé à Abidjan, habilité par l'État ivoirien, partenaire FDFP et Agence Emploi Jeunes.
+> Premier institut de formation professionnelle en fibre optique en Côte d'Ivoire. Basé à Abidjan, habilité par l'État ivoirien, partenaire FDFP et Agence Emploi Jeunes.
 
 ## À propos
 
@@ -15,7 +15,6 @@ KMC forme des techniciens immédiatement opérationnels sur les réseaux FTTH (f
 - **AIPR** : Autorisation d'Intervention à Proximité des Réseaux
 - **CACES Nacelle** : Conduite engins élévateurs
 - **Habilitation H0-B0** : Habilitation électrique non-électricien
-- **Photovoltaïque** : Installation et maintenance solaire
 
 ## Public
 

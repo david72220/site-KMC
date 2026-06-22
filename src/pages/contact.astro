@@ -4,7 +4,7 @@ import Navigation from '../components/Navigation.astro';
 import Footer from '../components/Footer.astro';
 
 const title = 'Contact – KMC';
-const description = 'Contactez KMC, le centre de formation aux métiers de la fibre optique et du photovoltaïque à Abidjan. Inscriptions, devis, renseignements.';
+const description = 'Contactez KMC, le centre de formation aux métiers de la fibre optique à Abidjan. Inscriptions, devis, renseignements.';
 const pageImage = 'https://kmc.ci/images/og-contact.jpg';
 
 const contactJsonLd = {
@@ -16,7 +16,7 @@ const contactJsonLd = {
     '@type': 'Organization',
     name: 'KMC - Knowledge Management Center',
     url: 'https://kmc.ci',
-    telephone: '+225 07 08 09 10 11',
+    telephone: '+33 6 34 03 66 26',
     email: 'contact@kmc.ci',
     address: {
       '@type': 'PostalAddress',
@@ -26,7 +26,7 @@ const contactJsonLd = {
     },
     contactPoint: {
       '@type': 'ContactPoint',
-      telephone: '+225 07 08 09 10 11',
+      telephone: '+33 6 34 03 66 26',
       email: 'contact@kmc.ci',
       contactType: 'Inscriptions et renseignements',
       availableLanguage: ['French'],
@@ -59,7 +59,11 @@ const contactJsonLd = {
         <div class="reveal rounded-2xl border border-white/[0.08] bg-gradient-to-br from-white/[0.04] to-transparent p-8 backdrop-blur-sm md:p-10">
           <h2 class="mb-6 font-display text-2xl font-bold md:text-3xl">Envoyer un message</h2>
 
-          <form action="https://formspree.io/f/xnqkqzqz" method="POST" class="space-y-5">
+          <form action="https://formsubmit.co/contact@kmc.ci" method="POST" class="space-y-5">
+            <input type="hidden" name="_subject" value="Nouveau message depuis le site KMC.ci" />
+            <input type="hidden" name="_template" value="table" />
+            <input type="hidden" name="_captcha" value="false" />
+            <input type="text" name="_honey" style="display:none" />
             <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
               <div>
                 <label for="name" class="mb-2 block text-sm font-medium text-kmc-light">Nom complet</label>
@@ -166,8 +170,8 @@ const contactJsonLd = {
                   </svg>
                 </div>
                 <div>
-                  <p class="font-medium text-kmc-white">Téléphone</p>
-                  <p class="text-sm text-kmc-light">+225 07 08 09 10 11</p>
+                  <p class="font-medium text-kmc-white">Téléphone / WhatsApp</p>
+                  <p class="text-sm text-kmc-light">+33 6 34 03 66 26</p>
                 </div>
               </li>
 
@@ -194,7 +198,7 @@ const contactJsonLd = {
                 <div>
                   <p class="font-medium text-kmc-white">Horaires</p>
                   <p class="text-sm text-kmc-light">Lun – Ven : 08h00 – 18h00</p>
-                  <p class="text-sm text-kmc-light">Sam : 09h00 – 13h00</p>
+                  <p class="text-sm text-kmc-light">Sam – Dim : Fermé</p>
                 </div>
               </li>
             </ul>
@@ -226,7 +230,7 @@ const contactJsonLd = {
           Pour une réponse immédiate, écrivez-nous directement sur WhatsApp. Nous vous répondons en général sous l'heure en journée.
         </p>
         <a
-          href="https://wa.me/2250708091011?text=Bonjour%20KMC%2C%20je%20souhaite%20avoir%20des%20renseignements%20sur%20vos%20formations."
+          href="https://wa.me/33634036626?text=Bonjour%20KMC%2C%20je%20souhaite%20avoir%20des%20renseignements%20sur%20vos%20formations."
           target="_blank"
           rel="noopener noreferrer"
           class="group inline-flex items-center gap-3 rounded-full bg-green-500 px-8 py-4 text-sm font-semibold text-white shadow-lg shadow-green-500/20 transition hover:bg-green-400"
