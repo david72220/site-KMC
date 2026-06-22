@@ -1,0 +1,46 @@
+# KMC.ci — Knowledge Management Center
+
+> Premier institut de formation professionnelle en fibre optique et énergie photovoltaïque en Côte d'Ivoire. Basé à Abidjan, habilité par l'État ivoirien, partenaire FDFP et Agence Emploi Jeunes.
+
+## À propos
+
+KMC forme des techniciens immédiatement opérationnels sur les réseaux FTTH (fibre to the home) pour les trois opérateurs nationaux ivoiriens : Orange CI, MTN Côte d'Ivoire, Moov Africa. Pédagogie associant théorie (principes de la fibre, mesures OTDR, lecture de plans, code couleur) et ateliers pratiques intensifs (raccordement, soudure, installation, diagnostic de pannes). Sécurité au cœur du programme : EPI, balisage de chantier, habilitations électriques.
+
+## Formations principales
+
+- **FTTH-D1** : Initiation au raccordement fibre optique
+- **FTTH-D2** : Technicien raccordement et soudure fibre optique
+- **FTTH-D3** : Superviseur réseau FTTH
+- **FTTH Pack** : Parcours complet D1+D2+D3
+- **AIPR** : Autorisation d'Intervention à Proximité des Réseaux
+- **CACES Nacelle** : Conduite engins élévateurs
+- **Habilitation H0-B0** : Habilitation électrique non-électricien
+- **Photovoltaïque** : Installation et maintenance solaire
+
+## Public
+
+- Demandeurs d'emploi (financement Agence Emploi Jeunes)
+- Salariés en reconversion (financement FDFP)
+- Entreprises télécom et énergie (formation continue intra)
+
+## Localisation
+
+Abidjan, Côte d'Ivoire — formations en présentiel uniquement.
+
+## Contact
+
+- Site : https://kmc.ci
+- Téléphone : +225 (Côte d'Ivoire) — voir page contact
+- Formulaire : https://kmc.ci/contact/
+
+## Ressources
+
+- [Catalogue formations fibre optique](https://kmc.ci/formations-fibre-optique/)
+- [Catalogue habilitations](https://kmc.ci/habilitations/)
+- [Blog technique](https://kmc.ci/blog/)
+- [Cours et ressources pédagogiques](https://kmc.ci/cours/)
+- [À propos de KMC](https://kmc.ci/a-propos/)
+
+## Sitemap
+
+https://kmc.ci/sitemap-index.xml
