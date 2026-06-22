@@ -163,7 +163,7 @@ const formation = await getFormationByName('FTTH-D2');
     </div>
 
     <!-- Fiche formation (z-60) : scène 11 — fond sombre révélé après remontée de img2 -->
-    <div id="layer-formation" class="absolute inset-0 z-[60] flex flex-col items-center justify-start pt-24 lg:pt-28 pb-16 px-4 opacity-0 overflow-y-auto">
+    <div id="layer-formation" class="absolute inset-0 z-[60] flex flex-col items-center justify-start pt-24 lg:pt-28 pb-16 px-4 opacity-0 overflow-y-auto pointer-events-none">
       <div class="w-full max-w-2xl mx-auto text-center mb-8">
         <p class="text-[#3b97d3] text-sm font-semibold tracking-widest uppercase mb-3">Formation exemple</p>
         <h2 class="font-display text-3xl md:text-4xl font-bold text-[#f5f5f0] leading-tight">
@@ -260,7 +260,7 @@ const formation = await getFormationByName('FTTH-D2');
       // Transition finale : image réseau remonte pour révéler le fond sombre (dézoom + slide up)
       .to(img2, { yPercent: -100, scale: 1, duration: 1.0, ease: 'power2.inOut' }, 10.9)
       // Fiche formation + menu réapparaissent sur le fond sombre
-      .to(formation, { opacity: 1, duration: 0.6 }, 11.6)
+      .to(formation, { opacity: 1, pointerEvents: 'auto', duration: 0.6 }, 11.6)
       .to(mainNav, { autoAlpha: 1, duration: 0.3 }, 11.6)
       // Scène 12 : fader formation à 50% + gros bouton centré
       .to(formation, { opacity: 0.5, duration: 0.5 }, 12.8)
