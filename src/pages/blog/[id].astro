@@ -146,11 +146,13 @@ const jsonLd = {
 
       <!-- Hero Image -->
       {post.data.heroImage && (
-        <div class="reveal-item opacity-0 translate-y-6 mb-12 rounded-xl overflow-hidden border border-white/[0.08]">
+        <div class="reveal-item opacity-0 translate-y-6 mb-12 rounded-xl overflow-hidden border border-white/[0.08] aspect-video">
           <img
             src={post.data.heroImage}
             alt={post.data.title}
-            class="w-full h-auto object-cover"
+            width="1024"
+            height="576"
+            class="w-full h-full object-cover"
             loading="eager"
           />
         </div>

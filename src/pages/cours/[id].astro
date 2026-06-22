@@ -101,8 +101,8 @@ const jsonLd = {
       </div>
 
       {cours.imageHero && (
-        <div class="reveal-item opacity-0 translate-y-6 mb-12 rounded-xl overflow-hidden border border-white/[0.08]">
-          <img src={cours.imageHero} alt={cours.nom} class="w-full h-auto object-cover" loading="eager" />
+        <div class="reveal-item opacity-0 translate-y-6 mb-12 rounded-xl overflow-hidden border border-white/[0.08] aspect-video">
+          <img src={cours.imageHero} alt={cours.nom} width="1024" height="576" class="w-full h-full object-cover" loading="eager" />
         </div>
       )}
 
