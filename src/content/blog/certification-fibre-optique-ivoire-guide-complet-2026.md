@@ -1,5 +1,5 @@
 ---
-title: "Certification fibre optique ivoire - Guide complet 2026"
+title: "Certification fibre optique ivoire — Guide complet 2026"
 pubDate: 2026-05-21
 author: "Équipe KMC"
 category: "Fibre optique"
@@ -8,9 +8,9 @@ heroImage: "/images/blog/certification-fibre-optique-ivoire-guide-complet-2026.j
 
 ---
 
-## Certification fibre optique ivoire - Guide complet 2026
+## Certification fibre optique ivoire — Guide complet 2026
 
-Créer un article de blog optimisé pour 'certification fibre optique ivoire'
+Créer un article de blog optimisé pour « certification fibre optique ivoire »
 
 ## Pourquoi ce sujet est important aujourd'hui
 

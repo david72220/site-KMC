@@ -14,7 +14,7 @@ heroImage: "/images/blog/numerisation.jpg"
 
 ## Le contexte économique
 
-La Côte d'Ivoire affiche une croissance du PIB de 7,5% en 2025, avec un taux de pénétration internet en croissance constante. Les entreprises investissent massivement dans le cloud et les solutions numériques.
+La Côte d'Ivoire affiche une croissance du PIB de 7,5 % en 2025, avec un taux de pénétration internet en croissance constante. Les entreprises investissent massivement dans le cloud et les solutions numériques.
 
 ## Comment la fibre aide les entreprises
 

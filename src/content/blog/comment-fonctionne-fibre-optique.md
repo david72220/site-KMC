@@ -18,7 +18,7 @@ Le phénomène physique à l'œuvre est la **réflexion totale interne** : lorsq
 
 ## Les composants clés d'un réseau FTTH
 
-Un réseau Fibre jusqu'à l'Abonné (FTTH) comprend plusieurs éléments :
+Un réseau fibre jusqu'à l'abonné (FTTH) comprend plusieurs éléments :
 
 - **NRO (Nœud de Raccordement Optique)** : point central où les fibres des opérateurs arrivent
 - **SRO (Sous-Répartiteur Optique)** : point intermédiaire de distribution dans un immeuble ou un quartier

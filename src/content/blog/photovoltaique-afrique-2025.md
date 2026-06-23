@@ -24,7 +24,7 @@ Plusieurs obstacles freinent encore le déploiement :
 ## Les formations KMC répondent au besoin
 
 Face à ce déficit de compétences, KMC propose des parcours certifiants :
-- **Technicien installateur photovoltaïque** : dimensionnement, câblage, raccordement au réseau ou en autonome
+- **Technicien installateur photovoltaïque** : dimensionnement, câblage, raccordement au réseau ou en autonome (site isolé)
 - **Superviseur de chantier solaire** : gestion d'équipe, sécurité, contrôle qualité
 - **Maintenance systèmes PV** : diagnostic, remplacement de composants, optimisation
 
@@ -43,4 +43,4 @@ Le gouvernement ivoirien vise **5 % d'énergies renouvelables** dans le mix éle
 
 ---
 
-*Préparez-vous à saisir ces opportunités avec nos [formations photovoltaïque](/formations-fibre-optique/).*
+*Préparez-vous à saisir ces opportunités avec nos [formations photovoltaïques](/formations-fibre-optique/).*

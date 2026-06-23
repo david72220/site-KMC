@@ -3,6 +3,54 @@
 
 ---
 
+## 🆕 FICHES FORMATIONS & PAGES DÉTAIL — 21 Juin 2026
+
+### Fiches Notion complétées (DB `1e49628038de8091a5d2c38db72951f4`)
+
+7 formations remplies avec contenu réglementaire complet :
+
+| Formation | Page Notion | Affiché site |
+|---|---|---|
+| AIPR | `1f29628038de80efb4bbe9503586767d` | ❌ (case décochée) |
+| Habilitation H0-B0 | `1f29628038de806db4eef42bac3614b0` | ❌ |
+| CACES Nacelle R 486 | `1f29628038de8016a0abd854c02da03f` | ❌ |
+| FTTH-D1 | `1e49628038de80df9d72efa8f8197cfe` | ✅ |
+| FTTH-D2 | `1e49628038de803ea23ad281bff4b2cb` | ✅ |
+| FTTH-D3 | `1e49628038de80ce8243f0a021d88701` | ❌ |
+| FTTH-Pack | `1f29628038de80e5a1b1ca8198e12e85` | ✅ |
+
+Champs remplis sur toutes : `Objectifs et Compétences Visées`, `Public Cible et Prérequis`, `Organisation et Modalités Pédagogiques`, `Programme de formation` (corrigé sur AIPR/H0-B0/Nacelle/Pack), `Modalités d'Évaluation et de Suivi`, `Modalités Pratiques, Accessibilité`, `Version du document` (v1.0 — Juin 2026), `Coût de la formation` = **"Sur devis"** sur toutes.
+
+Durées corrigées : AIPR → 1j/2j, H0-B0 → 1j, CACES Nacelle → 3j (étaient copiées sur FTTH-D1 "1 mois").
+
+### Code site mis à jour
+
+**`src/lib/notion.ts`** :
+- Interface `Formation` : 6 nouveaux champs (`objectifsCompetences`, `publicCible`, `organisation`, `modalitesEvaluation`, `modalitesPratiques`, `versionDocument`) + champ `slug`
+- `slugifyFormation()` helper (nom → slug URL-safe)
+- `mapPage()` : tous nouveaux champs mappés
+- Fix `participants` : était `number()` mais champ TEXT dans Notion → retournait toujours `null` → corrigé en `richText()`
+- `FALLBACK_FORMATION` mis à jour avec les nouveaux champs
+
+**`src/components/FormationCard.astro`** — version légère :
+- Affiche : durée formation, stage entreprise, participants max, prix, programme résumé (180 chars)
+- Toute la carte est un lien cliquable vers `/formations/[slug]/`
+- "Voir la fiche complète →" avec animation hover
+
+**`src/pages/formations/[slug].astro`** — page détail complète (nouvelle) :
+- `getStaticPaths()` → génère une page par formation cochée dans Notion
+- Sections : infos clés, objectifs, public cible, organisation, programme, à l'issue, évaluation, modalités pratiques
+- CTA "Demander un devis" → `/contact/`
+- JSON-LD `Course` par page
+- URLs : `/formations/ftth-d1/`, `/formations/ftth-d2/`, `/formations/ftth-pack/`
+
+**Automation inchangée** : le webhook Notion → N8N → Vercel Deploy Hook reconstruit déjà tout le site. `getStaticPaths()` génère automatiquement la page détail de toute formation cochée "A afficher sur le site web" lors du rebuild.
+
+### Pour activer AIPR / H0-B0 / CACES / D3 sur le site
+Cocher `A afficher sur le site web` dans Notion → rebuild automatique (~1 min) → page `/formations/[slug]/` générée.
+
+---
+
 ## 🆕 PIPELINE SEO BLOG N8N — DÉPLOYÉ ✅ — 2 Juin 2026
 
 > Pipeline complet opérationnel. 5 workflows N8N créés, validés, prêts à activer.
