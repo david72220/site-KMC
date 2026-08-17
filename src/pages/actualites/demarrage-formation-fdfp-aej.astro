@@ -1,0 +1,108 @@
+---
+import { Image } from 'astro:assets';
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+import Footer from '../../components/Footer.astro';
+
+const images = Object.values(
+  import.meta.glob<{ default: ImageMetadata }>(
+    '../../assets/actualites/1ere-journee/*.jpeg',
+    { eager: true }
+  )
+).map((m) => m.default);
+
+const pageTitle = 'Démarrage de la formation FDFP & AEJ — KMC.ci';
+const pageDescription =
+  'KMC lance sa convention avec le FDFP et l\'AEJ : 1 mois de formation en institut suivi de 2 mois de stage chez nos clients de la fibre optique. Retour en images sur la première journée.';
+---
+
+<Layout title={pageTitle} description={pageDescription} type="article">
+  <Navigation />
+  <main id="main-content" class="bg-[#070a10] min-h-screen">
+    <article class="pt-32 pb-24 px-6 lg:px-8">
+      <div class="max-w-4xl mx-auto">
+
+        <!-- En-tête -->
+        <div class="text-center mb-12">
+          <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F59E0B]/10 border border-[#F59E0B]/20 text-[#F59E0B] text-sm font-semibold tracking-wide uppercase mb-4">
+            Actualité · 17 août 2026
+          </span>
+          <h1 class="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight mb-6">
+            Début de la convention <span class="text-[#1e9ad7]">FDFP</span> &amp; <span class="text-[#F59E0B]">AEJ</span> : la formation est lancée !
+          </h1>
+          <p class="text-white/60 text-lg max-w-2xl mx-auto leading-relaxed">
+            1 mois de formation en institut, puis 2 mois de stage chez nos clients de la fibre optique.
+          </p>
+        </div>
+
+        <!-- Vidéo -->
+        <div class="relative rounded-2xl overflow-hidden border border-white/[0.08] shadow-[0_0_60px_rgba(30,154,215,0.15)] mb-16">
+          <video
+            src="/videos/lancement-formation-fdfp-aej.mp4"
+            controls
+            playsinline
+            preload="metadata"
+            class="w-full aspect-video bg-black"
+          >
+            Votre navigateur ne prend pas en charge la lecture vidéo.
+            <a href="/videos/lancement-formation-fdfp-aej.mp4" class="text-[#7dd3fc] underline">Télécharger la vidéo</a>
+          </video>
+        </div>
+
+        <!-- Texte -->
+        <div class="prose-invert max-w-2xl mx-auto text-white/70 leading-relaxed space-y-5 mb-16">
+          <p>
+            Ce lundi 17 août marque le coup d'envoi officiel de la convention signée entre KMC, le
+            <strong class="text-white">FDFP</strong> (Fonds de Développement de la Formation Professionnelle) et
+            l'<strong class="text-white">AEJ</strong> (Agence Emploi Jeunes). Nos nouveaux apprenants ont franchi
+            les portes du centre pour leur toute première journée de formation aux métiers de la fibre optique.
+          </p>
+          <p>
+            Le programme : <strong class="text-white">1 mois de formation intensive en institut</strong> — théorie,
+            manipulation, raccordement, mesures — suivi de <strong class="text-white">2 mois de stage en immersion</strong>
+            chez nos clients opérateurs et sous-traitants de la fibre optique en Côte d'Ivoire.
+          </p>
+          <p>
+            L'ambiance était au rendez-vous : accueil des apprenants, présentation des formateurs, découverte des
+            plateaux techniques et premiers gestes métier. Tout le monde est reparti motivé — formateurs comme
+            apprenants — après un démarrage dont chacun s'est dit ravi. Une belle promotion est née, et nous sommes
+            fiers de l'accompagner vers l'emploi.
+          </p>
+        </div>
+
+        <!-- Galerie -->
+        <h2 class="font-display text-2xl md:text-3xl font-bold text-white text-center mb-10">
+          La première journée <span class="text-[#1e9ad7]">en images</span>
+        </h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+          {images.map((img, i) => (
+            <div class="relative rounded-xl overflow-hidden border border-white/[0.08] bg-white/[0.03]">
+              <Image
+                src={img}
+                alt={`Première journée de la formation FDFP / AEJ chez KMC — photo ${i + 1}`}
+                width={800}
+                loading={i < 3 ? 'eager' : 'lazy'}
+                class="w-full h-48 md:h-56 object-cover hover:scale-105 transition-transform duration-500"
+              />
+            </div>
+          ))}
+        </div>
+
+        <!-- CTA -->
+        <div class="text-center mt-16">
+          <a
+            href="/contact/"
+            class="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-[#1e9ad7] text-white font-semibold hover:bg-[#1a86bc] transition-all duration-300"
+          >
+            Rejoindre une prochaine session
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+            </svg>
+          </a>
+        </div>
+
+      </div>
+    </article>
+  </main>
+  <Footer />
+</Layout>
