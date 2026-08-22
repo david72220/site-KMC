@@ -3,6 +3,7 @@ import type { Formation } from '../lib/notion';
 interface Props { formation: Formation; }
 const { formation: f } = Astro.props;
 
+const prix = f.prixFormation || f.coutFormation;
 const programmeSummary = f.programme.length > 180
   ? f.programme.slice(0, 180).replace(/\s+\S*$/, '') + '…'
   : f.programme;
@@ -20,8 +21,8 @@ const programmeSummary = f.programme.length > 180
         </div>
         <div class="flex-1 space-y-2.5 sm:text-right">
           <p><span class="text-[#7dd3fc] font-semibold">Participants max :</span><br/>{f.participants ?? '—'}</p>
-          {f.coutFormation && (
-            <p><span class="text-[#7dd3fc] font-semibold">Prix :</span><br/><span class="text-white font-bold">{f.coutFormation}</span></p>
+          {prix && (
+            <p><span class="text-[#7dd3fc] font-semibold">Prix :</span><br/><span class="text-white font-bold">{prix}</span></p>
           )}
         </div>
       </div>

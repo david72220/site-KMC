@@ -21,7 +21,8 @@ const provider = {
   sameAs: 'https://kmc.ci',
 };
 
-const priceNumeric = f.coutFormation ? String(f.coutFormation).replace(/[^\d]/g, '') : null;
+const prixAffiche = f.prixFormation || f.coutFormation;
+const priceNumeric = prixAffiche ? String(prixAffiche).replace(/[^\d]/g, '') : null;
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -131,10 +132,10 @@ function lines(text: string): string[] {
               <span class="text-white">{f.lieu}</span>
             </div>
           )}
-          {f.coutFormation && (
+          {prixAffiche && (
             <div>
               <span class="block text-[#7dd3fc] font-semibold mb-1">Prix</span>
-              <span class="text-white font-bold">{f.coutFormation}</span>
+              <span class="text-white font-bold">{prixAffiche}</span>
             </div>
           )}
           {f.tauxReussite && f.tauxReussite !== '/' && (

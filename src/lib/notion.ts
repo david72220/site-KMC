@@ -17,6 +17,8 @@ export interface Formation {
     dureeFormation: string;
     dureeStagePratique: string;
     coutFormation: string;
+    prixFormation: string;
+    theme: string;
     fraisAdministratifs: number | null;
     participants: string | null;
     tauxReussite: string;
@@ -79,6 +81,8 @@ function mapPage(page: any): Formation | null {
         dureeFormation: richText(prop(p, 'Durée de la formation')),
         dureeStagePratique: richText(prop(p, 'Durée du stage en entreprise')),
         coutFormation: richText(prop(p, 'Coût de la formation')),
+        prixFormation: richText(prop(p, 'Prix de la formation')),
+        theme: prop(p, 'Thème')?.select?.name || '',
         fraisAdministratifs: number(prop(p, 'Coût des frais administratifs')),
         participants: richText(p['Participants']) || null,
         tauxReussite: richText(prop(p, 'Taux de réussite')),
