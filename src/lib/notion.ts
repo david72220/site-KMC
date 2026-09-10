@@ -1,10 +1,48 @@
 import { Client } from '@notionhq/client';
 import { NotionToMarkdown } from 'notion-to-md';
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
+import { join } from 'node:path';
 
 const FORMATION_DB_ID = import.meta.env.NOTION_FORMATION_DB_ID ?? process.env.NOTION_FORMATION_DB_ID ?? '1e49628038de8091a5d2c38db72951f4';
 
 const NOTION_TOKEN = import.meta.env.NOTION_TOKEN ?? process.env.NOTION_TOKEN;
 const notion = new Client({ auth: NOTION_TOKEN });
+
+// ─── Snapshot de secours (filet anti-site-vide) ──────────────────────────────
+// À chaque build réussi, les formations sont écrites dans src/data/formations-snapshot.json.
+// Si Notion devient injoignable, le build suivant utilise ce snapshot au lieu
+// de publier un site vide. Le fichier est commité → survit même à un repo neuf.
+const SNAPSHOT_PATH = join(process.cwd(), 'src', 'data', 'formations-snapshot.json');
+
+function loadFormationsSnapshot(): Formation[] {
+    try {
+        if (!existsSync(SNAPSHOT_PATH)) return [];
+        const data = JSON.parse(readFileSync(SNAPSHOT_PATH, 'utf-8'));
+        if (Array.isArray(data?.formations) && data.formations.length > 0) {
+            return data.formations as Formation[];
+        }
+        return [];
+    } catch {
+        return [];
+    }
+}
+
+export function saveFormationsSnapshot(formations: Formation[]): void {
+    try {
+        mkdirSync(join(process.cwd(), 'src', 'data'), { recursive: true });
+        writeFileSync(
+            SNAPSHOT_PATH,
+            JSON.stringify(
+                { updatedAt: new Date().toISOString(), count: formations.length, formations },
+                null,
+                2
+            ) + '\n'
+        );
+        console.log(`[notion.ts] snapshot formations mis à jour (${formations.length} fiches)`);
+    } catch (e) {
+        console.warn('[notion.ts] impossible d\'écrire le snapshot formations:', e);
+    }
+}
 
 export interface Formation {
     id: string;
@@ -137,7 +175,11 @@ export async function getFormations(): Promise<Formation[]> {
                     page_size: 100,
                 })
             );
-            return response.results.map(mapPage).filter(Boolean) as Formation[];
+            const formations = response.results.map(mapPage).filter(Boolean) as Formation[];
+            if (formations.length === 0) throw new Error('query OK mais 0 formation retournée');
+            // Build réussi → met à jour le snapshot de secours (commité dans le repo).
+            saveFormationsSnapshot(formations);
+            return formations;
         } catch {
             // La propriété checkbox n'existe pas encore dans Notion → tout afficher
             const response = await notionRequest(() =>
@@ -147,11 +189,27 @@ export async function getFormations(): Promise<Formation[]> {
                     page_size: 100,
                 })
             );
-            return response.results.map(mapPage).filter(Boolean) as Formation[];
+            const formations = response.results.map(mapPage).filter(Boolean) as Formation[];
+            if (formations.length === 0) throw new Error('query OK mais 0 formation retournée');
+            // Build réussi → met à jour le snapshot de secours (commité dans le repo).
+            saveFormationsSnapshot(formations);
+            return formations;
         }
     } catch (error) {
-        console.warn('Notion API indisponible:', error);
-        return [];
+        // Notion indisponible ou vide : ne JAMAIS publier un site sans formations.
+        // Soit on utilise le dernier snapshot connu, soit on fait échouer le build
+        // (Vercel garde alors l'ancien déploiement correct en ligne).
+        console.warn('Notion API indisponible ou vide:', error);
+        const snapshot = loadFormationsSnapshot();
+        if (snapshot.length > 0) {
+            console.warn(`[notion.ts] Utilisation du snapshot de secours (${snapshot.length} formations, mise à jour au dernier build réussi).`);
+            return snapshot;
+        }
+        throw new Error(
+            'AUCUNE formation disponible (Notion injoignable ET aucun snapshot). ' +
+            'Build interrompu pour ne pas publier un site sans formations. ' +
+            'Vérifiez NOTION_TOKEN / DB ID, ou restaurez src/data/formations-snapshot.json.'
+        );
     }
 }
 

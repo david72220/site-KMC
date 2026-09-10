@@ -2,7 +2,9 @@
 import Layout from '../../layouts/Layout.astro';
 import Navigation from '../../components/Navigation.astro';
 import Footer from '../../components/Footer.astro';
-import { getCours, getCoursContent } from '../../lib/notion.ts';
+import { getCours } from '../../lib/notion';
+import { readFileSync, existsSync } from 'node:fs';
+import { join } from 'node:path';
 import { marked } from 'marked';
 
 export async function getStaticPaths() {
@@ -15,16 +17,26 @@ export async function getStaticPaths() {
     return true;
   });
   console.log(`[cours/[id].astro] ${unique.length} cours Notion à générer (sur ${allCours.length})`);
-  // Séquentiel : chaque page de cours = dizaines de requêtes Notion (page + blocs).
-  // En parallèle (Promise.all), on dépasse le quota ~3 req/s → 429 en cascade
-  // → les formations et les autres pages perdent leurs données Notion au build.
+
+  // Contenu depuis les fichiers markdown locaux (src/content/cours/*.md), PAS Notion.
+  // Notion ne sert plus qu'à lister les cours publiés (checkbox) : zéro appel API au build.
   const paths = [];
   for (const c of unique) {
-    const content = (await getCoursContent(c.id)) || '';
-    console.log(`[cours/[id].astro] ${c.slug} → ${content.length} chars`);
-    paths.push({ params: { id: c.slug }, props: { cours: c, content } });
-    // Micro-pause entre pages pour rester sous le rate limit Notion.
-    await new Promise((r) => setTimeout(r, 350));
+    const mdPath = join(process.cwd(), 'src', 'content', 'cours', `${c.slug}.md`);
+    let content = '';
+    if (existsSync(mdPath)) {
+      const raw = readFileSync(mdPath, 'utf-8');
+      // Retire le frontmatter (--- ... ---) du fichier
+      content = raw.replace(/^---\n[\s\S]*?\n---\n/, '');
+      console.log(`[cours/[id].astro] ${c.slug} → fichier local (${content.length} chars)`);
+    } else {
+      console.warn(`[cours/[id].astro] ${c.slug} : PAS de fichier local, page non générée`);
+    }
+    if (content) {
+      paths.push({ params: { id: c.slug }, props: { cours: c, content } });
+    }
+    // Micro-pause anti-rafale conservée par sécurité si d'autres sources Notion s'ajoutent.
+    await new Promise((r) => setTimeout(r, 50));
   }
   return paths;
 }
