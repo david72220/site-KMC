@@ -15,13 +15,17 @@ export async function getStaticPaths() {
     return true;
   });
   console.log(`[cours/[id].astro] ${unique.length} cours Notion à générer (sur ${allCours.length})`);
-  const paths = await Promise.all(
-    unique.map(async (c) => {
-      const content = (await getCoursContent(c.id)) || '';
-      console.log(`[cours/[id].astro] ${c.slug} → ${content.length} chars`);
-      return { params: { id: c.slug }, props: { cours: c, content } };
-    })
-  );
+  // Séquentiel : chaque page de cours = dizaines de requêtes Notion (page + blocs).
+  // En parallèle (Promise.all), on dépasse le quota ~3 req/s → 429 en cascade
+  // → les formations et les autres pages perdent leurs données Notion au build.
+  const paths = [];
+  for (const c of unique) {
+    const content = (await getCoursContent(c.id)) || '';
+    console.log(`[cours/[id].astro] ${c.slug} → ${content.length} chars`);
+    paths.push({ params: { id: c.slug }, props: { cours: c, content } });
+    // Micro-pause entre pages pour rester sous le rate limit Notion.
+    await new Promise((r) => setTimeout(r, 350));
+  }
   return paths;
 }
 

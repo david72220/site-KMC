@@ -47,6 +47,31 @@ function number(prop: any): number | null {
     return Number(prop.number);
 }
 
+/**
+ * Exécute une requête Notion avec retry automatique sur rate-limit (429).
+ * Notion autorise ~3 req/s par token : sans retry, une rafale de requêtes
+ * (ex: build parallèle des pages de cours) fait échouer TOUTES les suivantes
+ * et les formations disparaissent du site.
+ */
+async function notionRequest<T>(fn: () => Promise<T>, maxAttempts = 5): Promise<T> {
+    let lastError: any;
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+        try {
+            return await fn();
+        } catch (error: any) {
+            lastError = error;
+            if (error?.code !== 'rate_limited' && error?.status !== 429) throw error;
+            if (attempt === maxAttempts) throw error;
+            // Notion renvoie retry_after (secondes) ; sinon backoff exponentiel.
+            const retryAfterSec = Number(error?.headers?.get?.('retry-after')) || 0;
+            const delayMs = retryAfterSec > 0 ? (retryAfterSec + 1) * 1000 : Math.min(30_000, 1000 * 2 ** attempt);
+            console.warn(`[notion.ts] rate limited (429), tentative ${attempt}/${maxAttempts}, retry dans ${Math.round(delayMs / 1000)}s`);
+            await new Promise((resolve) => setTimeout(resolve, delayMs));
+        }
+    }
+    throw lastError;
+}
+
 function slugifyFormation(text: string): string {
     return text
         .toLowerCase()
@@ -101,23 +126,27 @@ export async function getFormations(): Promise<Formation[]> {
     try {
         // Essaie d'abord avec le filtre checkbox (si la propriété existe dans Notion)
         try {
-            const response = await notion.databases.query({
-                database_id: FORMATION_DB_ID,
-                filter: {
-                    property: 'A afficher sur le site web',
-                    checkbox: { equals: true },
-                },
-                sorts: [{ property: 'Nom', direction: 'ascending' }],
-                page_size: 100,
-            });
+            const response = await notionRequest(() =>
+                notion.databases.query({
+                    database_id: FORMATION_DB_ID,
+                    filter: {
+                        property: 'A afficher sur le site web',
+                        checkbox: { equals: true },
+                    },
+                    sorts: [{ property: 'Nom', direction: 'ascending' }],
+                    page_size: 100,
+                })
+            );
             return response.results.map(mapPage).filter(Boolean) as Formation[];
         } catch {
             // La propriété checkbox n'existe pas encore dans Notion → tout afficher
-            const response = await notion.databases.query({
-                database_id: FORMATION_DB_ID,
-                sorts: [{ property: 'Nom', direction: 'ascending' }],
-                page_size: 100,
-            });
+            const response = await notionRequest(() =>
+                notion.databases.query({
+                    database_id: FORMATION_DB_ID,
+                    sorts: [{ property: 'Nom', direction: 'ascending' }],
+                    page_size: 100,
+                })
+            );
             return response.results.map(mapPage).filter(Boolean) as Formation[];
         }
     } catch (error) {
@@ -138,6 +167,8 @@ export const FALLBACK_FORMATION: Formation = {
   dureeFormation: "3 semaines (105 h)",
   dureeStagePratique: "2 semaines",
   coutFormation: 'Sur devis',
+  prixFormation: 'Sur devis',
+  theme: 'Fibre optique',
   fraisAdministratifs: null,
   participants: '12',
   tauxReussite: "94 %",
@@ -188,14 +219,16 @@ export interface CoursNotion {
 
 export async function getCours(): Promise<CoursNotion[]> {
   try {
-    const response = await notion.databases.query({
-      database_id: COURS_DB_ID,
-      filter: {
-        property: '▶ Lancer publication',
-        checkbox: { equals: true },
-      },
-      page_size: 100,
-    });
+    const response = await notionRequest(() =>
+        notion.databases.query({
+            database_id: COURS_DB_ID,
+            filter: {
+                property: '▶ Lancer publication',
+                checkbox: { equals: true },
+            },
+            page_size: 100,
+        })
+    );
     const items = response.results
       .map((page: any) => {
         const p = page.properties;
@@ -235,7 +268,7 @@ export async function getAllCoursSlugs(): Promise<string[]> {
 
 export async function getCoursContent(pageId: string): Promise<string> {
   try {
-    const mdBlocks = await n2m.pageToMarkdown(pageId);
+    const mdBlocks = await notionRequest(() => n2m.pageToMarkdown(pageId), 8);
     const md = n2m.toMarkdownString(mdBlocks).parent;
     // Reconvertit les URLs absolues kmc.ci → relatives (utilisé pour les assets internes)
     return md.replace(/https:\/\/kmc\.ci\//g, '/');
