@@ -1,0 +1,65 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+
+const pageTitle = 'Politique de confidentialité – KMC';
+const pageDescription = "Politique de confidentialité de KMC (Knowledge Management Center), centre de formation à Abidjan, Côte d'Ivoire.";
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <Navigation />
+
+  <main class="bg-[#0B1120] min-h-screen">
+    <section class="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl mx-auto">
+        <h1 class="text-4xl sm:text-5xl font-display font-bold text-white mb-4 leading-tight">
+          Politique de <span class="text-[#3b97d3]">confidentialité</span>
+        </h1>
+        <p class="text-white/40 text-sm mb-12">Dernière mise à jour : 19 septembre 2026</p>
+
+        <div class="space-y-10 text-white/60 leading-relaxed">
+          <section>
+            <h2 class="text-xl font-display font-bold text-white mb-3">Qui nous sommes</h2>
+            <p>
+              KMC (Knowledge Management Center, opéré par CONSULT-EQ) est un centre de formation
+              basé à Abidjan, Côte d'Ivoire, spécialisé dans les métiers de la fibre optique et du
+              photovoltaïque. Cette page décrit comment nous traitons les données dans le cadre de
+              nos outils internes et de nos services aux étudiants et partenaires.
+            </p>
+          </section>
+
+          <section>
+            <h2 class="text-xl font-display font-bold text-white mb-3">Données traitées</h2>
+            <p>
+              Nos outils internes (suivi de formation, gestion administrative) traitent des
+              données relatives aux étudiants et au personnel de KMC (identité, parcours de
+              formation, documents administratifs), ainsi que des documents organisationnels de
+              l'institut.
+            </p>
+          </section>
+
+          <section>
+            <h2 class="text-xl font-display font-bold text-white mb-3">Accès à des services tiers (Google Drive)</h2>
+            <p>
+              Certains de nos outils internes peuvent être autorisés à accéder à l'espace Google
+              Drive de KMC, uniquement pour indexer, classer et organiser les documents internes
+              de l'institut. Cet accès est strictement interne à KMC : aucune donnée n'est
+              partagée avec un tiers, revendue, ni utilisée à des fins publicitaires.
+            </p>
+          </section>
+
+          <section>
+            <h2 class="text-xl font-display font-bold text-white mb-3">Contact</h2>
+            <p>
+              Pour toute question relative à cette politique ou à vos données :
+              <a href="mailto:contact@kmc.ci" class="text-[#3b97d3] hover:underline">contact@kmc.ci</a>.
+            </p>
+          </section>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
