@@ -10,7 +10,7 @@ import centreImg from '../assets/hero/Image 1 - centre de formation.png';
 import reseauImg from '../assets/hero/Image 2 - reseau.png';
 const formation = await getFormationByName('FTTH-D2');
 ---
-<section id="scrolly" aria-label="Présentation KMC" style="height:950vh;">
+<section id="scrolly" aria-label="Présentation KMC" style="height:1050vh;">
   <div id="scrolly-stage" class="sticky top-0 h-screen w-full overflow-hidden bg-[#070d18]" style="perspective:1200px;">
 
     <!-- Couche IMG0 éléphant + techniciens + titre serif (z-30) : scène 1 -->
@@ -31,6 +31,38 @@ const formation = await getFormationByName('FTTH-D2');
           <Image src={techniciensImg} alt="Deux techniciens ivoiriens en intervention sur la fibre optique" widths={[400, 800, 1200]} sizes="(max-width: 1023px) 80vw, 38vw" formats={['avif', 'webp']} loading="eager" class="relative z-10 max-h-[40vh] w-auto object-contain object-center" />
         </div>
       </div>
+    </div>
+
+    <!-- Annonce ouverture FTTH-D3 (z-25) : révélée quand la couche éléphant/techniciens
+         remonte (scène 2), avant l'image du centre de formation (img1, z-20) -->
+    <div id="layer-annonce" class="absolute inset-0 z-[25] flex items-center justify-center px-4 bg-[#070d18] pointer-events-none">
+      <a
+        href="/formations/ftth-d3/"
+        class="w-full max-w-4xl block rounded-2xl border border-[#1e9ad7]/30 bg-gradient-to-r from-[#1e9ad7]/[0.12] to-[#F59E0B]/[0.10] p-8 md:p-10 hover:border-[#1e9ad7]/60 transition-all duration-300 group shadow-[0_0_40px_rgba(30,154,215,0.12)]"
+      >
+        <div class="flex flex-col md:flex-row md:items-center gap-6">
+          <div class="flex-1">
+            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#1e9ad7]/10 border border-[#1e9ad7]/30 text-[#7dd3fc] text-sm font-semibold tracking-wide uppercase mb-4">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+              </svg>
+              Ouverture de session · Octobre 2026
+            </span>
+            <h2 class="font-display text-2xl md:text-3xl font-bold text-white leading-tight mb-3 group-hover:text-[#7dd3fc] transition-colors">
+              Nouvelle session de formation FTTH-D3 en octobre !
+            </h2>
+            <p class="text-white/60 leading-relaxed">
+              Notre formation FTTH-D3 — raccordement du client final — ouvre ses portes en octobre. Une dizaine de places disponibles : inscrivez-vous vite pour garantir la vôtre.
+            </p>
+          </div>
+          <span class="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-[#1e9ad7] to-[#1565a8] text-white font-semibold group-hover:opacity-90 group-hover:scale-[1.03] transition-all duration-300 shrink-0">
+            Voir la formation
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+            </svg>
+          </span>
+        </div>
+      </a>
     </div>
 
     <!-- Couche IMG1 (z-20) : scènes 3,4 -->
@@ -203,6 +235,7 @@ const formation = await getFormationByName('FTTH-D2');
     const img0 = document.getElementById('layer-img0');
     const elephant = document.getElementById('elephant');
     const technicians = document.getElementById('technicians');
+    const annonce = document.getElementById('layer-annonce');
     const img1 = document.getElementById('layer-img1');
     const img2 = document.getElementById('layer-img2');
     const video = document.getElementById('flux-video');
@@ -228,44 +261,49 @@ const formation = await getFormationByName('FTTH-D2');
       // Scène 1 → 3 : Image 1 révélée par le glissement vers le haut de la couche éléphant/techniciens
       .set(img1, { opacity: 1 }, 0.95)
       .to(img0, { yPercent: -100, duration: 0.6, ease: 'power2.in' }, 1.0)
+      // Scène 2 : annonce FTTH-D3 révélée par le remontée de img0, tenue un instant, puis
+      // glisse vers le haut → révèle img1 (déjà visible sous la couche opaque annonce)
+      .set(annonce, { pointerEvents: 'auto' }, 1.7)
+      .to(annonce, { yPercent: -100, duration: 0.6, ease: 'power2.in' }, 2.6)
+      .set(annonce, { pointerEvents: 'none' }, 2.61)
       // Scène 4 : Image 1 tient un peu avant l'apparition du texte
-      .to(text, { opacity: 1, duration: 0.4 }, 1.9)
+      .to(text, { opacity: 1, duration: 0.4 }, 3.4)
       // Scène 5 : Image 1 + carte texte glissent vers le haut → Image 2 réseau révélée
-      .set(img2, { opacity: 1 }, 2.5)
-      .to([img1, text], { yPercent: -100, duration: 0.6, ease: 'power2.in' }, 2.6)
-      .to(video, { opacity: 1, duration: 0.4 }, 2.9)
+      .set(img2, { opacity: 1 }, 4.0)
+      .to([img1, text], { yPercent: -100, duration: 0.6, ease: 'power2.in' }, 4.1)
+      .to(video, { opacity: 1, duration: 0.4 }, 4.4)
       // Menu masqué pendant l'image réseau (sinon il cache le centre de formation en haut à droite)
-      .to(mainNav, { autoAlpha: 0, duration: 0.3 }, 2.5)
+      .to(mainNav, { autoAlpha: 0, duration: 0.3 }, 4.0)
       // Scène 6 : zoom sur les 3 opérateurs (bord gauche) — origine fixée ici ; le menu réapparaît
-      .to(img2, { scale: 1.65, transformOrigin: '6% 45%', duration: 1 }, 3.4)
-      .to(mainNav, { autoAlpha: 1, duration: 0.3 }, 3.4)
+      .to(img2, { scale: 1.65, transformOrigin: '6% 45%', duration: 1 }, 4.9)
+      .to(mainNav, { autoAlpha: 1, duration: 0.3 }, 4.9)
       // Scène 7 : intro opérateurs
-      .to(opIntro, { opacity: 1, duration: 0.5 }, 4.6)
-      .to(opIntro, { opacity: 0, duration: 0.4 }, 5.4)
+      .to(opIntro, { opacity: 1, duration: 0.5 }, 6.1)
+      .to(opIntro, { opacity: 0, duration: 0.4 }, 6.9)
       // Scène 8 : fenêtres opérateurs en cascade
-      .to(ops, { opacity: 1, duration: 0.2 }, 5.5)
-      .from(opWins, { opacity: 0, y: 40, stagger: 0.4, duration: 0.5 }, 5.6)
-      .to(ops, { opacity: 0, duration: 0.4 }, 7.1)
+      .to(ops, { opacity: 1, duration: 0.2 }, 7.0)
+      .from(opWins, { opacity: 0, y: 40, stagger: 0.4, duration: 0.5 }, 7.1)
+      .to(ops, { opacity: 0, duration: 0.4 }, 8.6)
       // Scène 9 : dézoom jusqu'à l'image ENTIÈRE (menu masqué) puis re-zoom sur le centre
       //           de formation en haut à droite de l'image
-      .to(mainNav, { autoAlpha: 0, duration: 0.3 }, 7.3)
-      .to(img2, { scale: 1, transformOrigin: '6% 45%', duration: 0.8 }, 7.3)
-      .to(img2, { scale: 1.6, transformOrigin: '92% 12%', duration: 0.9 }, 8.2)
+      .to(mainNav, { autoAlpha: 0, duration: 0.3 }, 8.8)
+      .to(img2, { scale: 1, transformOrigin: '6% 45%', duration: 0.8 }, 8.8)
+      .to(img2, { scale: 1.6, transformOrigin: '92% 12%', duration: 0.9 }, 9.7)
       // Scène 10a : présentation A (qui sommes-nous + 3 opérateurs)
-      .to(presentation, { opacity: 1, duration: 0.4 }, 9.3)
-      .to(presentation, { opacity: 0, duration: 0.3 }, 10.0)
+      .to(presentation, { opacity: 1, duration: 0.4 }, 10.8)
+      .to(presentation, { opacity: 0, duration: 0.3 }, 11.5)
       // Scène 10b : présentation B (théorie/pratique + sécurité + CTA)
-      .to(presentation2, { opacity: 1, duration: 0.4 }, 10.1)
-      .to(presentation2, { opacity: 0, duration: 0.3 }, 10.9)
+      .to(presentation2, { opacity: 1, duration: 0.4 }, 11.6)
+      .to(presentation2, { opacity: 0, duration: 0.3 }, 12.4)
       // Transition finale : image réseau remonte pour révéler le fond sombre (dézoom + slide up)
-      .to(img2, { yPercent: -100, scale: 1, duration: 1.0, ease: 'power2.inOut' }, 10.9)
+      .to(img2, { yPercent: -100, scale: 1, duration: 1.0, ease: 'power2.inOut' }, 12.4)
       // Fiche formation + menu réapparaissent sur le fond sombre
-      .to(formation, { opacity: 1, pointerEvents: 'auto', duration: 0.6 }, 11.6)
-      .to(mainNav, { autoAlpha: 1, duration: 0.3 }, 11.6)
+      .to(formation, { opacity: 1, pointerEvents: 'auto', duration: 0.6 }, 13.1)
+      .to(mainNav, { autoAlpha: 1, duration: 0.3 }, 13.1)
       // Scène 12 : fader formation à 50% + gros bouton centré
-      .to(formation, { opacity: 0.5, duration: 0.5 }, 12.8)
-      .to(cta, { opacity: 1, duration: 0.5 }, 12.8)
-      .to({}, { duration: 1.2 }, 13.4);
+      .to(formation, { opacity: 0.5, duration: 0.5 }, 14.3)
+      .to(cta, { opacity: 1, duration: 0.5 }, 14.3)
+      .to({}, { duration: 1.2 }, 14.9);
 
     // Garantir scroll = 0 au moment où ScrollTrigger calcule ses positions
     window.scrollTo(0, 0);
@@ -336,5 +374,9 @@ const formation = await getFormationByName('FTTH-D2');
   #scrolly-stage.is-stacked #elephant,
   #scrolly-stage.is-stacked #technicians {
     opacity: 1 !important;
+  }
+  /* Annonce FTTH-D3 : cliquable en mode empilé (le pointer-events:none desktop ne s'applique pas) */
+  #scrolly-stage.is-stacked > #layer-annonce {
+    pointer-events: auto;
   }
 </style>
