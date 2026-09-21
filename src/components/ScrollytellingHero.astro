@@ -14,7 +14,7 @@ const formation = await getFormationByName('FTTH-D2');
   <div id="scrolly-stage" class="sticky top-0 h-screen w-full overflow-hidden bg-[#070d18]" style="perspective:1200px;">
 
     <!-- Couche IMG0 éléphant + techniciens + titre serif (z-30) : scène 1 -->
-    <div id="layer-img0" class="absolute inset-0 z-30 flex flex-col items-center justify-center gap-10 bg-[#070d18] px-6">
+    <div id="layer-img0" class="absolute inset-0 z-30 flex flex-col items-center justify-center gap-10 bg-[#070d18] px-6 pointer-events-none">
       <h1 class="font-serif text-3xl md:text-5xl font-bold text-white text-center max-w-4xl lg:absolute lg:top-[16%] lg:left-1/2 lg:-translate-x-1/2 lg:w-full lg:px-6">
         <span class="text-[#1e9ad7]">K</span><span class="text-[#1e9ad7]">M</span><span class="text-[#F59E0B]">C</span> — Institut de formation professionnelle en <span class="text-[#F59E0B]">fibre optique</span>
       </h1>
@@ -72,7 +72,7 @@ const formation = await getFormationByName('FTTH-D2');
     </div>
 
     <!-- Carte texte + logos (z-40) : scène 4 -->
-    <div id="layer-text" class="absolute inset-0 z-40 flex items-center justify-center pt-24 pb-8 px-4 opacity-0">
+    <div id="layer-text" class="absolute inset-0 z-40 flex items-center justify-center pt-24 pb-8 px-4 opacity-0 pointer-events-none">
       <div class="max-w-3xl w-full rounded-2xl border border-white/10 px-8 py-7 text-center"
            style="backdrop-filter: blur(14px); background: rgba(10,22,40,0.68);">
 
@@ -159,7 +159,7 @@ const formation = await getFormationByName('FTTH-D2');
     </div>
 
     <!-- Texte intro opérateurs (z-50) : scène 7 -->
-    <div id="layer-op-intro" class="absolute inset-0 z-50 flex items-center justify-center px-4 opacity-0 bg-[#070d18]/60">
+    <div id="layer-op-intro" class="absolute inset-0 z-50 flex items-center justify-center px-4 opacity-0 bg-[#070d18]/60 pointer-events-none">
       <div class="max-w-3xl text-center">
         <h2 class="font-display text-4xl md:text-5xl font-bold text-white mb-6">KMC forme les techniciens des<br/><span class="text-[#1e9ad7]">3 opérateurs nationaux</span></h2>
         <p class="text-white/70 text-lg leading-relaxed">KMC est le premier centre de formation en Côte d'Ivoire à former des techniciens fibre optique pour Orange CI, MTN Côte d'Ivoire et Moov Africa. Nos programmes couvrent à la fois la maîtrise technique du raccordement FTTH et la manipulation du matériel spécifique à chaque opérateur — pour une insertion professionnelle immédiate sur le terrain.</p>
@@ -167,7 +167,7 @@ const formation = await getFormationByName('FTTH-D2');
     </div>
 
     <!-- 3 fenêtres opérateurs (z-50) : scène 8 -->
-    <div id="layer-ops" class="absolute inset-0 z-50 flex items-center justify-center px-4 opacity-0">
+    <div id="layer-ops" class="absolute inset-0 z-50 flex items-center justify-center px-4 opacity-0 pointer-events-none">
       <div id="operators" class="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-6xl w-full" style="perspective:1000px;">
         {operators.map((op, i) => (
           <div class={`op-win op-win-${i}`} style="transform-style:preserve-3d;"><OperatorWindow op={op} /></div>
@@ -176,7 +176,7 @@ const formation = await getFormationByName('FTTH-D2');
     </div>
 
     <!-- Présentation A (z-55) : qui sommes-nous + 3 opérateurs — APRÈS le dézoom -->
-    <div id="layer-presentation" class="absolute inset-0 z-[55] flex items-center justify-center px-4 opacity-0 bg-[#070d18]/78">
+    <div id="layer-presentation" class="absolute inset-0 z-[55] flex items-center justify-center px-4 opacity-0 bg-[#070d18]/78 pointer-events-none">
       <div class="max-w-3xl text-center">
         <h2 class="font-display text-3xl md:text-4xl font-bold text-white mb-5">Centre de formation de techniciens <span class="text-[#1e9ad7]">fibre optique</span> à Abidjan</h2>
         <p class="text-white/80 text-base md:text-lg leading-relaxed mb-4">KMC est un centre de formation spécialisé dans les métiers de la fibre optique, basé à Abidjan. Notre mission : former des techniciens immédiatement opérationnels sur les réseaux optiques FTTH, avec rigueur, sécurité et professionnalisme.</p>
@@ -185,7 +185,7 @@ const formation = await getFormationByName('FTTH-D2');
     </div>
 
     <!-- Présentation B (z-56) : théorie & pratique + sécurité/parcours + CTA -->
-    <div id="layer-presentation-2" class="absolute inset-0 z-[56] flex items-center justify-center px-4 opacity-0 bg-[#070d18]/82">
+    <div id="layer-presentation-2" class="absolute inset-0 z-[56] flex items-center justify-center px-4 opacity-0 bg-[#070d18]/82 pointer-events-none">
       <div class="max-w-3xl text-center">
         <h2 class="font-display text-3xl md:text-4xl font-bold text-white mb-5">Théorie, <span class="text-[#1e9ad7]">ateliers pratiques</span> et sécurité</h2>
         <p class="text-white/80 text-base md:text-lg leading-relaxed mb-4">La fibre optique est un métier de terrain. Notre pédagogie associe enseignement théorique — principes de la fibre, types de fibres, lecture de plans de câblage, mesures OTDR, code couleur — et <span class="text-white/90">ateliers pratiques intensifs</span> : l'apprenant manipule le matériel professionnel, réalise raccordements et soudures, installe les équipements et apprend à diagnostiquer les pannes.</p>
@@ -208,7 +208,7 @@ const formation = await getFormationByName('FTTH-D2');
     <!-- CTA (z-61) : scène 12 — bouton centré sur la fiche à 50% -->
     <div id="layer-cta" class="absolute inset-0 z-[61] flex items-center justify-center opacity-0 pointer-events-none">
       <a href="/formations-fibre-optique/"
-         class="pointer-events-auto btn-cta-gradient inline-flex items-center justify-center gap-4 rounded-full px-14 py-7 font-display font-bold text-[#06121f] text-2xl md:text-3xl shadow-[0_0_60px_rgba(245,158,11,0.5)] hover:shadow-[0_0_80px_rgba(245,158,11,0.7)] transition-all duration-300 hover:scale-105">
+         class="btn-cta-gradient inline-flex items-center justify-center gap-4 rounded-full px-14 py-7 font-display font-bold text-[#06121f] text-2xl md:text-3xl shadow-[0_0_60px_rgba(245,158,11,0.5)] hover:shadow-[0_0_80px_rgba(245,158,11,0.7)] transition-all duration-300 hover:scale-105">
         Nos formations
         <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
           <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -268,9 +268,11 @@ const formation = await getFormationByName('FTTH-D2');
       .set(annonce, { pointerEvents: 'none' }, 2.61)
       // Scène 4 : Image 1 tient un peu avant l'apparition du texte
       .to(text, { opacity: 1, duration: 0.4 }, 3.4)
+      .set(text, { pointerEvents: 'auto' }, 3.4)
       // Scène 5 : Image 1 + carte texte glissent vers le haut → Image 2 réseau révélée
       .set(img2, { opacity: 1 }, 4.0)
       .to([img1, text], { yPercent: -100, duration: 0.6, ease: 'power2.in' }, 4.1)
+      .set(text, { pointerEvents: 'none' }, 4.11)
       .to(video, { opacity: 1, duration: 0.4 }, 4.4)
       // Menu masqué pendant l'image réseau (sinon il cache le centre de formation en haut à droite)
       .to(mainNav, { autoAlpha: 0, duration: 0.3 }, 4.0)
@@ -282,8 +284,10 @@ const formation = await getFormationByName('FTTH-D2');
       .to(opIntro, { opacity: 0, duration: 0.4 }, 6.9)
       // Scène 8 : fenêtres opérateurs en cascade
       .to(ops, { opacity: 1, duration: 0.2 }, 7.0)
+      .set(ops, { pointerEvents: 'auto' }, 7.0)
       .from(opWins, { opacity: 0, y: 40, stagger: 0.4, duration: 0.5 }, 7.1)
       .to(ops, { opacity: 0, duration: 0.4 }, 8.6)
+      .set(ops, { pointerEvents: 'none' }, 8.61)
       // Scène 9 : dézoom jusqu'à l'image ENTIÈRE (menu masqué) puis re-zoom sur le centre
       //           de formation en haut à droite de l'image
       .to(mainNav, { autoAlpha: 0, duration: 0.3 }, 8.8)
@@ -294,7 +298,9 @@ const formation = await getFormationByName('FTTH-D2');
       .to(presentation, { opacity: 0, duration: 0.3 }, 11.5)
       // Scène 10b : présentation B (théorie/pratique + sécurité + CTA)
       .to(presentation2, { opacity: 1, duration: 0.4 }, 11.6)
+      .set(presentation2, { pointerEvents: 'auto' }, 11.6)
       .to(presentation2, { opacity: 0, duration: 0.3 }, 12.4)
+      .set(presentation2, { pointerEvents: 'none' }, 12.41)
       // Transition finale : image réseau remonte pour révéler le fond sombre (dézoom + slide up)
       .to(img2, { yPercent: -100, scale: 1, duration: 1.0, ease: 'power2.inOut' }, 12.4)
       // Fiche formation + menu réapparaissent sur le fond sombre
@@ -303,6 +309,7 @@ const formation = await getFormationByName('FTTH-D2');
       // Scène 12 : fader formation à 50% + gros bouton centré
       .to(formation, { opacity: 0.5, duration: 0.5 }, 14.3)
       .to(cta, { opacity: 1, duration: 0.5 }, 14.3)
+      .set(cta, { pointerEvents: 'auto' }, 14.3)
       .to({}, { duration: 1.2 }, 14.9);
 
     // Garantir scroll = 0 au moment où ScrollTrigger calcule ses positions
