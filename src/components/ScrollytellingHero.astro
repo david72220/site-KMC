@@ -153,8 +153,8 @@ const formation = await getFormationByName('FTTH-D2');
     <div id="layer-img2" class="absolute inset-0 z-10 opacity-0 will-change-transform">
       <Image src={reseauImg} alt="Architecture réseau fibre optique FTTH" widths={[800, 1280, 1920]} sizes="100vw" formats={['avif', 'webp']} loading="lazy" class="w-full h-full object-contain" />
       <video id="flux-video" class="absolute inset-0 w-full h-full object-contain opacity-0"
-             autoplay loop muted playsinline preload="auto">
-        <source src="/images/A_partir_de_l_image_ci_jointe_.mp4" type="video/mp4" />
+             autoplay loop muted playsinline preload="none">
+        <source data-src="/images/A_partir_de_l_image_ci_jointe_.mp4" type="video/mp4" />
       </video>
     </div>
 
@@ -239,6 +239,12 @@ const formation = await getFormationByName('FTTH-D2');
     const img1 = document.getElementById('layer-img1');
     const img2 = document.getElementById('layer-img2');
     const video = document.getElementById('flux-video');
+    // Vidéo masquée sous 1024 px : on ne la télécharge qu'ici
+    const source = video?.querySelector<HTMLSourceElement>('source[data-src]');
+    if (video instanceof HTMLVideoElement && source && !source.src) {
+      source.src = source.dataset.src!;
+      video.load();
+    }
     const text = document.getElementById('layer-text');
     const opIntro = document.getElementById('layer-op-intro');
     const ops = document.getElementById('layer-ops');
