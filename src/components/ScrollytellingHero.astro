@@ -149,13 +149,9 @@ const formation = await getFormationByName('FTTH-D2');
       </div>
     </div>
 
-    <!-- Couche IMG2 + vidéo (z-10) : scènes 5,6,9 -->
+    <!-- Couche IMG2 (z-10) : scènes 5,6,9 -->
     <div id="layer-img2" class="absolute inset-0 z-10 opacity-0 will-change-transform">
       <Image src={reseauImg} alt="Architecture réseau fibre optique FTTH" widths={[800, 1280, 1920]} sizes="100vw" formats={['avif', 'webp']} loading="lazy" class="w-full h-full object-contain" />
-      <video id="flux-video" class="absolute inset-0 w-full h-full object-contain opacity-0"
-             autoplay loop muted playsinline preload="none">
-        <source data-src="/images/A_partir_de_l_image_ci_jointe_.mp4" type="video/mp4" />
-      </video>
     </div>
 
     <!-- Texte intro opérateurs (z-50) : scène 7 -->
@@ -238,13 +234,6 @@ const formation = await getFormationByName('FTTH-D2');
     const annonce = document.getElementById('layer-annonce');
     const img1 = document.getElementById('layer-img1');
     const img2 = document.getElementById('layer-img2');
-    const video = document.getElementById('flux-video');
-    // Vidéo masquée sous 1024 px : on ne la télécharge qu'ici
-    const source = video?.querySelector<HTMLSourceElement>('source[data-src]');
-    if (video instanceof HTMLVideoElement && source && !source.src) {
-      source.src = source.dataset.src!;
-      video.load();
-    }
     const text = document.getElementById('layer-text');
     const opIntro = document.getElementById('layer-op-intro');
     const ops = document.getElementById('layer-ops');
@@ -279,7 +268,6 @@ const formation = await getFormationByName('FTTH-D2');
       .set(img2, { opacity: 1 }, 4.0)
       .to([img1, text], { yPercent: -100, duration: 0.6, ease: 'power2.in' }, 4.1)
       .set(text, { pointerEvents: 'none' }, 4.11)
-      .to(video, { opacity: 1, duration: 0.4 }, 4.4)
       // Menu masqué pendant l'image réseau (sinon il cache le centre de formation en haut à droite)
       .to(mainNav, { autoAlpha: 0, duration: 0.3 }, 4.0)
       // Scène 6 : zoom sur les 3 opérateurs (bord gauche) — origine fixée ici ; le menu réapparaît
@@ -335,15 +323,12 @@ const formation = await getFormationByName('FTTH-D2');
   mm.add('(max-width: 1023px), (prefers-reduced-motion: reduce)', () => {
     const stage = document.getElementById('scrolly-stage');
     const scrolly = document.getElementById('scrolly');
-    const v = document.getElementById('flux-video') as HTMLVideoElement | null;
     stage?.classList.add('is-stacked');
     if (scrolly) scrolly.style.height = 'auto';
-    if (v) v.style.opacity = '1';
 
     return () => {
       stage?.classList.remove('is-stacked');
       if (scrolly) scrolly.style.height = '';
-      if (v) v.style.opacity = '';
     };
   });
 </script>
@@ -378,10 +363,6 @@ const formation = await getFormationByName('FTTH-D2');
     height: 50vh;
     width: 100%;
     object-fit: cover;
-  }
-  /* En empilé : on garde l'image réseau statique, on masque la vidéo (autoplay peu fiable mobile) */
-  #scrolly-stage.is-stacked > #layer-img2 video {
-    display: none;
   }
   /* Éléphant + techniciens : empilés, taille adaptée */
   #scrolly-stage.is-stacked #elephant,
