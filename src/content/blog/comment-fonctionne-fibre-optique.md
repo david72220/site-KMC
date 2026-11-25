@@ -5,7 +5,7 @@ pubDate: "2025-01-15"
 updatedDate: "2025-03-10"
 category: "Fibre optique"
 tags: ["fibre optique", "technologie", "transmission", "FTTH"]
-heroImage: "/blog/fibre-optique-principe.jpg"
+heroImage: "/images/blog/fibre-optique-principe.jpg"
 ---
 
 La fibre optique révolutionne les réseaux de télécommunications depuis plusieurs décennies. Mais comment fonctionne-t-elle réellement ?

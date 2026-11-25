@@ -4,7 +4,7 @@ description: "Analyse du marché solaire africain, des politiques énergétiques
 pubDate: "2025-02-20"
 category: "Photovoltaïque"
 tags: ["photovoltaïque", "Afrique", "énergie solaire", "formation"]
-heroImage: "/blog/photovoltaique-afrique.jpg"
+heroImage: "/images/blog/photovoltaique-afrique.jpg"
 ---
 
 L'Afrique dispose du potentiel solaire le plus important au monde. Pourtant, seulement 1 % de cette énergie est aujourd'hui exploitée. Quelles sont les perspectives réelles pour 2025 ?

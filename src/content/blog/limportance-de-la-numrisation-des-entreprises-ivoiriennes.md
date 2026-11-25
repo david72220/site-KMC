@@ -4,7 +4,7 @@ pubDate: 2026-05-21
 author: "Équipe KMC"
 category: "Fibre optique"
 tags: [fibre optique, certification, formation]
-heroImage: "/images/blog/limportance-de-la-numrisation-des-entreprises-ivoiriennes.jpg"
+heroImage: "/images/blog/numerisation.jpg"
 
 ---
 
