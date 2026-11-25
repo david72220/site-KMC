@@ -160,7 +160,17 @@ function mapPage(page: any): Formation | null {
     };
 }
 
-export async function getFormations(): Promise<Formation[]> {
+// Une seule lecture Notion par build : chaque page qui appelle getFormations()
+// relançait sinon la requête (rafale → 429, cf. panne du 10/09). En dev, relecture
+// à chaque appel pour voir les coches sans redémarrer. Un échec reste en cache.
+let formationsEnCours: Promise<Formation[]> | undefined;
+
+export function getFormations(): Promise<Formation[]> {
+    if (import.meta.env.DEV) return chargerFormations();
+    return (formationsEnCours ??= chargerFormations());
+}
+
+async function chargerFormations(): Promise<Formation[]> {
     try {
         // Essaie d'abord avec le filtre checkbox (si la propriété existe dans Notion)
         try {
@@ -275,7 +285,14 @@ export interface CoursNotion {
   identifiant: number;
 }
 
-export async function getCours(): Promise<CoursNotion[]> {
+let coursEnCours: Promise<CoursNotion[]> | undefined;
+
+export function getCours(): Promise<CoursNotion[]> {
+  if (import.meta.env.DEV) return chargerCours();
+  return (coursEnCours ??= chargerCours());
+}
+
+async function chargerCours(): Promise<CoursNotion[]> {
   try {
     const response = await notionRequest(() =>
         notion.databases.query({
